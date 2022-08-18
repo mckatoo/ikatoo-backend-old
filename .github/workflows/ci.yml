@@ -28,5 +28,6 @@ jobs:
         os: ${{ matrix.os }}
         cache: 'yarn'
     - run: yarn install
-    - run: yarn build --if-present
+    - run: yarn typecheck
+    #- run: yarn build --if-present
     - run: yarn test

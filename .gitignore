@@ -1,0 +1,3 @@
+*.drawio.bkp
+node_modules/**/*
+*.drawio.dtmp

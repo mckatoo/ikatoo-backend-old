@@ -1,0 +1,32 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Backend CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+        os: [ubuntu-latest, ubuntu-18.04.x, alpine-latest, alpine-3.16.x, centos-latest, centos-7.9.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }} & Linux ${{ matrix.os }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        os: ${{ matrix.os }}
+        cache: 'yarn'
+    - run: yarn install
+    - run: yarn build --if-present
+    - run: yarn test

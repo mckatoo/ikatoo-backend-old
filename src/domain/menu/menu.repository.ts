@@ -1,6 +1,7 @@
-import { Menu } from "./menu.entity";
+import { Menu, MenuItem } from "./menu.entity";
 
 export interface MenuRepositoryInterface {
-  insert(aboutPage: Menu): Promise<void>;
+  create(menu: Menu): Promise<void>;
+  insertItem(item: MenuItem, menuId: string): Promise<void>;
   getAll(): Promise<Menu[]>;
 }

@@ -25,28 +25,24 @@ export class Menu {
     return new Menu(props, id)
   }
 
-  updateLabel(label: string) {
-    this.props.label = label;
+  updateName(name: string) {
+    this.props.name = name;
   }
 
-  updateTo(to: string) {
-    this.props.to = to;
+  updateItems(items: MenuItem[]) {
+    this.props.items = items;
   }
 
-  get to(): string {
-    return this.props.to;
+  get items(): MenuItem[] {
+    return this.props.items;
   }
 
-  private set to(to: string) {
-    this.props.to = to;
+  get name():string  {
+    return this.props.name;
   }
 
-  get label():string  {
-    return this.props.label;
-  }
-
-  private set label(label: string) {
-    this.props.label = label;
+  get user_id(): string {
+    return this.props.user_id;
   }
 
   toJson() {

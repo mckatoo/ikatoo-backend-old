@@ -57,32 +57,16 @@ export class AboutPage {
     return this.props.title;
   }
 
-  private set title(title: string) {
-    this.props.title = title;
-  }
-
   get description(): string {
     return this.props.description;
-  }
-
-  private set description(description: string) {
-    this.props.description = description;
   }
 
   get skills(): SkillProps[] {
     return this.props.skills;
   }
 
-  private set skills(skills: SkillProps[]) {
-    this.props.skills = skills;
-  }
-
   get image(): ImageProps {
     return this.props.image;
-  }
-
-  private set image(image: ImageProps) {
-    this.props.image = image;
   }
 
   toJson() {

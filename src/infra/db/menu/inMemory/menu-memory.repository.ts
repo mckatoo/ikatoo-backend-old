@@ -1,18 +1,23 @@
-import { Menu } from "@domain/menu/menu.entity";
+import { Menu, MenuItem } from "@domain/menu/menu.entity";
 import { MenuRepositoryInterface } from "@domain/menu/menu.repository";
 
 export class MenuMemoryRepository implements MenuRepositoryInterface {
-  private items: Menu[] = [];
+  private menu: Menu[] = [];
 
-  async insert(menu: Menu): Promise<void> {
-    this.items = [...this.items, menu]
+  async insertItem(item: MenuItem, menuId: string): Promise<void> {
+    const menu = this.menu.find(({ id }) => id === menuId);
+    !!menu && menu.items.push(item);
+  }
+
+  async create(menu: Menu): Promise<void> {
+    this.menu = [...this.menu, menu];
   }
 
   async getAll(): Promise<Menu[]> {
-    return this.items;
+    return this.menu;
   }
 
-  count(): Promise<number> {
-    return Promise.resolve(this.items.length);
+  async count(): Promise<number> {
+    return Promise.resolve(this.menu.length);
   }
 }

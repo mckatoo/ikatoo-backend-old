@@ -20,7 +20,7 @@ describe("Menu in Memory Repository", () => {
     const beforeInsert = await repository.getAll();
     expect(beforeInsert).toHaveLength(0);
 
-    await repository.insert(menu);
+    await repository.create(menu);
     const afterInsert = await repository.getAll();
     expect(afterInsert).toHaveLength(1);
     expect(afterInsert).toStrictEqual([menu]);
@@ -38,14 +38,12 @@ describe("Menu in Memory Repository", () => {
       user_id: randomUUID()
     };
     const menu = new Menu(menuData);
-    const menuBeforeInsert = await repository.getAll()
+    const menuBeforeInsert = await repository.getAll();
 
-    await repository.insert(menu);
-    const menuAfterInsert = await repository.getAll()
+    await repository.create(menu);
+    const menuAfterInsert = await repository.getAll();
 
-    expect(menuAfterInsert).toStrictEqual([
-      ...menuBeforeInsert,
-      menu
-    ]);
-  })
+    expect(menuAfterInsert).toStrictEqual([...menuBeforeInsert, menu]);
+    expect(await repository.count()).toBe(2);
+  });
 });

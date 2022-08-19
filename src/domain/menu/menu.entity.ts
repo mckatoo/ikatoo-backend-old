@@ -1,8 +1,14 @@
 import { randomUUID } from "crypto";
 
-export type MenuProps = {
+export type MenuItem = {
   label: string
   to: string
+}
+
+export type MenuProps = {
+  name: string
+  items: MenuItem[]
+  user_id: string
 };
 
 export class Menu {
@@ -16,8 +22,9 @@ export class Menu {
 
     this.props = {
       ...props,
-      label: props.label || "",
-      to: props.to || "",
+      name: props.name || "",
+      items: props.items,
+      user_id: props.user_id
     };
   }
 

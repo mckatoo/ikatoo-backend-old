@@ -53,6 +53,9 @@ export class Menu {
   }
 
   toJson() {
-    return this.props;
+    return {
+      id: this.id,
+      ...this.props,
+    }
   }
 }

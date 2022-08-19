@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto';
 describe("Menu in Memory Repository", () => {
   const repository = new MenuMemoryRepository();
 
-  it("should insert a new menu", async () => {
+  it("should create a new menu", async () => {
     const menuData: MenuProps = {
       name: "public",
       items: [
@@ -45,5 +45,6 @@ describe("Menu in Memory Repository", () => {
 
     expect(menuAfterInsert).toStrictEqual([...menuBeforeInsert, menu]);
     expect(await repository.count()).toBe(2);
+    expect(await repository.get(menu.user_id, menu.name)).toStrictEqual(menu.toJson());
   });
 });

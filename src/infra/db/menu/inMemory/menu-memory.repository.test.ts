@@ -1,13 +1,20 @@
 import { Menu, MenuProps } from "@domain/menu/menu.entity";
 import { MenuMemoryRepository } from "./menu-memory.repository";
+import { randomUUID } from 'crypto';
 
 describe("Menu in Memory Repository", () => {
   const repository = new MenuMemoryRepository();
 
   it("should insert a new menu", async () => {
     const menuData: MenuProps = {
-      label: "label to link",
-      to: "url"
+      name: "public",
+      items: [
+        {
+          label: "label to link",
+          to: "url",
+        },
+      ],
+      user_id: randomUUID()
     };
     const menu = new Menu(menuData);
     const beforeInsert = await repository.getAll();
@@ -21,9 +28,15 @@ describe("Menu in Memory Repository", () => {
 
   it("should get a menu", async () => {
     const menuData: MenuProps = {
-      label: "new label to link",
-      to: "new url"
-    }
+      name: "admin",
+      items: [
+        {
+          label: "new label to link",
+          to: "new url",
+        },
+      ],
+      user_id: randomUUID()
+    };
     const menu = new Menu(menuData);
     const menuBeforeInsert = await repository.getAll()
 

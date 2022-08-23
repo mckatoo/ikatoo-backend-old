@@ -16,7 +16,6 @@
     "dev": "NODE_ENV=test tsnd -r tsconfig-paths/register --watch src/ --respawn --transpile-only src/infra/http/express/index.ts",
     "dev:express": "NODE_ENV=test tsnd -r tsconfig-paths/register src/infra/http/express/index.ts",
     "test:express": "NODE_ENV=test jest src/infra/http/express",
-    "typeorm": "tsnd -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "start": "yarn express"
   },
   "devDependencies": {
@@ -47,9 +46,7 @@
     "express": "4.18.1",
     "jsonwebtoken": "8.5.1",
     "jsrsasign": "10.5.27",
-    "pg": "8.7.3",
-    "reflect-metadata": "0.1.13",
-    "typeorm": "0.3.7"
+    "pg": "8.7.3"
   },
   "importSort": {
     ".js, .jsx, .es6, .es": {

@@ -7,10 +7,7 @@ import { jwtVerify } from "./verification";
 
 const generateFunction = async (options: JwtSign) => await jwtSign(options);
 
-const validateFunction = async (token: string) => {
-  const result = await jwtValidate(token);
-  return result || false;
-};
+const validateFunction = async (token: string) => await jwtValidate(token);
 
 const verificationFunction = async (token: string) => await jwtVerify(token);
 
@@ -37,7 +34,7 @@ describe("Jwt module", () => {
     );
   });
 
-  it("Should validate token with id", async () => {
+  it("Should validate token", async () => {
     const id = randomUUID();
     const token = await generateFunction({
       id,
@@ -65,13 +62,13 @@ describe("Jwt module", () => {
     }, 2000);
   });
 
-  it("Should not validate token with invalid data", async () => {
+  it("Should not validate a token with invalid data 'COUNTERFEIT'", async () => {
     const token = await generateFunction({
       id: "testId",
       expireTime: 1,
     });
-    const isValid = await verificationFunction(token + 'invalid');
+    const isValid = await verificationFunction(token + "counterfeit_data");
 
     expect(isValid).toBe(false);
-  })
+  });
 });

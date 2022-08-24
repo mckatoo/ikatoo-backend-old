@@ -1,8 +1,7 @@
-import { env } from "@infra/env";
-import { randomBytes } from "crypto";
-import { KJUR, utf8tob64u } from "jsrsasign";
+import { env } from '@infra/env';
+import { KJUR, utf8tob64u } from 'jsrsasign';
 
-import { JwtSign } from "../";
+import { JwtSign } from '../';
 
 const { jws } = KJUR;
 
@@ -24,7 +23,7 @@ export const jwtSign = async (options: JwtSign) => {
     jti: options.id || (env("JWT_ID") as string),
   };
   const secret = utf8tob64u(env("JWT_SECRET"));
-  const token = jws.JWS.sign("HS256", header, payload, secret)
+  const token = jws.JWS.sign("HS256", header, payload, secret);
 
   return Promise.resolve(token);
 };

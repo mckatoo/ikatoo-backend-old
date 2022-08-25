@@ -3,7 +3,8 @@ import { jwtValidate } from './jsrsasign/validate'
 import { jwtVerify } from './jsrsasign/verification';
 
 export type JwtSign = {
-  expireTime: number // in seconds
+  /** in seconds */
+  expireTime: number
   id: string
 }
 

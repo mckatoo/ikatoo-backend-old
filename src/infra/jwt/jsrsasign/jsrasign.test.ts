@@ -2,12 +2,12 @@ import { randomUUID } from "crypto";
 
 import { JwtSign } from "..";
 import { jwtSign } from "./sign";
-import { jwtValidate } from "./validate";
+import { jwtDisassemble } from "./disassemble";
 import { jwtVerify } from "./verification";
 
 const generateFunction = async (options: JwtSign) => await jwtSign(options);
 
-const validateFunction = async (token: string) => await jwtValidate(token);
+const disassembleFunction = async (token: string) => await jwtDisassemble(token);
 
 const verificationFunction = async (token: string) => await jwtVerify(token);
 
@@ -17,10 +17,10 @@ describe("Jwt module", () => {
       id: "testId",
       expireTime: 1000,
     });
-    const isValid = await validateFunction(token);
-
+    const disassembledToken = await disassembleFunction(token + 'crash');
     expect(token).toBeDefined();
-    expect(isValid).not.toBe(false);
+    expect(disassembledToken).toHaveProperty("header");
+    expect(disassembledToken).toHaveProperty("payload");
   });
 
   it("Should not generate valid token with invalid input data", async () => {
@@ -40,7 +40,7 @@ describe("Jwt module", () => {
       id,
       expireTime: 1000,
     });
-    const validToken = await validateFunction(token);
+    const validToken = await disassembleFunction(token);
     const payload = JSON.parse(JSON.stringify(validToken.payload));
 
     expect(payload.jti).toBe(id);

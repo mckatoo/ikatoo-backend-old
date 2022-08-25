@@ -1,5 +1,5 @@
 import { jwtSign } from './jsrsasign/sign'
-import { jwtValidate } from './jsrsasign/validate'
+import { jwtDisassemble } from './jsrsasign/disassemble'
 import { jwtVerify } from './jsrsasign/verification';
 
 export type JwtSign = {
@@ -8,4 +8,4 @@ export type JwtSign = {
   id: string
 }
 
-export { jwtSign, jwtValidate, jwtVerify }
+export { jwtSign, jwtDisassemble as jwtValidate, jwtVerify }

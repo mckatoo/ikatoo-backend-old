@@ -18,7 +18,7 @@ export class MenuMemoryRepository implements MenuRepositoryInterface {
 
   async get(user_id: string, name: string): Promise<MenuProps> {
     const menu = this.menu.find(
-      (menu) => menu.user_id == user_id && menu.name == name
+      (menu) => menu.user_id === user_id && menu.name === name
     );
     if (!menu) throw new Error("Menu not found");
 

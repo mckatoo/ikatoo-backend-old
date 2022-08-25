@@ -1,8 +1,29 @@
-import { UserRepositoryInterface } from "@domain/user/user.repository";
+import {
+  UserRepositoryInterface,
+  UserWithId,
+} from "@domain/user/user.repository";
+import { comparePassword } from "@infra/hashing-password";
+import { jwtSign } from "@infra/jwt";
 
 type AuthUserOutput = {
-  acessToken: string;
+  accessToken: string;
   refreshToken: string;
+};
+
+const validateCredentials = async (user: UserWithId, password: string) => {
+  const isValid = await comparePassword(password, user.password);
+  if (!isValid) throw new Error("Credentials invalid.");
+
+  const accessToken = await jwtSign({
+    id: user.id,
+    expireTime: 60,
+  });
+  const refreshToken = await jwtSign({
+    id: user.id,
+    expireTime: 600,
+  });
+
+  return { accessToken, refreshToken };
 };
 
 export class AuthUserUseCase {
@@ -12,12 +33,19 @@ export class AuthUserUseCase {
     username: string,
     password: string
   ): Promise<AuthUserOutput> {
-    // procurar usuario
     const user = await this.userRepository.getByUsername(username);
-
-    // verificar senha com bcrypt compare
-    // emitir accessToken e refreshToken ou throw Error
+    return validateCredentials(user, password);
   }
+  
+  async authByEmail(email: string, password: string): Promise<AuthUserOutput> {
+    const user = await this.userRepository.getByEmail(email);
+    return validateCredentials(user, password);
+  }
+  
+  // async authByToken(refreshToken: string): Promise<AuthUserOutput> {
 
-  async authByEmail(email: string, password: string): Promise<AuthUserOutput> {}
+    
+  //   const user = await this.userRepository.getByUsername(username);
+  //   return validateCredentials(user, password);
+  // }
 }

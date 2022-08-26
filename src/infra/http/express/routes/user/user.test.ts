@@ -31,16 +31,27 @@ describe("Express - User", () => {
     );
   });
 
-  // it("should get user data", async () => {
-  //   const response = await request(app).get("/user/milton").send();
+  it("should authenticate a valid user", async () => {
+    const user = await request(app).get("/user").send();
+  });
 
-  //   expect(response.status).toBe(200);
-  //   expect(response.body).toStrictEqual({
-  //     id: "9bec9383-5a22-4a70-9242-cfc3f3926ca8",
-  //     name: "Milton Carlos Katoo",
-  //     username: "milton",
-  //     email: "milton@katoo.com",
-  //     password: "teste12345",
-  //   });
-  // });
+  it("should not authenticate a invalid user", async () => {
+    const user = await request(app).get("/user").send();
+  });
+
+  it("should get user data an through access token", async () => {
+    const user = await request(app).get("/user").send();
+  });
+
+  it("should not get user data an through invalid access token", async () => {
+    const user = await request(app).get("/user").send();
+  });
+
+  it("should renew access token and refresh token", async () => {
+    const user = await request(app).get("/user").send();
+  });
+
+  it("should not renew access token and refresh token", async () => {
+    const user = await request(app).get("/user").send();
+  });
 });

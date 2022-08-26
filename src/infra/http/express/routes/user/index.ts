@@ -16,7 +16,7 @@ userRoute.post("/user", async (req: Request, res: Response) => {
   res.status(201).json(output);
 });
 
-userRoute.get("/user/:username", async (req: Request, res: Response) => {
+userRoute.get("/user", async (req: Request, res: Response) => {
   const { username } = req.params;
   const getUseCase = new GetUserUseCase(userRepository);
   const output = await getUseCase.byUsername(username);

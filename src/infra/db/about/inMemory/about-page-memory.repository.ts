@@ -1,18 +1,24 @@
 import { AboutPage } from "@domain/about/about-page.entity";
-import { AboutPageRepositoryInterface } from "@domain/about/about-page.repository";
+import {
+  AboutPageRepositoryInterface,
+  AboutPageWithId,
+} from "@domain/about/about-page.repository";
 
 export class AboutPageMemoryRepository implements AboutPageRepositoryInterface {
   private items: AboutPage[] = [];
 
-  get(): Promise<AboutPage> {
-    return Promise.resolve(this.items[0])
+  async get(user_id: string): Promise<AboutPageWithId> {
+    const aboutPage = this.items.find((item) => item.user_id === user_id);
+    if (!aboutPage) throw new Error("About Page not found");
+
+    return Promise.resolve(aboutPage);
   }
 
-  async insert(aboutPage: AboutPage): Promise<void> {
-    this.items = [aboutPage]
+  async create(aboutPage: AboutPage): Promise<void> {
+    this.items = [...this.items, aboutPage];
   }
 
-  count(): Promise<number> {
+  async count(): Promise<number> {
     return Promise.resolve(this.items.length);
   }
 }

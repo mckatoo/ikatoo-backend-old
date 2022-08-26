@@ -1,18 +1,13 @@
+import { AboutPageProps } from "@domain/about/about-page.entity";
 import { AboutPageRepositoryInterface } from "@domain/about/about-page.repository";
-import { ImageProps, SkillProps } from "@domain/about/about-page.entity";
 
-type GetAboutPageOutput = {
-  title: string;
-  description: string;
-  skills: SkillProps[];
-  image: ImageProps;
-};
+type GetAboutPageOutput = AboutPageProps & { id: string };
 
 export class GetAboutPageUseCase {
   constructor(private aboutPageRepository: AboutPageRepositoryInterface) {}
 
-  async execute(): Promise<GetAboutPageOutput> {
-    const aboutPage = await this.aboutPageRepository.get()
+  async execute(user_id: string): Promise<GetAboutPageOutput> {
+    const aboutPage = await this.aboutPageRepository.get(user_id);
 
     return aboutPage.toJson();
   }

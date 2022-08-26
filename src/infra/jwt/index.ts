@@ -1,11 +1,4 @@
-import { jwtSign } from './jsrsasign/sign'
-import { jwtDisassemble } from './jsrsasign/disassemble'
-import { jwtVerify } from './jsrsasign/verification';
+import sign from './jsonwebtoken/sign';
+import verify from './jsonwebtoken/verify';
 
-export type JwtSign = {
-  /** in seconds */
-  expireTime: number
-  id: string
-}
-
-export { jwtSign, jwtDisassemble as jwtValidate, jwtVerify }
+export { sign, verify };

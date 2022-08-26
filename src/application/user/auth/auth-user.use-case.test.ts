@@ -1,7 +1,8 @@
-import { User } from "@domain/user/user.entity";
 import { UserRepository } from "@infra/db/user";
-import { CreateUserUseCase } from "../create/create-user.use-case";
+import { env } from "@infra/env";
+import { verify } from "@infra/jwt";
 
+import { CreateUserUseCase } from "../create/create-user.use-case";
 import { AuthUserUseCase } from "./auth-user.use-case";
 
 describe("Auth User use-case Test", () => {
@@ -16,12 +17,34 @@ describe("Auth User use-case Test", () => {
       username: "auth-user",
       password: "123passauth",
     });
-    const tokens = await authUseCase.authByUsername(
+    const { accessToken, refreshToken } = await authUseCase.authByUsername(
       user.username,
       "123passauth"
     );
 
-    expect(tokens).toHaveProperty("accessToken");
-    expect(tokens).toHaveProperty("refreshToken");
+    expect(verify(accessToken)).toBeDefined();
+    expect(verify(refreshToken)).toBeDefined();
+  });
+
+  it("should authenticate a user using email and password", async () => {
+    const { accessToken, refreshToken } = await authUseCase.authByEmail(
+      "user@auth.com",
+      "123passauth"
+    );
+
+    expect(verify(accessToken)).toBeDefined();
+    expect(verify(refreshToken)).toBeDefined();
+  });
+
+  it("should fail on authenticate a user using invalid username", async () => {
+    const token = authUseCase.authByUsername("fail", "123passauth");
+
+    await expect(token).rejects.toThrowError("User not found");
+  });
+
+  it("should fail on authenticate a user using invalid email", async () => {
+    const token = authUseCase.authByEmail("fail@auth.com", "123passauth");
+
+    await expect(token).rejects.toThrowError("User not found");
   });
 });

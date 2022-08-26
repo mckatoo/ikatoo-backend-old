@@ -2,8 +2,9 @@ import {
   UserRepositoryInterface,
   UserWithId,
 } from "@domain/user/user.repository";
+import { env } from "@infra/env";
 import { comparePassword } from "@infra/hashing-password";
-import { jwtSign } from "@infra/jwt";
+import { sign } from "@infra/jwt";
 
 type AuthUserOutput = {
   accessToken: string;
@@ -14,13 +15,13 @@ const validateCredentials = async (user: UserWithId, password: string) => {
   const isValid = await comparePassword(password, user.password);
   if (!isValid) throw new Error("Credentials invalid.");
 
-  const accessToken = await jwtSign({
-    id: user.id,
-    expireTime: 60,
+  const accessToken = sign({
+    options: { id: user.id },
+    expiresIn: "60s",
   });
-  const refreshToken = await jwtSign({
-    id: user.id,
-    expireTime: 600,
+  const refreshToken = sign({
+    options: { id: user.id },
+    expiresIn: "600s",
   });
 
   return { accessToken, refreshToken };
@@ -36,15 +37,14 @@ export class AuthUserUseCase {
     const user = await this.userRepository.getByUsername(username);
     return validateCredentials(user, password);
   }
-  
+
   async authByEmail(email: string, password: string): Promise<AuthUserOutput> {
     const user = await this.userRepository.getByEmail(email);
     return validateCredentials(user, password);
   }
-  
+
   // async authByToken(refreshToken: string): Promise<AuthUserOutput> {
 
-    
   //   const user = await this.userRepository.getByUsername(username);
   //   return validateCredentials(user, password);
   // }

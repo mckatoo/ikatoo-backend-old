@@ -10,8 +10,8 @@
   "license": "CC0-1.0",
   "scripts": {
     "typecheck": "tsc --project tsconfig.json --noEmit",
-    "test": "NODE_ENV=test jest",
-    "test:coverage": "NODE_ENV=test jest --coverage",
+    "test": "NODE_ENV=test jest ./src",
+    "test:coverage": "NODE_ENV=test jest ./src --coverage",
     "express": "ts-node -r tsconfig-paths/register src/infra/http/express/index.ts",
     "dev": "NODE_ENV=test tsnd -r tsconfig-paths/register --watch src/ --respawn --transpile-only src/infra/http/express/index.ts",
     "dev:express": "NODE_ENV=test tsnd -r tsconfig-paths/register src/infra/http/express/index.ts",

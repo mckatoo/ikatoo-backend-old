@@ -17,10 +17,7 @@ export class User {
 
     if (!props) throw new Error("Props required on contructor");
 
-    this.props = {
-      ...props,
-      name: props.name || "",
-    };
+    this.props = props;
   }
 
   static create(props: UserProps, id?: string) {

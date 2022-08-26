@@ -17,8 +17,7 @@ describe("Jwt module", () => {
       id: "testId",
       expireTime: 1000,
     });
-    const disassembledToken = await disassembleFunction(token + 'crash');
-    expect(token).toBeDefined();
+    const disassembledToken = await disassembleFunction(token);
     expect(disassembledToken).toHaveProperty("header");
     expect(disassembledToken).toHaveProperty("payload");
   });

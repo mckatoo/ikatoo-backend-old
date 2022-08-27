@@ -30,28 +30,4 @@ describe("Express - User", () => {
       "9bec9383-5a22-4a70-9242-cfc3f3926ca8"
     );
   });
-
-  it("should authenticate a valid user", async () => {
-    const user = await request(app).get("/user").send();
-  });
-
-  it("should not authenticate a invalid user", async () => {
-    const user = await request(app).get("/user").send();
-  });
-
-  it("should get user data an through access token", async () => {
-    const user = await request(app).get("/user").send();
-  });
-
-  it("should not get user data an through invalid access token", async () => {
-    const user = await request(app).get("/user").send();
-  });
-
-  it("should renew access token and refresh token", async () => {
-    const user = await request(app).get("/user").send();
-  });
-
-  it("should not renew access token and refresh token", async () => {
-    const user = await request(app).get("/user").send();
-  });
 });

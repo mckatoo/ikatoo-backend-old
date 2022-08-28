@@ -10,12 +10,12 @@
   "license": "CC0-1.0",
   "scripts": {
     "typecheck": "tsc --project tsconfig.json --noEmit",
-    "test": "NODE_ENV=test jest ./src",
-    "test:coverage": "NODE_ENV=test jest ./src --coverage",
+    "test": "NODE_ENV=test jest ./src --detectOpenHandles",
+    "test:coverage": "NODE_ENV=test jest ./src --coverage --detectOpenHandles",
     "express": "ts-node -r tsconfig-paths/register src/infra/http/express/index.ts",
     "dev": "NODE_ENV=test tsnd -r tsconfig-paths/register --watch src/ --respawn --transpile-only src/infra/http/express/index.ts",
     "dev:express": "NODE_ENV=test tsnd -r tsconfig-paths/register src/infra/http/express/index.ts",
-    "test:express": "NODE_ENV=test jest src/infra/http/express",
+    "test:express": "NODE_ENV=test jest src/infra/http/express --detectOpenHandles",
     "start": "yarn express"
   },
   "devDependencies": {
@@ -33,6 +33,7 @@
     "import-sort-parser-typescript": "6.0.0",
     "import-sort-style-renke": "6.0.0",
     "jest": "28.1.1",
+    "sqlite": "4.1.2",
     "supertest": "6.2.3",
     "ts-node": "10.8.1",
     "ts-node-dev": "2.0.0",

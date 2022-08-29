@@ -26,6 +26,7 @@
     "@types/jest": "28.1.2",
     "@types/jsonwebtoken": "8.5.8",
     "@types/node": "18.7.11",
+    "@types/sqlite3": "3.1.8",
     "@types/supertest": "2.0.12",
     "cross-env": "7.0.3",
     "import-sort-cli": "6.0.0",
@@ -34,6 +35,10 @@
     "import-sort-style-renke": "6.0.0",
     "jest": "28.1.1",
     "sqlite": "4.1.2",
+<<<<<<< HEAD
+=======
+    "sqlite3": "5.0.11",
+>>>>>>> 9fea0c7c02ec892729e15392a5edaac5ae895f31
     "supertest": "6.2.3",
     "ts-node": "10.8.1",
     "ts-node-dev": "2.0.0",

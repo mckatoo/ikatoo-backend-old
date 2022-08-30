@@ -1,4 +1,5 @@
 import { UserProps } from "@domain/user/user.entity";
+import { clearUserSqliteRepository } from "@infra/db/sqlite";
 import database from "./database";
 import { UserSqliteRepository } from "./user-sqlite.repository";
 
@@ -175,9 +176,3 @@ describe("Sqlite repository", () => {
     ).rejects.toThrowError("User not found");
   });
 });
-
-export async function clearUserSqliteRepository() {
-  const db = await database();
-  await db.run("delete from users");
-  db.close();
-}

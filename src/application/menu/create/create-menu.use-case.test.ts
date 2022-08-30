@@ -7,7 +7,7 @@ describe("Create Menu use-case Test", () => {
   const createUseCase = new CreateMenuUseCase(repository);
 
   it("should create a new menu", async () => {
-    expect(await repository.count()).toBe(0);
+    expect(await repository.getAll()).toHaveLength(0);
 
     const output = await createUseCase.execute({
       name: "public",
@@ -19,11 +19,11 @@ describe("Create Menu use-case Test", () => {
     });
     const expectedMenu = await repository.get("other_user_id", "public");
     expect(output).toStrictEqual(expectedMenu);
-    expect(await repository.count()).toBe(1);
+    expect(await repository.getAll()).toHaveLength(1);
   });
 
   it("should create a new menu with id", async () => {
-    expect(await repository.count()).toBe(1);
+    expect(await repository.getAll()).toHaveLength(1);
 
     const output = await createUseCase.execute({
       id: "teste_id",
@@ -38,6 +38,6 @@ describe("Create Menu use-case Test", () => {
 
     expect(output).toHaveProperty("id", "teste_id");
     expect(output).toStrictEqual(expectedMenu);
-    expect(await repository.count()).toBe(2);
+    expect(await repository.getAll()).toHaveLength(2);
   });
 });

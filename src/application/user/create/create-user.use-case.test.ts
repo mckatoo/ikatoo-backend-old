@@ -1,5 +1,5 @@
+import { clearUserSqliteRepository } from "@infra/db/sqlite";
 import { UserRepository } from "@infra/db/user";
-import { clearUserSqliteRepository } from "@infra/db/user/sqlite/user-sqlite.repository.test";
 
 import { CreateUserUseCase } from "./create-user.use-case";
 

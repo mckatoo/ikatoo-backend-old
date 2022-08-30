@@ -44,7 +44,7 @@ describe("Menu in Memory Repository", () => {
     const menuAfterInsert = await repository.getAll();
 
     expect(menuAfterInsert).toStrictEqual([...menuBeforeInsert, menu]);
-    expect(await repository.count()).toBe(2);
+    expect(await repository.getAll()).toHaveLength(2);
     expect(await repository.get(menu.user_id, menu.name)).toStrictEqual(menu.toJson());
   });
 });

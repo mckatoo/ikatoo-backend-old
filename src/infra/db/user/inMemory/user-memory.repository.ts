@@ -1,10 +1,16 @@
-import { User } from "@domain/user/user.entity";
+import { User, UserProps } from "@domain/user/user.entity";
 import {
   UserRepositoryInterface,
   UserWithId,
 } from "@domain/user/user.repository";
 
 export class UserMemoryRepository implements UserRepositoryInterface {
+  update(user: UserProps, id: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  remove(id: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   private users: User[] = [];
 
   async getByUsername(username: string): Promise<UserWithId> {

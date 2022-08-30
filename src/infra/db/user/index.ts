@@ -1,3 +1,3 @@
-import { UserMemoryRepository } from "./inMemory/user-memory.repository";
+import { UserSqliteRepository } from "./sqlite/user-sqlite.repository";
 
-export { UserMemoryRepository as UserRepository };
+export { UserSqliteRepository as UserRepository };

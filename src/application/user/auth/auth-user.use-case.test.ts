@@ -1,5 +1,4 @@
 import { UserRepository } from "@infra/db/user";
-import { env } from "@infra/env";
 import { verify } from "@infra/jwt";
 
 import { CreateUserUseCase } from "../create/create-user.use-case";

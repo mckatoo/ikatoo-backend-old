@@ -2,16 +2,16 @@ import app from "@infra/http/express/app";
 import request from "supertest";
 
 describe("Express - Auth", () => {
-  const user = {
-    id: "9bec9383-5a22-4a70-9242-cfc3f3926ca8",
-    name: "Milton Carlos Katoo",
-    username: "milton",
-    email: "milton@katoo.com",
-    password: "teste12345",
-  }
+  // const user = {
+  //   id: "9bec9383-5a22-4a70-9242-cfc3f3926ca8",
+  //   name: "Milton Carlos Katoo",
+  //   username: "milton",
+  //   email: "milton@katoo.com",
+  //   password: "teste12345",
+  // }
   
   beforeAll(async () => {
-    await request(app).post("/user").send(user);
+    // await request(app).post("/user").send(user);
   });
 
   it("should authenticate a valid username", async () => {

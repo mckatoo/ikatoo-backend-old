@@ -4,15 +4,11 @@ import { UserSqliteRepository } from "./user-sqlite.repository";
 
 describe("Sqlite repository", () => {
   afterAll(async () => {
-    const db = await database();
-    await db.run("delete from users");
-    db.close();
+    await clearUserSqliteRepository();
   });
 
   beforeAll(async () => {
-    const db = await database();
-    await db.run("delete from users");
-    db.close();
+    await clearUserSqliteRepository();
   });
 
   const repository = new UserSqliteRepository();
@@ -179,3 +175,9 @@ describe("Sqlite repository", () => {
     ).rejects.toThrowError("User not found");
   });
 });
+
+export async function clearUserSqliteRepository() {
+  const db = await database();
+  await db.run("delete from users");
+  db.close();
+}

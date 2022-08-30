@@ -1,7 +1,7 @@
 import { UserProps } from "@domain/user/user.entity";
 import { UserRepositoryInterface } from "@domain/user/user.repository";
 
-type GetUserOutput = Omit<UserProps, "password"> & { id: string };
+type GetUserOutput = Omit<UserProps, "password"> & { id?: string };
 
 export class GetUserUseCase {
   constructor(private userRepository: UserRepositoryInterface) {}

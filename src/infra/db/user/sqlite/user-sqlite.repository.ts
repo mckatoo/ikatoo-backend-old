@@ -4,16 +4,14 @@ import {
   UserWithId,
 } from "@domain/user/user.repository";
 import { randomUUID } from "crypto";
-
 import database from "./database";
 
 export class UserSqliteRepository implements UserRepositoryInterface {
   async create(user: UserWithId): Promise<void> {
     const db = await database();
-
     await db.exec(`create table if not exists users (
       id text NOT NULL UNIQUE PRIMARY KEY, 
-      name text NOT NULL UNIQUE, 
+      name text NOT NULL, 
       username text NOT NULL UNIQUE, 
       password text NOT NULL, 
       email text NOT NULL UNIQUE
@@ -28,7 +26,7 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       user.email
     );
 
-    db.close();
+    await db.close();
   }
 
   async getByUsername(username: string): Promise<UserWithId> {
@@ -37,7 +35,7 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       `select * from users where username = $username`,
       { $username: username }
     );
-    db.close();
+    await db.close();
 
     if (!user) throw new Error("User not found");
 
@@ -52,7 +50,7 @@ export class UserSqliteRepository implements UserRepositoryInterface {
         $email: email,
       }
     );
-    db.close();
+    await db.close();
 
     if (!user) throw new Error("User not found");
 
@@ -64,7 +62,7 @@ export class UserSqliteRepository implements UserRepositoryInterface {
     const users = await db.all<UserWithId[]>(
       `select * from users where name like '%${partialName}%'`
     );
-    db.close();
+    await db.close();
 
     if (!users) throw new Error("User not found");
 
@@ -74,7 +72,7 @@ export class UserSqliteRepository implements UserRepositoryInterface {
   async getAll(): Promise<UserWithId[]> {
     const db = await database();
     const users = await db.all<UserWithId[]>("select * from users");
-    db.close();
+    await db.close();
 
     if (!users) throw new Error("User not found");
 
@@ -83,7 +81,6 @@ export class UserSqliteRepository implements UserRepositoryInterface {
 
   async update(user: UserProps, id: string): Promise<void> {
     const db = await database();
-
     await db.run(
       `update users set 
       id = ?,
@@ -100,14 +97,13 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       id
     );
 
-    db.close();
+    await db.close();
   }
 
   async remove(id: string): Promise<void> {
     const db = await database();
-
     await db.run(`delete from users where id=?`, id);
 
-    db.close();
+    await db.close();
   }
 }

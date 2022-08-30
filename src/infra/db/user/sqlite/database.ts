@@ -5,6 +5,6 @@ export type SqliteConnection = DatabaseSqlite<Database, Statement>;
 
 export default async () =>
   await open<Database, Statement>({
-    filename: ":memory:",
+    filename: "sqlite.db",
     driver: Database,
   });

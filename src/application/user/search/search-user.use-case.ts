@@ -1,18 +1,18 @@
-import { UserProps } from "@domain/user/user.entity";
-import { UserRepositoryInterface } from "@domain/user/user.repository";
+import { UserProps } from '@domain/user/user.entity'
+import { UserRepositoryInterface } from '@domain/user/user.repository'
 
-type SearchUserOutput = Omit<UserProps, "password">;
+type SearchUserOutput = Omit<UserProps, 'password'>
 
 export class SearchUserUseCase {
-  constructor(private userRepository: UserRepositoryInterface) {}
+  constructor (private readonly userRepository: UserRepositoryInterface) {}
 
-  async byNamePart(name_part: string): Promise<SearchUserOutput[]> {
-    const users = await this.userRepository.searchByName(name_part);
+  async byNamePart (namePart: string): Promise<SearchUserOutput[]> {
+    const users = await this.userRepository.searchByName(namePart)
 
     return users.map(({ name, username, email }) => ({
       name,
       username,
-      email,
-    }));
+      email
+    }))
   }
 }

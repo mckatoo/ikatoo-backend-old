@@ -1,9 +1,9 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv'
 
 dotenv.config({
-  path: `.env.${process.env.NODE_ENV}`,
-});
+  path: `.env.${process.env.NODE_ENV ?? ''}`
+})
 
 export const env = (key: string) => {
-  return `${process.env[key]}`;
-};
+  return `${process.env[key] ?? ''}`
+}

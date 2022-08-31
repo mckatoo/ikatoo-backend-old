@@ -1,65 +1,65 @@
-import { randomUUID } from "crypto";
+import { randomUUID } from 'crypto'
 
-export type UserProps = {
-  name: string;
-  username: string;
-  password: string;
-  email: string;
-};
+export interface UserProps {
+  name: string
+  username: string
+  password: string
+  email: string
+}
 
 export class User {
-  readonly id: string;
+  readonly id: string
 
-  props: Required<UserProps>;
+  props: Required<UserProps>
 
-  constructor(props: UserProps, id?: string) {
-    this.id = id || randomUUID();
+  constructor (props: UserProps, id?: string) {
+    this.id = id ?? randomUUID()
 
-    if (!props) throw new Error("Props required on contructor");
+    if (props === undefined) throw new Error('Props required on contructor')
 
-    this.props = props;
+    this.props = props
   }
 
-  static create(props: UserProps, id?: string) {
-    return new User(props, id);
+  static create (props: UserProps, id?: string) {
+    return new User(props, id)
   }
 
-  updateName(name: string) {
-    this.props.name = name;
+  updateName (name: string) {
+    this.props.name = name
   }
 
-  get name(): string {
-    return this.props.name;
+  get name (): string {
+    return this.props.name
   }
 
-  updateUsername(username: string) {
-    this.props.username = username;
+  updateUsername (username: string) {
+    this.props.username = username
   }
 
-  get username(): string {
-    return this.props.username;
+  get username (): string {
+    return this.props.username
   }
 
-  updatePassword(password: string) {
-    this.props.password = password;
+  updatePassword (password: string) {
+    this.props.password = password
   }
 
-  get password(): string {
-    return this.props.password;
+  get password (): string {
+    return this.props.password
   }
 
-  updateEmail(email: string) {
-    this.props.email = email;
+  updateEmail (email: string) {
+    this.props.email = email
   }
 
-  get email(): string {
-    return this.props.email;
+  get email (): string {
+    return this.props.email
   }
 
-  toJson() {
+  toJson () {
     return {
       id: this.id,
-      ...this.props,
-    };
+      ...this.props
+    }
   }
 }

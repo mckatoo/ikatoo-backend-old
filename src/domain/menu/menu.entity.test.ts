@@ -1,42 +1,42 @@
-import { Menu, MenuProps } from "./menu.entity";
+import { Menu, MenuProps } from './menu.entity'
 
-describe("Test Menu Test", () => {
+describe('Test Menu Test', () => {
   const menuData: MenuProps = {
-    name: "test name",
+    name: 'test name',
     items: [
-      { label: "first item", to: "url/first" },
-      { label: "second item", to: "url/second" },
+      { label: 'first item', to: 'url/first' },
+      { label: 'second item', to: 'url/second' }
     ],
-    user_id: "randomUUID",
-  };
+    user_id: 'randomUUID'
+  }
 
-  it("constructor without id", () => {
-    const menu = new Menu(menuData);
+  it('constructor without id', () => {
+    const menu = new Menu(menuData)
 
-    expect(menu.props).toStrictEqual(menuData);
-    expect(menu.id).toBeDefined();
-  });
+    expect(menu.props).toStrictEqual(menuData)
+    expect(menu.id).toBeDefined()
+  })
 
-  it("constructor with id", () => {
-    let menu = new Menu(menuData, "test_id");
+  it('constructor with id', () => {
+    const menu = new Menu(menuData, 'test_id')
 
-    expect(menu.props).toStrictEqual(menuData);
-    expect(menu.id).toBe("test_id");
-  });
+    expect(menu.props).toStrictEqual(menuData)
+    expect(menu.id).toBe('test_id')
+  })
 
-  it("should update name", () => {
-    const menu = new Menu(menuData);
-    menu.updateName("new name");
+  it('should update name', () => {
+    const menu = new Menu(menuData)
+    menu.updateName('new name')
 
-    expect(menu.name).toBe("new name");
-  });
+    expect(menu.name).toBe('new name')
+  })
 
-  it("should update items", () => {
-    const menu = new Menu(menuData);
-    const items = [{ label: "other label", to: "url/updated" }];
-    menu.updateItems(items);
+  it('should update items', () => {
+    const menu = new Menu(menuData)
+    const items = [{ label: 'other label', to: 'url/updated' }]
+    menu.updateItems(items)
 
-    expect(menu.items).toStrictEqual(items);
-    expect(menu.items).toHaveLength(1);
-  });
-});
+    expect(menu.items).toStrictEqual(items)
+    expect(menu.items).toHaveLength(1)
+  })
+})

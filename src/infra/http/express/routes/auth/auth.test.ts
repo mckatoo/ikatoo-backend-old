@@ -1,7 +1,7 @@
-import app from "@infra/http/express/app";
-import request from "supertest";
+// import app from '@infra/http/express/app'
+// import request from 'supertest'
 
-describe("Express - Auth", () => {
+describe('Express - Auth', () => {
   // const user = {
   //   id: "9bec9383-5a22-4a70-9242-cfc3f3926ca8",
   //   name: "Milton Carlos Katoo",
@@ -9,17 +9,17 @@ describe("Express - Auth", () => {
   //   email: "milton@katoo.com",
   //   password: "teste12345",
   // }
-  
+
   beforeAll(async () => {
     // await request(app).post("/user").send(user);
-  });
+  })
 
-  it("should authenticate a valid username", async () => {
+  it('should authenticate a valid username', async () => {
     // const token = await request(app).post("/auth").send({
     //   username: user.username,
     //   password: user.password
     // });
-  });
+  })
 
   // it("should not authenticate a invalid user", async () => {
   //   const login = await request(app).post("/auth").send();
@@ -40,4 +40,4 @@ describe("Express - Auth", () => {
   // it("should not renew access token and refresh token", async () => {
   //   const login = await request(app).post("/auth").send();
   // });
-});
+})

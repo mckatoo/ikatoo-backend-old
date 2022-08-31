@@ -1,18 +1,18 @@
-import { MenuItem } from "@domain/menu/menu.entity";
-import { MenuRepositoryInterface } from "@domain/menu/menu.repository";
+import { MenuItem } from '@domain/menu/menu.entity'
+import { MenuRepositoryInterface } from '@domain/menu/menu.repository'
 
-type GetMenuOutput = {
-  name: string;
-  items: MenuItem[];
-  user_id: string;
-};
+interface GetMenuOutput {
+  name: string
+  items: MenuItem[]
+  user_id: string
+}
 
 export class GetMenuUseCase {
-  constructor(private menuRepository: MenuRepositoryInterface) {}
+  constructor (private readonly menuRepository: MenuRepositoryInterface) {}
 
-  async execute(user_id: string, name: string): Promise<GetMenuOutput> {
-    const menu = await this.menuRepository.get(user_id, name);
+  async execute (userId: string, name: string): Promise<GetMenuOutput> {
+    const menu = await this.menuRepository.get(userId, name)
 
-    return menu;
+    return menu
   }
 }

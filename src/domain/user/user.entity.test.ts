@@ -1,55 +1,55 @@
-import { randomUUID } from "crypto";
-import { User, UserProps } from "./user.entity";
+import { randomUUID } from 'crypto'
+import { User, UserProps } from './user.entity'
 
-describe("Test User Test", () => {
+describe('Test User Test', () => {
   const userData: UserProps = {
-    name: "test name",
-    email: "test@email.com",
-    username: "user1",
-    password: "pass123"
-  };
-  
-  it("constructor without id", () => {
-    const user = new User(userData);
-    
-    expect(user.props).toStrictEqual(userData);
-    expect(user.id).toBeDefined();
-  });
+    name: 'test name',
+    email: 'test@email.com',
+    username: 'user1',
+    password: 'pass123'
+  }
 
-  it("constructor with id", () => {
+  it('constructor without id', () => {
+    const user = new User(userData)
+
+    expect(user.props).toStrictEqual(userData)
+    expect(user.id).toBeDefined()
+  })
+
+  it('constructor with id', () => {
     const id = randomUUID()
 
-    let user = new User(userData, id);
+    const user = new User(userData, id)
 
-    expect(user.props).toStrictEqual(userData);
-    expect(user.id).toBe(id);
-  });
+    expect(user.props).toStrictEqual(userData)
+    expect(user.id).toBe(id)
+  })
 
-  it("should update name", () => {
-    const user = new User(userData);
-    user.updateName("new name");
+  it('should update name', () => {
+    const user = new User(userData)
+    user.updateName('new name')
 
-    expect(user.name).toBe("new name");
-  });
+    expect(user.name).toBe('new name')
+  })
 
-  it("should update username", () => {
-    const user = new User(userData);
-    user.updateUsername("new username");
+  it('should update username', () => {
+    const user = new User(userData)
+    user.updateUsername('new username')
 
-    expect(user.username).toBe("new username");
-  });
+    expect(user.username).toBe('new username')
+  })
 
-  it("should update email", () => {
-    const user = new User(userData);
-    user.updateEmail("new@email.com");
+  it('should update email', () => {
+    const user = new User(userData)
+    user.updateEmail('new@email.com')
 
-    expect(user.email).toBe("new@email.com");
-  });
+    expect(user.email).toBe('new@email.com')
+  })
 
-  it("should update password", () => {
-    const user = new User(userData);
-    user.updatePassword("newPass");
+  it('should update password', () => {
+    const user = new User(userData)
+    user.updatePassword('newPass')
 
-    expect(user.password).toBe("newPass");
-  });
-});
+    expect(user.password).toBe('newPass')
+  })
+})

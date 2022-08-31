@@ -3,7 +3,7 @@ import { clearUserSqliteRepository } from '@infra/db/sqlite'
 import database from './database'
 import { UserSqliteRepository } from './user-sqlite.repository'
 
-describe('Sqlite repository', () => {
+describe('User Sqlite repository', () => {
   afterAll(async () => {
     await clearUserSqliteRepository()
   })

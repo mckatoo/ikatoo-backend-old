@@ -9,13 +9,6 @@ import database from './database'
 export class UserSqliteRepository implements UserRepositoryInterface {
   async create (user: UserWithId): Promise<void> {
     const db = await database()
-    await db.exec(`create table if not exists users (
-      id text NOT NULL UNIQUE PRIMARY KEY, 
-      name text NOT NULL, 
-      username text NOT NULL UNIQUE, 
-      password text NOT NULL, 
-      email text NOT NULL UNIQUE
-      )`)
 
     await db.run(
       'insert into users values(?,?,?,?,?)',

@@ -21,4 +21,15 @@ async function clearAboutPagesSqliteRepository () {
   await db.close()
 }
 
-export { initDb, clearUserSqliteRepository, clearAboutPagesSqliteRepository }
+async function clearSkillsSqliteRepository () {
+  const db = await database()
+  await db.run('drop table if exists skills')
+  await db.close()
+}
+
+export {
+  initDb,
+  clearUserSqliteRepository,
+  clearAboutPagesSqliteRepository,
+  clearSkillsSqliteRepository
+}

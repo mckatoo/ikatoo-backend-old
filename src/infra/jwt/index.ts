@@ -1,4 +1,4 @@
 import sign from './jsonwebtoken/sign'
-import verify from './jsonwebtoken/verify'
+import isValid from './jsonwebtoken/isValid'
 
-export { sign, verify }
+export { sign, isValid }

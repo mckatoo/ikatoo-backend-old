@@ -15,8 +15,6 @@ describe('Express - About Page', () => {
 
   let accessToken: string
 
-  jest.setTimeout(10000)
-
   beforeAll(async () => {
     await clearAboutPagesSqliteRepository()
     await clearUserSqliteRepository()

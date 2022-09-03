@@ -1,14 +1,17 @@
-import { AboutPageProps } from '@domain/about/about-page.entity'
-import { AboutPageRepositoryInterface } from '@domain/about/about-page.repository'
-
-type GetAboutPageOutput = AboutPageProps & { id: string }
+import { AboutPageRepositoryInterface, AboutPageWithId } from '@domain/about/about-page.repository'
 
 export class GetAboutPageUseCase {
   constructor (private readonly aboutPageRepository: AboutPageRepositoryInterface) {}
 
-  async execute (userId: string): Promise<GetAboutPageOutput> {
-    const aboutPage = await this.aboutPageRepository.get(userId)
+  async getByUserId (userId: string): Promise<AboutPageWithId> {
+    const aboutPage = await this.aboutPageRepository.getByUserId(userId)
 
-    return aboutPage.toJson()
+    return aboutPage
+  }
+
+  async getByDomain (domain: string): Promise<AboutPageWithId> {
+    const aboutPage = await this.aboutPageRepository.getByDomain(domain)
+
+    return aboutPage
   }
 }

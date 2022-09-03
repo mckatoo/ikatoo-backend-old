@@ -9,10 +9,11 @@ export class SearchUserUseCase {
   async byNamePart (namePart: string): Promise<SearchUserOutput[]> {
     const users = await this.userRepository.searchByName(namePart)
 
-    return users.map(({ name, username, email }) => ({
+    return users.map(({ name, username, email, domain }) => ({
       name,
       username,
-      email
+      email,
+      domain
     }))
   }
 }

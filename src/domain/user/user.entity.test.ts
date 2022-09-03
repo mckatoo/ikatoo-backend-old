@@ -6,7 +6,8 @@ describe('Test User Test', () => {
     name: 'test name',
     email: 'test@email.com',
     username: 'user1',
-    password: 'pass123'
+    password: 'pass123',
+    domain: 'localhost'
   }
 
   it('constructor without id', () => {
@@ -51,5 +52,12 @@ describe('Test User Test', () => {
     user.updatePassword('newPass')
 
     expect(user.password).toBe('newPass')
+  })
+
+  it('should update Domain', () => {
+    const user = new User(userData)
+    user.updateDomain('newHost')
+
+    expect(user.domain).toBe('newHost')
   })
 })

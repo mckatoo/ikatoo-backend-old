@@ -1,8 +1,10 @@
-import { AboutPage } from './about-page.entity'
+import { AboutPageProps } from './about-page.entity'
 
-export type AboutPageWithId = AboutPage & { id: string }
+export type AboutPageWithId = AboutPageProps & { id?: string }
 
 export interface AboutPageRepositoryInterface {
-  create: (aboutPage: AboutPage) => Promise<void>
-  get: (user_id: string) => Promise<AboutPageWithId>
+  create: (aboutPage: AboutPageWithId) => Promise<void>
+  getByUserId: (userId: string) => Promise<AboutPageWithId>
+  getByDomain: (domain: string) => Promise<AboutPageWithId>
+  getAll: () => Promise<AboutPageWithId[]>
 }

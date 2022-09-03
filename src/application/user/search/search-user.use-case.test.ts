@@ -22,13 +22,15 @@ describe('Search User use-case Test', () => {
         name: 'User Test Rakuna',
         email: 'rakuna@user.com',
         username: 'rakuna',
-        password: '1234521312'
+        password: '1234521312',
+        domain: 'rakuna.com'
       },
       {
         name: 'User2 Test Rakuna',
         email: 'matata@user.com',
         username: 'matata',
-        password: '1234521312'
+        password: '1234521312',
+        domain: 'matata.com'
       }
     ]
     await createUseCase.execute(users[0])
@@ -40,12 +42,14 @@ describe('Search User use-case Test', () => {
       {
         name: 'User Test Rakuna',
         email: 'rakuna@user.com',
-        username: 'rakuna'
+        username: 'rakuna',
+        domain: 'rakuna.com'
       },
       {
         name: 'User2 Test Rakuna',
         email: 'matata@user.com',
-        username: 'matata'
+        username: 'matata',
+        domain: 'matata.com'
       }
     ])
   })

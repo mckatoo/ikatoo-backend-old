@@ -1,3 +1,3 @@
-import { AboutPageMemoryRepository } from './inMemory/about-page-memory.repository'
+import { AboutPagesSqliteRepository } from './sqlite/about-page-sqlite.repository'
 
-export { AboutPageMemoryRepository as AboutPageRepository }
+export { AboutPagesSqliteRepository as AboutPageRepository }

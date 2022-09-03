@@ -4,13 +4,15 @@
  */
 
 module.exports = {
-  coverageProvider: "v8",
+  coverageProvider: 'v8',
   moduleNameMapper: {
-    "^@application/(.*)$": "<rootDir>/src/application/$1",
-    "^@domain/(.*)$": "<rootDir>/src/domain/$1",
-    "^@infra/(.*)$": "<rootDir>/src/infra/$1",
+    '^@application/(.*)$': '<rootDir>/src/application/$1',
+    '^@domain/(.*)$': '<rootDir>/src/domain/$1',
+    '^@infra/(.*)$': '<rootDir>/src/infra/$1'
   },
   transform: {
-    "^.+\\.ts?$": ["@swc/jest"],
+    '^.+\\.ts?$': ['@swc/jest']
   },
-} 
+  testTimeout: 10000
+
+}

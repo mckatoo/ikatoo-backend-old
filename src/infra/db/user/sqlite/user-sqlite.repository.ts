@@ -11,12 +11,13 @@ export class UserSqliteRepository implements UserRepositoryInterface {
     const db = await database()
 
     await db.run(
-      'insert into users values(?,?,?,?,?)',
+      'insert into users values(?,?,?,?,?,?)',
       user.id ?? randomUUID(),
       user.name,
       user.username,
       user.password,
-      user.email
+      user.email,
+      user.domain
     )
 
     await db.close()
@@ -41,6 +42,21 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       'select * from users where email = $email',
       {
         $email: email
+      }
+    )
+    await db.close()
+
+    if (user == null) throw new Error('User not found')
+
+    return user
+  }
+
+  async getByDomain (domain: string): Promise<UserWithId> {
+    const db = await database()
+    const user = await db.get<UserWithId>(
+      'select * from users where domain = $domain',
+      {
+        $domain: domain
       }
     )
     await db.close()
@@ -80,13 +96,15 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       name = ?,
       username = ?,
       password = ?,
-      email = ?
+      email = ?,
+      domain = ?
       where id = ?`,
       id,
       user.name,
       user.username,
       user.password,
       user.email,
+      user.domain,
       id
     )
 

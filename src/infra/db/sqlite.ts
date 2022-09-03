@@ -11,8 +11,14 @@ async function initDb () {
 
 async function clearUserSqliteRepository () {
   const db = await database()
-  await db.run('delete from users')
+  await db.run('drop table if exists users')
   await db.close()
 }
 
-export { initDb, clearUserSqliteRepository }
+async function clearAboutPagesSqliteRepository () {
+  const db = await database()
+  await db.run('drop table if exists aboutPages')
+  await db.close()
+}
+
+export { initDb, clearUserSqliteRepository, clearAboutPagesSqliteRepository }

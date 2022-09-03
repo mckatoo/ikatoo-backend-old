@@ -7,13 +7,11 @@ export type SqliteConnection = DatabaseSqlite<Database, Statement>
 export default async () => {
   const db = await initDb()
 
-  await db.exec(`create table if not exists users (
+  await db.exec(`create table if not exists aboutPages (
     id text NOT NULL UNIQUE PRIMARY KEY, 
-    name text NOT NULL, 
-    username text NOT NULL UNIQUE, 
-    password text NOT NULL, 
-    email text NOT NULL UNIQUE,
-    domain text NOT NULL UNIQUE
+    title text NOT NULL, 
+    description text NOT NULL, 
+    user_id text NOT NULL UNIQUE 
     )`)
 
   return db

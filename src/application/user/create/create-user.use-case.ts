@@ -20,7 +20,8 @@ export class CreateUserUseCase {
       id: user.id,
       name: user.name,
       username: user.username,
-      email: user.email
+      email: user.email,
+      domain: user.domain
     }
   }
 }

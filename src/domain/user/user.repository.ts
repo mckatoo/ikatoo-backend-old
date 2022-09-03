@@ -6,6 +6,7 @@ export interface UserRepositoryInterface {
   create: (user: UserWithId) => Promise<void>
   getByUsername: (username: string) => Promise<UserWithId>
   getByEmail: (email: string) => Promise<UserWithId>
+  getByDomain: (domain: string) => Promise<UserWithId>
   searchByName: (partialName: string) => Promise<UserWithId[]>
   getAll: () => Promise<UserWithId[]>
   update: (user: UserProps, id: string) => Promise<void>

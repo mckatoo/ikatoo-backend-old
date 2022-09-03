@@ -1,13 +1,23 @@
+import { clearUserSqliteRepository } from '@infra/db/sqlite'
 import app from '@infra/http/express/app'
 import request from 'supertest'
 
 describe('Express - User', () => {
+  beforeAll(async () => {
+    await clearUserSqliteRepository()
+  })
+
+  afterAll(async () => {
+    await clearUserSqliteRepository()
+  })
+
   it('should create user without id', async () => {
     const response = await request(app).post('/user').send({
       name: 'Test User',
       username: 'test_user_sdfj',
       email: 'test@user2.com',
-      password: '123teste312'
+      password: '123teste312',
+      domain: 'ikatoo.com.br'
     })
 
     expect(response.status).toBe(201)
@@ -18,9 +28,10 @@ describe('Express - User', () => {
     const response = await request(app).post('/user').send({
       id: '9bec9383-5a22-4a70-9242-cfc3f3926ca8',
       name: 'Milton Carlos Katoo',
-      username: 'milton',
+      username: 'milton_with_id',
       email: 'milton@katoo.com',
-      password: 'teste12345'
+      password: 'teste12345',
+      domain: 'ikatoo2.com.br'
     })
 
     expect(response.status).toBe(201)

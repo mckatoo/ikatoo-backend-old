@@ -22,7 +22,8 @@ describe('Create User use-case Test', () => {
       name: 'User Test',
       email: 'user@test.com',
       username: 'usertest',
-      password: 'asdfl'
+      password: 'asdfl',
+      domain: 'localhost'
     })
     const expectedUser = await repository.getByUsername(output.username)
 
@@ -30,7 +31,8 @@ describe('Create User use-case Test', () => {
       id: expectedUser.id,
       name: 'User Test',
       email: 'user@test.com',
-      username: 'usertest'
+      username: 'usertest',
+      domain: 'localhost'
     })
     expect(output).not.toHaveProperty('password')
     const users = await repository.getAll()

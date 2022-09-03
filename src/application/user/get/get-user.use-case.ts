@@ -13,7 +13,8 @@ export class GetUserUseCase {
       id: user.id,
       name: user.name,
       username: user.username,
-      email: user.email
+      email: user.email,
+      domain: user.domain
     }
   }
 
@@ -24,7 +25,20 @@ export class GetUserUseCase {
       id: user.id,
       name: user.name,
       username: user.username,
-      email: user.email
+      email: user.email,
+      domain: user.domain
+    }
+  }
+
+  async bydomain (domain: string): Promise<GetUserOutput> {
+    const user = await this.userRepository.getByDomain(domain)
+
+    return {
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      domain: user.domain
     }
   }
 }

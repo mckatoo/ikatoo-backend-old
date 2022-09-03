@@ -5,6 +5,7 @@ export interface UserProps {
   username: string
   password: string
   email: string
+  domain: string
 }
 
 export class User {
@@ -54,6 +55,14 @@ export class User {
 
   get email (): string {
     return this.props.email
+  }
+
+  updateDomain (domain: string) {
+    this.props.domain = domain
+  }
+
+  get domain (): string {
+    return this.props.domain
   }
 
   toJson () {

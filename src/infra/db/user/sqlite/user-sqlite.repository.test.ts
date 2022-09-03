@@ -84,18 +84,18 @@ describe('User Sqlite repository', () => {
     })
   })
 
-  // it('should get a user by domain', async () => {
-  //   const user = await repository.getBydomain('localhost3')
+  it('should get a user by domain', async () => {
+    const user = await repository.getByDomain('localhost3')
 
-  //   expect(user).toEqual({
-  //     id: user.id,
-  //     name: 'Test sqlite3',
-  //     username: 'test_sqlite3',
-  //     email: 'test@sqlite.com3',
-  //     password: 'test1233',
-  //     domain: 'localhost3'
-  //   })
-  // })
+    expect(user).toEqual({
+      id: user.id,
+      name: 'Test sqlite3',
+      username: 'test_sqlite3',
+      email: 'test@sqlite.com3',
+      password: 'test1233',
+      domain: 'localhost3'
+    })
+  })
 
   it('should get users with contain partial name', async () => {
     await repository.create({

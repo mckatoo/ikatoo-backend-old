@@ -14,7 +14,7 @@ authRoute.post('/auth', async (req: Request, res: Response) => {
     ? await authUseCase.authByEmail(email, password)
     : await authUseCase.authByUsername(username, password)
 
-  res.status(201).json(tokens)
+  res.status(200).json(tokens)
 })
 
 // authRoute.get("/refresh", async (req: Request, res: Response) => {

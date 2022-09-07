@@ -10,12 +10,12 @@
   "license": "CC0-1.0",
   "scripts": {
     "typecheck": "tsc --project tsconfig.json --noEmit",
-    "test": "rimraf sqlite.db && NODE_ENV=test jest ./src --detectOpenHandles",
-    "test:coverage": "rimraf sqlite.db,coverage && NODE_ENV=test jest ./src --coverage --detectOpenHandles",
+    "test": "rimraf sqlite.db && NODE_ENV=test jest ./src",
+    "test:coverage": "rimraf sqlite.db,coverage && NODE_ENV=test jest ./src --coverage",
     "express": "ts-node -r tsconfig-paths/register src/infra/http/express/index.ts",
     "dev": "NODE_ENV=test tsnd -r tsconfig-paths/register --watch src/ --respawn --transpile-only src/infra/http/express/index.ts",
     "dev:express": "NODE_ENV=test tsnd -r tsconfig-paths/register src/infra/http/express/index.ts",
-    "test:express": "rimraf sqlite.db && NODE_ENV=test jest src/infra/http/express --detectOpenHandles",
+    "test:express": "rimraf sqlite.db && NODE_ENV=test jest src/infra/http/express",
     "start": "yarn express"
   },
   "devDependencies": {
@@ -39,7 +39,7 @@
     "import-sort-parser-babylon": "6.0.0",
     "import-sort-parser-typescript": "6.0.0",
     "import-sort-style-renke": "6.0.0",
-    "jest": "28.1.1",
+    "jest": "29.0.2",
     "rimraf": "3.0.2",
     "sqlite": "4.1.2",
     "sqlite3": "5.0.11",

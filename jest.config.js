@@ -5,6 +5,16 @@
 
 module.exports = {
   coverageProvider: 'v8',
+  coverageDirectory: 'coverage',
+  coverageReporters: ['lcov', 'html', 'text'],
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    'src/tools',
+    'src/services',
+    'src/middlewares'
+  ],
+  modulePathIgnorePatterns: ['dist', 'node_modules', 'coverage'],
+  testMatch: ['**/?(*.)+(spec|test).(ts|tsx)'],
   moduleNameMapper: {
     '^@application/(.*)$': '<rootDir>/src/application/$1',
     '^@domain/(.*)$': '<rootDir>/src/domain/$1',
@@ -14,5 +24,4 @@ module.exports = {
     '^.+\\.ts?$': ['@swc/jest']
   },
   testTimeout: 10000
-
 }

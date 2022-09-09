@@ -25,7 +25,7 @@ describe('Express - About Page', () => {
       username: 'milton',
       email: 'milton@katoo.com',
       password: 'teste12345',
-      domain: 'teste.com.br'
+      domain: 'teste234234.com.br'
     })
     const authResponse = await request(app).post('/auth').send({
       username: user.username,
@@ -101,7 +101,7 @@ describe('Express - About Page', () => {
     const response = await request(app)
       .get('/about')
       .send({
-        domain: 'teste.com.br'
+        domain: 'teste234234.com.br'
       })
 
     expect(response.status).toBe(200)

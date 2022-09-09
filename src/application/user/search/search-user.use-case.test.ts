@@ -19,14 +19,14 @@ describe('Search User use-case Test', () => {
   it('should search users with last name', async () => {
     const users = [
       {
-        name: 'User Test Rakuna',
-        email: 'rakuna@user.com',
-        username: 'rakuna',
+        name: 'User Test Rakuna9',
+        email: 'rakuna9@user.com',
+        username: 'rakuna9',
         password: '1234521312',
-        domain: 'rakuna.com'
+        domain: 'rakuna9.com'
       },
       {
-        name: 'User2 Test Rakuna',
+        name: 'User2 Test Rakuna9',
         email: 'matata@user.com',
         username: 'matata',
         password: '1234521312',
@@ -35,18 +35,18 @@ describe('Search User use-case Test', () => {
     ]
     await createUseCase.execute(users[0])
     await createUseCase.execute(users[1])
-    const output = await searchUseCase.byNamePart('rakuna')
+    const output = await searchUseCase.byNamePart('rakuna9')
 
     expect(output).toHaveLength(2)
     expect(output).toEqual([
       {
-        name: 'User Test Rakuna',
-        email: 'rakuna@user.com',
-        username: 'rakuna',
-        domain: 'rakuna.com'
+        name: 'User Test Rakuna9',
+        email: 'rakuna9@user.com',
+        username: 'rakuna9',
+        domain: 'rakuna9.com'
       },
       {
-        name: 'User2 Test Rakuna',
+        name: 'User2 Test Rakuna9',
         email: 'matata@user.com',
         username: 'matata',
         domain: 'matata.com'

@@ -1,6 +1,6 @@
+import { UnauthorizedError } from '@application/helpers/api-erros'
 import { isValid } from '@infra/jwt'
 import { NextFunction, Request, Response } from 'express'
-import { UnauthorizedError } from '../helpers/api-erros'
 
 const expressVerifyToken = async (
   req: Request,

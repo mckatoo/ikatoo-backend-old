@@ -1,6 +1,6 @@
 import { UserRepositoryInterface, UserWithId } from '@domain/user/user.repository'
 import { comparePassword } from '@infra/hashing-password'
-import { UnauthorizedError } from '@infra/http/express/helpers/api-erros'
+import { UnauthorizedError } from '@application/helpers/api-erros'
 import { sign } from '@infra/jwt'
 
 interface AuthUserOutput {

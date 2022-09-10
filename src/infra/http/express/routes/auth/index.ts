@@ -1,8 +1,8 @@
 import { Request, Response, Router } from 'express'
 
+import { UnauthorizedError } from '@application/helpers/api-erros'
 import { AuthUserUseCase } from '@application/user/auth/auth-user.use-case'
 import { UserRepository } from '@infra/db/user'
-import { UnauthorizedError } from '../../helpers/api-erros'
 
 const authRoute = Router()
 

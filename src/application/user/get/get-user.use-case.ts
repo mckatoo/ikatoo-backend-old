@@ -1,6 +1,6 @@
 import { UserProps } from '@domain/user/user.entity'
 import { UserRepositoryInterface } from '@domain/user/user.repository'
-import { NotFoundError } from '@infra/http/express/helpers/api-erros'
+import { NotFoundError } from '@application/helpers/api-erros'
 
 type GetUserOutput = Omit<UserProps, 'password'> & { id?: string }
 

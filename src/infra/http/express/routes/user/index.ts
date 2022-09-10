@@ -1,8 +1,8 @@
 import { Request, Response, Router } from 'express'
 
-import { UserRepository } from '@infra/db/user'
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { GetUserUseCase } from '@application/user/get/get-user.use-case'
+import { UserRepository } from '@infra/db/user'
 import { expressVerifyToken } from '../verifyToken'
 
 const userRoute = Router()

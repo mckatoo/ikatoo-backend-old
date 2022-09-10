@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express'
 
-import { UnauthorizedError } from '@application/helpers/api-erros'
 import { AuthUserUseCase } from '@application/user/auth/auth-user.use-case'
 import { UserRepository } from '@infra/db/user'
 
@@ -11,17 +10,11 @@ const authUseCase = new AuthUserUseCase(userRepository)
 
 authRoute.post('/auth', async (req: Request, res: Response) => {
   const { username, email, password } = req.body
-  try {
-    const tokens = username === undefined
-      ? await authUseCase.authByEmail(email, password)
-      : await authUseCase.authByUsername(username, password)
+  const tokens = username === undefined
+    ? await authUseCase.authByEmail(email, password)
+    : await authUseCase.authByUsername(username, password)
 
-    res.status(200).json(tokens)
-  } catch (e) {
-    if (e instanceof UnauthorizedError) {
-      res.status(e.statusCode).json({ message: e.message })
-    }
-  }
+  res.status(200).json(tokens)
 })
 
 // authRoute.get("/refresh", async (req: Request, res: Response) => {

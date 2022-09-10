@@ -1,5 +1,6 @@
 import { UserRepositoryInterface, UserWithId } from '@domain/user/user.repository'
 import { comparePassword } from '@infra/hashing-password'
+import { UnauthorizedError } from '@infra/http/express/helpers/api-erros'
 import { sign } from '@infra/jwt'
 
 interface AuthUserOutput {
@@ -31,11 +32,15 @@ export class AuthUserUseCase {
     password: string
   ): Promise<AuthUserOutput> {
     const user = await this.userRepository.getByUsername(username)
+    if (user == null) throw new UnauthorizedError('User not found')
+
     return await validateCredentials(user, password)
   }
 
   async authByEmail (email: string, password: string): Promise<AuthUserOutput> {
     const user = await this.userRepository.getByEmail(email)
+    if (user == null) throw new UnauthorizedError('User not found')
+
     return await validateCredentials(user, password)
   }
 

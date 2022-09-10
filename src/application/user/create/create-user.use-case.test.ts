@@ -21,7 +21,7 @@ describe('Create User use-case Test', () => {
 
     expect({ ...expectedUser, password: undefined }).toStrictEqual({
       ...mock,
-      id: expectedUser.id,
+      id: expectedUser?.id,
       password: undefined
     })
   })

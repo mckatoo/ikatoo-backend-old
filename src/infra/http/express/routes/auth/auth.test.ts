@@ -28,14 +28,14 @@ describe('Express - Auth', () => {
     expect(response.body).toHaveProperty('refreshToken')
   })
 
-  // it('should not authenticate a invalid user', async () => {
-  //   const call = async () => await request(app).post('/auth').send({
-  //     username: 'invalid-username',
-  //     password: 'invalid-pass'
-  //   })
+  it('should not authenticate a invalid user', async () => {
+    const response = await request(app).post('/auth').send({
+      username: 'invalid-username',
+      password: 'invalid-pass'
+    })
 
-  //   expect(await call).toThrowError('User not found')
-  // })
+    expect(response.status).toBe(401)
+  })
 
   // it("should get user data an through access token", async () => {
   //   const login = await request(app).post("/auth").send();

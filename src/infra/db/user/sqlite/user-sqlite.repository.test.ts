@@ -67,7 +67,7 @@ describe('User Sqlite repository', () => {
     const user = await repository.getByUsername(mock.username)
 
     expect(user).toEqual({
-      id: user.id,
+      id: user?.id,
       ...mock
     })
   })
@@ -85,7 +85,7 @@ describe('User Sqlite repository', () => {
     const user = await repository.getByEmail(mock.email)
 
     expect(user).toEqual({
-      id: user.id,
+      id: user?.id,
       ...mock
     })
   })
@@ -102,7 +102,7 @@ describe('User Sqlite repository', () => {
     const user = await repository.getByDomain(mock.domain)
 
     expect(user).toEqual({
-      id: user.id,
+      id: user?.id,
       ...mock
     })
   })
@@ -198,13 +198,12 @@ describe('User Sqlite repository', () => {
     const user = await repository.getByEmail(mock.email)
 
     expect(user).toEqual({
-      id: user.id,
+      id: user?.id,
       ...mock
     })
-    await repository.remove(user.id ?? '')
+    await repository.remove(user?.id ?? '')
 
-    await expect(
-      repository.getByEmail(mock.email)
-    ).rejects.toThrowError('User not found')
+    const expectedUndefinedUser = await repository.getByEmail(mock.email)
+    expect(expectedUndefinedUser).not.toBeDefined()
   })
 })

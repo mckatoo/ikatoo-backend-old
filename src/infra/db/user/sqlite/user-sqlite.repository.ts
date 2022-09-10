@@ -23,7 +23,7 @@ export class UserSqliteRepository implements UserRepositoryInterface {
     await db.close()
   }
 
-  async getByUsername (username: string): Promise<UserWithId> {
+  async getByUsername (username: string): Promise<UserWithId | undefined> {
     const db = await database()
     const user = await db.get<UserWithId>(
       'select * from users where username = $username',
@@ -31,12 +31,10 @@ export class UserSqliteRepository implements UserRepositoryInterface {
     )
     await db.close()
 
-    if (user == null) throw new Error('User not found')
-
     return user
   }
 
-  async getByEmail (email: string): Promise<UserWithId> {
+  async getByEmail (email: string): Promise<UserWithId | undefined> {
     const db = await database()
     const user = await db.get<UserWithId>(
       'select * from users where email = $email',
@@ -46,12 +44,10 @@ export class UserSqliteRepository implements UserRepositoryInterface {
     )
     await db.close()
 
-    if (user == null) throw new Error('User not found')
-
     return user
   }
 
-  async getByDomain (domain: string): Promise<UserWithId> {
+  async getByDomain (domain: string): Promise<UserWithId | undefined> {
     const db = await database()
     const user = await db.get<UserWithId>(
       'select * from users where domain = $domain',
@@ -60,8 +56,6 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       }
     )
     await db.close()
-
-    if (user == null) throw new Error('User not found')
 
     return user
   }
@@ -73,8 +67,6 @@ export class UserSqliteRepository implements UserRepositoryInterface {
     )
     await db.close()
 
-    if (users === undefined) throw new Error('User not found')
-
     return users
   }
 
@@ -82,8 +74,6 @@ export class UserSqliteRepository implements UserRepositoryInterface {
     const db = await database()
     const users = await db.all<UserWithId[]>('select * from users')
     await db.close()
-
-    if (users === undefined) throw new Error('User not found')
 
     return users
   }

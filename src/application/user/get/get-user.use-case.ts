@@ -1,5 +1,6 @@
 import { UserProps } from '@domain/user/user.entity'
 import { UserRepositoryInterface } from '@domain/user/user.repository'
+import { NotFoundError } from '@infra/http/express/helpers/api-erros'
 
 type GetUserOutput = Omit<UserProps, 'password'> & { id?: string }
 
@@ -8,6 +9,7 @@ export class GetUserUseCase {
 
   async byUsername (username: string): Promise<GetUserOutput> {
     const user = await this.userRepository.getByUsername(username)
+    if (user == null) throw new NotFoundError('User not found.')
 
     return {
       id: user.id,
@@ -20,6 +22,7 @@ export class GetUserUseCase {
 
   async byEmail (email: string): Promise<GetUserOutput> {
     const user = await this.userRepository.getByEmail(email)
+    if (user == null) throw new NotFoundError('User not found.')
 
     return {
       id: user.id,
@@ -32,6 +35,7 @@ export class GetUserUseCase {
 
   async bydomain (domain: string): Promise<GetUserOutput> {
     const user = await this.userRepository.getByDomain(domain)
+    if (user == null) throw new NotFoundError('User not found.')
 
     return {
       id: user.id,

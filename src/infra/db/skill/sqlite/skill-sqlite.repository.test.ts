@@ -1,18 +1,9 @@
 import { SkillWithId } from '@domain/skill/skill.repository'
-import { clearSkillsSqliteRepository } from '@infra/db/sqlite'
 
-import { SkillsSqliteRepository } from './skill-sqlite.repository'
 import database from './database'
+import { SkillsSqliteRepository } from './skill-sqlite.repository'
 
 describe('Skill Sqlite repository', () => {
-  afterAll(async () => {
-    await clearSkillsSqliteRepository()
-  })
-
-  beforeAll(async () => {
-    await clearSkillsSqliteRepository()
-  })
-
   const repository = new SkillsSqliteRepository()
 
   it('Should insert skill', async () => {

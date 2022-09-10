@@ -1,4 +1,3 @@
-import { clearUserSqliteRepository } from '@infra/db/sqlite'
 import { UserRepository } from '@infra/db/user'
 import { generate } from '@infra/generate'
 import { CreateUserUseCase } from '../create/create-user.use-case'
@@ -8,14 +7,6 @@ describe('Search User use-case Test', () => {
   const repository = new UserRepository()
   const createUseCase = new CreateUserUseCase(repository)
   const searchUseCase = new SearchUserUseCase(repository)
-
-  beforeAll(async () => {
-    await clearUserSqliteRepository()
-  })
-
-  afterAll(async () => {
-    await clearUserSqliteRepository()
-  })
 
   it('should search users with last name', async () => {
     const lastname = 'UniquelastnameXYZ'

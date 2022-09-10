@@ -1,21 +1,10 @@
 import { AboutPageWithId } from '@domain/about/about-page.repository'
-import { clearAboutPagesSqliteRepository, clearUserSqliteRepository } from '@infra/db/sqlite'
 import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
 
 import { AboutPagesSqliteRepository } from './about-page-sqlite.repository'
 import database from './database'
 
 describe('About Sqlite repository', () => {
-  afterAll(async () => {
-    await clearAboutPagesSqliteRepository()
-    await clearUserSqliteRepository()
-  })
-
-  beforeAll(async () => {
-    await clearAboutPagesSqliteRepository()
-    await clearUserSqliteRepository()
-  })
-
   const repository = new AboutPagesSqliteRepository()
 
   it('Should insert about page', async () => {

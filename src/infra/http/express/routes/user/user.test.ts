@@ -1,6 +1,6 @@
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
-import { clearUserSqliteRepository } from '@infra/db/sqlite'
 import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
+import { generate } from '@infra/generate'
 import app from '@infra/http/express/app'
 import request from 'supertest'
 
@@ -9,25 +9,22 @@ describe('Express - User', () => {
   const createUseCase = new CreateUserUseCase(userRepository)
   let accessToken: string
 
+  const userMock = {
+    id: generate(),
+    name: generate(),
+    username: generate(),
+    email: `${generate()}@domain.com`,
+    password: 'teste12345',
+    domain: `${generate()}.com.br`
+  }
+
   beforeAll(async () => {
-    await clearUserSqliteRepository()
-    const user = await createUseCase.execute({
-      id: 'user_id_test',
-      name: 'Milton Carlos Katoo',
-      username: 'milton',
-      email: 'milton@katoo.com',
-      password: 'teste12345',
-      domain: 'teste.com.br'
-    })
+    await createUseCase.execute(userMock)
     const authResponse = await request(app).post('/auth').send({
-      username: user.username,
+      username: userMock.username,
       password: 'teste12345'
     })
     accessToken = authResponse.body.accessToken
-  })
-
-  afterAll(async () => {
-    await clearUserSqliteRepository()
   })
 
   it('should create user without id', async () => {
@@ -35,11 +32,11 @@ describe('Express - User', () => {
       .post('/user')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        name: 'Test User',
-        username: 'test_user_sdfj',
-        email: 'test@user2.com',
+        name: generate(),
+        username: generate(),
+        email: `${generate()}@user2.com`,
         password: '123teste312',
-        domain: 'ikatoo.com.br'
+        domain: `${generate()}.com.br`
       })
 
     expect(response.status).toBe(201)
@@ -48,12 +45,12 @@ describe('Express - User', () => {
 
   it('should create user with id', async () => {
     const userData = {
-      id: 'user_with_id',
-      name: 'User With Id',
-      username: 'user_with_id',
-      email: 'user_with_id@katoo.com',
+      id: generate(),
+      name: generate(),
+      username: generate(),
+      email: `${generate()}@katoo.com`,
       password: 'teste12345',
-      domain: 'user_with_id.com.br'
+      domain: `${generate()}.com.br`
     }
     const response = await request(app)
       .post('/user')

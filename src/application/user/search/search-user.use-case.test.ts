@@ -1,5 +1,6 @@
 import { clearUserSqliteRepository } from '@infra/db/sqlite'
 import { UserRepository } from '@infra/db/user'
+import { generate } from '@infra/generate'
 import { CreateUserUseCase } from '../create/create-user.use-case'
 import { SearchUserUseCase } from './search-user.use-case'
 
@@ -17,40 +18,33 @@ describe('Search User use-case Test', () => {
   })
 
   it('should search users with last name', async () => {
-    const users = [
-      {
-        name: 'User Test Rakuna9',
-        email: 'rakuna9@user.com',
-        username: 'rakuna9',
-        password: '1234521312',
-        domain: 'rakuna9.com'
-      },
-      {
-        name: 'User2 Test Rakuna9',
-        email: 'matata@user.com',
-        username: 'matata',
-        password: '1234521312',
-        domain: 'matata.com'
-      }
-    ]
-    await createUseCase.execute(users[0])
-    await createUseCase.execute(users[1])
-    const output = await searchUseCase.byNamePart('rakuna9')
+    const lastname = 'UniquelastnameXYZ'
+    const user1 = {
+      name: `${generate()} ${lastname}`,
+      email: `${generate()}@user.com`,
+      username: generate(),
+      password: generate(),
+      domain: `${generate()}.com`
+    }
+    const user2 = {
+      name: `${generate()} ${lastname}`,
+      email: `${generate()}@user.com`,
+      username: generate(),
+      password: generate(),
+      domain: `${generate()}.com`
+    }
+    await createUseCase.execute(user1)
+    await createUseCase.execute(user2)
+    const output = await searchUseCase.byNamePart(lastname)
 
     expect(output).toHaveLength(2)
     expect(output).toEqual([
       {
-        name: 'User Test Rakuna9',
-        email: 'rakuna9@user.com',
-        username: 'rakuna9',
-        domain: 'rakuna9.com'
-      },
-      {
-        name: 'User2 Test Rakuna9',
-        email: 'matata@user.com',
-        username: 'matata',
-        domain: 'matata.com'
-      }
-    ])
+        ...user1,
+        password: undefined
+      }, {
+        ...user2,
+        password: undefined
+      }])
   })
 })

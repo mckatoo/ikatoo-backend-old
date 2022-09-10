@@ -1,5 +1,5 @@
-import { clearUserSqliteRepository } from '@infra/db/sqlite'
 import { UserRepository } from '@infra/db/user'
+import { generate } from '@infra/generate'
 import { isValid } from '@infra/jwt'
 
 import { CreateUserUseCase } from '../create/create-user.use-case'
@@ -10,25 +10,18 @@ describe('Auth User use-case Test', () => {
   const authUseCase = new AuthUserUseCase(repository)
   const createUseCase = new CreateUserUseCase(repository)
 
-  beforeAll(async () => {
-    await clearUserSqliteRepository()
-  })
-
-  afterAll(async () => {
-    await clearUserSqliteRepository()
-  })
-
   it('should authenticate a new user using username and password', async () => {
-    const user = await createUseCase.execute({
-      name: 'Auth User',
-      email: 'user@auth.com',
-      username: 'auth-user',
-      password: '123passauth',
-      domain: 'auth-user.com'
-    })
+    const mock = {
+      name: generate(),
+      email: `${generate()}@mail.com`,
+      username: generate(),
+      password: generate(),
+      domain: `${generate()}.com`
+    }
+    await createUseCase.execute(mock)
     const { accessToken, refreshToken } = await authUseCase.authByUsername(
-      user.username,
-      '123passauth'
+      mock.username,
+      mock.password
     )
 
     expect(isValid(accessToken)).toBeDefined()
@@ -36,9 +29,17 @@ describe('Auth User use-case Test', () => {
   })
 
   it('should authenticate a user using email and password', async () => {
+    const mock = {
+      name: generate(),
+      email: `${generate()}@mail.com`,
+      username: generate(),
+      password: generate(),
+      domain: `${generate()}.com`
+    }
+    await createUseCase.execute(mock)
     const { accessToken, refreshToken } = await authUseCase.authByEmail(
-      'user@auth.com',
-      '123passauth'
+      mock.email,
+      mock.password
     )
 
     expect(isValid(accessToken)).toBeDefined()

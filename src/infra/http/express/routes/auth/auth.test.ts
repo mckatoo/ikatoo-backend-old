@@ -2,29 +2,21 @@ import app from '@infra/http/express/app'
 import request from 'supertest'
 
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
-import { clearUserSqliteRepository } from '@infra/db/sqlite'
 import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
+import { generate } from '@infra/generate'
 
 describe('Express - Auth', () => {
-  beforeAll(async () => {
-    await clearUserSqliteRepository()
-  })
-
-  afterAll(async () => {
-    await clearUserSqliteRepository()
-  })
-
   const repository = new UserSqliteRepository()
   const createUseCase = new CreateUserUseCase(repository)
 
   it('should authenticate a valid username', async () => {
     const user = await createUseCase.execute({
-      id: '9bec9383-5a22-4a70-9242-cfc3f3926ca8',
-      name: 'Milton Carlos Katoo',
-      username: 'milton',
-      email: 'milton@katoo.com',
+      id: generate(),
+      name: generate(),
+      username: generate(),
+      email: `${generate()}@katoo.com`,
       password: 'teste12345',
-      domain: 'ikatoo.com.br'
+      domain: `${generate()}.com.br`
     })
     const response = await request(app).post('/auth').send({
       username: user.username,

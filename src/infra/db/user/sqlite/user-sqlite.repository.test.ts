@@ -1,136 +1,140 @@
 import { UserProps } from '@domain/user/user.entity'
-import { clearUserSqliteRepository } from '@infra/db/sqlite'
+import { generate } from '@infra/generate'
 import database from './database'
 import { UserSqliteRepository } from './user-sqlite.repository'
 
 describe('User Sqlite repository', () => {
-  afterAll(async () => {
-    await clearUserSqliteRepository()
-  })
-
-  beforeAll(async () => {
-    await clearUserSqliteRepository()
-  })
-
   const repository = new UserSqliteRepository()
 
   it('Should insert user', async () => {
-    await repository.create({
-      name: 'Test sqlite',
-      username: 'test_sqlite',
-      email: 'test@sqlite.com',
-      password: 'test123',
-      domain: 'localhost'
-    })
-    await repository.create({
-      name: 'Test sqlite2',
-      username: 'test_sqlite2',
-      email: 'test@sqlite.com2',
-      password: 'test1232',
-      domain: 'localhost2'
-    })
-    await repository.create({
-      name: 'Test sqlite3',
-      username: 'test_sqlite3',
-      email: 'test@sqlite.com3',
-      password: 'test1233',
-      domain: 'localhost3'
-    })
+    const mock1 = {
+      name: generate(),
+      username: generate(),
+      email: generate(),
+      password: generate(),
+      domain: generate()
+    }
+    const mock2 = {
+      name: generate(),
+      username: generate(),
+      email: generate(),
+      password: generate(),
+      domain: generate()
+    }
+    const mock3 = {
+      name: generate(),
+      username: generate(),
+      email: generate(),
+      password: generate(),
+      domain: generate()
+    }
+    await repository.create(mock1)
+    await repository.create(mock2)
+    await repository.create(mock3)
 
     const db = await database()
     const user = await db.get<UserProps>(
       'select * from users where username = ?',
-      'test_sqlite'
+      mock2.username
     )
 
-    expect(user?.username).toBe('test_sqlite')
+    expect(user?.username).toBe(mock2.username)
   })
 
-  it('Should not insert user with unique data', async () => {
+  it('Should not insert user with duplicated data', async () => {
+    const mock = {
+      name: generate(),
+      username: generate(),
+      email: generate(),
+      password: generate(),
+      domain: generate()
+    }
+    await repository.create(mock)
     await expect(
-      repository.create({
-        name: 'Test sqlite',
-        username: 'test_sqlite',
-        email: 'test@sqlite.com',
-        password: 'test123',
-        domain: 'localhost'
-      })
+      repository.create(mock)
     ).rejects.toThrowError(/unique/i)
   })
 
   it('should get a user by username', async () => {
-    const user = await repository.getByUsername('test_sqlite2')
+    const mock = {
+      name: generate(),
+      username: generate(),
+      email: generate(),
+      password: generate(),
+      domain: generate()
+    }
+    await repository.create(mock)
+    const user = await repository.getByUsername(mock.username)
 
     expect(user).toEqual({
       id: user.id,
-      name: 'Test sqlite2',
-      username: 'test_sqlite2',
-      email: 'test@sqlite.com2',
-      password: 'test1232',
-      domain: 'localhost2'
+      ...mock
     })
   })
 
   it('should get a user by email', async () => {
-    const user = await repository.getByEmail('test@sqlite.com3')
+    const mock = {
+      name: generate(),
+      username: generate(),
+      email: generate(),
+      password: generate(),
+      domain: generate()
+    }
+    await repository.create(mock)
+
+    const user = await repository.getByEmail(mock.email)
 
     expect(user).toEqual({
       id: user.id,
-      name: 'Test sqlite3',
-      username: 'test_sqlite3',
-      email: 'test@sqlite.com3',
-      password: 'test1233',
-      domain: 'localhost3'
+      ...mock
     })
   })
 
   it('should get a user by domain', async () => {
-    const user = await repository.getByDomain('localhost3')
+    const mock = {
+      name: generate(),
+      username: generate(),
+      email: generate(),
+      password: generate(),
+      domain: generate()
+    }
+    await repository.create(mock)
+    const user = await repository.getByDomain(mock.domain)
 
     expect(user).toEqual({
       id: user.id,
-      name: 'Test sqlite3',
-      username: 'test_sqlite3',
-      email: 'test@sqlite.com3',
-      password: 'test1233',
-      domain: 'localhost3'
+      ...mock
     })
   })
 
   it('should get users with contain partial name', async () => {
-    await repository.create({
-      name: 'Search sqlite',
-      username: 'test_sqlite4',
-      email: 'test@sqlite.com4',
-      password: 'test1233',
-      domain: 'localhost4'
-    })
-    await repository.create({
-      name: 'Search sqlite5',
-      username: 'test_sqlite45',
-      email: 'test@sqlite.com45',
-      password: 'test12335',
-      domain: 'localhost5'
-    })
+    const mock1 = {
+      name: `${generate()} Search`,
+      username: generate(),
+      email: generate(),
+      password: generate(),
+      domain: generate()
+    }
+    const mock2 = {
+      name: `${generate()} Search`,
+      username: generate(),
+      email: generate(),
+      password: generate(),
+      domain: generate()
+    }
+    await repository.create(mock1)
+    await repository.create(mock2)
 
     const users = await repository.searchByName('search')
 
     expect(users).toEqual([
       {
         id: users[0].id,
-        name: 'Search sqlite',
-        username: 'test_sqlite4',
-        email: 'test@sqlite.com4',
-        password: 'test1233',
-        domain: 'localhost4'
+        ...mock1
       },
       {
         id: users[1].id,
-        name: 'Search sqlite5',
-        username: 'test_sqlite45',
-        email: 'test@sqlite.com45',
-        password: 'test12335',
-        domain: 'localhost5'
+        ...mock2
       }
     ])
   })
@@ -138,69 +142,69 @@ describe('User Sqlite repository', () => {
   it('should get all registers on users table', async () => {
     const db = await database()
     await db.run('delete from users')
-    await db.run(`insert into users (id, name, username, email, password, domain) values 
-    ('id1', 'name1', 'username1', 'email1', 'pass1', 'host1'),
-    ('id2', 'name2', 'username2', 'email2', 'pass2', 'host2'),
-    ('id3', 'name3', 'username3', 'email3', 'pass3', 'host3'),
-    ('id4', 'name4', 'username4', 'email4', 'pass4', 'host4')
+    const user1 = {
+      id: generate(),
+      name: generate(),
+      username: generate(),
+      email: `${generate()}@mail.com`,
+      password: generate(),
+      domain: `${generate()}.com`
+    }
+    const user2 = {
+      id: generate(),
+      name: generate(),
+      username: generate(),
+      email: `${generate()}@mail.com`,
+      password: generate(),
+      domain: `${generate()}.com`
+    }
+    const user3 = {
+      id: generate(),
+      name: generate(),
+      username: generate(),
+      email: `${generate()}@mail.com`,
+      password: generate(),
+      domain: `${generate()}.com`
+    }
+    const user4 = {
+      id: generate(),
+      name: generate(),
+      username: generate(),
+      email: `${generate()}@mail.com`,
+      password: generate(),
+      domain: `${generate()}.com`
+    }
+    await db.run(`insert into users (id, name, username, email, password, domain) values
+    ('${user1.id}', '${user1.name}', '${user1.username}', '${user1.email}', '${user1.password}', '${user1.domain}'),
+    ('${user2.id}', '${user2.name}', '${user2.username}', '${user2.email}', '${user2.password}', '${user2.domain}'),
+    ('${user3.id}', '${user3.name}', '${user3.username}', '${user3.email}', '${user3.password}', '${user3.domain}'),
+    ('${user4.id}', '${user4.name}', '${user4.username}', '${user4.email}', '${user4.password}', '${user4.domain}')
     `)
 
     const users = await repository.getAll()
 
-    expect(users).toEqual([
-      {
-        id: 'id1',
-        name: 'name1',
-        username: 'username1',
-        email: 'email1',
-        password: 'pass1',
-        domain: 'host1'
-      },
-      {
-        id: 'id2',
-        name: 'name2',
-        username: 'username2',
-        email: 'email2',
-        password: 'pass2',
-        domain: 'host2'
-      },
-      {
-        id: 'id3',
-        name: 'name3',
-        username: 'username3',
-        email: 'email3',
-        password: 'pass3',
-        domain: 'host3'
-      },
-      {
-        id: 'id4',
-        name: 'name4',
-        username: 'username4',
-        email: 'email4',
-        password: 'pass4',
-        domain: 'host4'
-      }
-    ])
+    expect(users).toEqual([user1, user2, user3, user4])
   })
 
   it('should delete a row of the registers', async () => {
-    await repository.create({
-      name: 'Delete sqlite',
-      username: 'test_delete',
-      email: 'delete@sqlite.com4',
-      password: 'delete1233',
-      domain: 'deleteHost'
-    })
-    const user = await repository.getByEmail('delete@sqlite.com4')
+    const mock = {
+      name: generate(),
+      username: generate(),
+      email: `${generate()}@sqlite.com4`,
+      password: generate(),
+      domain: `${generate()}.com`
+    }
+    await repository.create(mock)
+    const user = await repository.getByEmail(mock.email)
 
     expect(user).toEqual({
       id: user.id,
-      ...user
+      ...mock
     })
     await repository.remove(user.id ?? '')
 
     await expect(
-      repository.getByEmail('delete@sqlite.com4')
+      repository.getByEmail(mock.email)
     ).rejects.toThrowError('User not found')
   })
 })

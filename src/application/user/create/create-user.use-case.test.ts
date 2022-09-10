@@ -44,4 +44,19 @@ describe('Create User use-case Test', () => {
       password: undefined
     })
   })
+
+  it('should not create a duplicated user', async () => {
+    const mock = {
+      id: generate(),
+      name: generate(),
+      email: `${generate()}@mail.com`,
+      username: generate(),
+      password: generate(),
+      domain: `${generate()}.com`
+    }
+
+    await createUseCase.execute(mock)
+
+    await expect(createUseCase.execute(mock)).rejects.toThrowError('User already exists')
+  })
 })

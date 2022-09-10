@@ -61,4 +61,26 @@ describe('Express - User', () => {
     expect(response.body).not.toHaveProperty('password')
     expect(response.body).toEqual({ ...userData, password: undefined })
   })
+
+  it('should not create duplicated user', async () => {
+    const userData = {
+      id: generate(),
+      name: generate(),
+      username: generate(),
+      email: `${generate()}@katoo.com`,
+      password: 'teste12345',
+      domain: `${generate()}.com.br`
+    }
+    await request(app)
+      .post('/user')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(userData)
+    const response = await request(app)
+      .post('/user')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(userData)
+
+    expect(response.status).toBe(409)
+    expect(response.body.message).toBe('User already exists')
+  })
 })

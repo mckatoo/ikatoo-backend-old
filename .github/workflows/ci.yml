@@ -5,14 +5,13 @@ name: Backend CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "*" ]
 
 jobs:
-  build:
-
+  dev:
     runs-on: ubuntu-latest
+
+    environment: dev
 
     strategy:
       matrix:
@@ -28,5 +27,7 @@ jobs:
         cache: 'yarn'
     - run: yarn install
     - run: yarn typecheck
-    #- run: yarn build --if-present
-    - run: yarn test
+    - name: Test
+      env:
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      run: yarn test

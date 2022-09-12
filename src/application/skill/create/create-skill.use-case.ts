@@ -12,9 +12,9 @@ export class CreateSkillUseCase {
   async execute (input: CreateSkillInput): Promise<CreateSkillOutput> {
     const userExists = await this.repository.getByUserId(input.user_id)
     const skillExists = userExists.find(skill => skill.title === input.title)
-    if (skillExists != null) throw new ConflictError('Skill already exists for this user')
+    if (skillExists != null) throw new ConflictError('This skill already exists for this user')
 
-    const skill = Skill.create(input)
+    const skill = Skill.create(input, input.id)
     await this.repository.create(skill)
 
     return skill.toJson()

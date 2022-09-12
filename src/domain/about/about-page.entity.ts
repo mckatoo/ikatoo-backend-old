@@ -1,9 +1,10 @@
+import { SkillProps } from '@domain/skill/skill.entity'
 import { randomUUID } from 'crypto'
 
-export interface SkillProps {
-  name: string
-  levelPercent: number
-}
+// export interface SkillProps {
+//   name: string
+//   levelPercent: number
+// }
 
 export interface ImageProps {
   src: string

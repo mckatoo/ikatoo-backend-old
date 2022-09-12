@@ -3,7 +3,7 @@ import { GetAboutPageUseCase } from '@application/about-page/get/get-about-page.
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { AboutPageRepository } from '@infra/db/about'
 import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
-import { generate } from '@infra/generate'
+import { generateString } from '@infra/generate'
 import app from '@infra/http/express/app'
 import request from 'supertest'
 
@@ -18,12 +18,12 @@ describe('Express - About Page', () => {
   let accessToken: string
 
   const userMock = {
-    id: generate(),
-    name: generate(),
-    username: generate(),
-    email: `${generate()}@katoo.com`,
+    id: generateString(),
+    name: generateString(),
+    username: generateString(),
+    email: `${generateString()}@katoo.com`,
     password: 'teste12345',
-    domain: `${generate()}.com.br`
+    domain: `${generateString()}.com.br`
   }
 
   beforeAll(async () => {
@@ -37,8 +37,8 @@ describe('Express - About Page', () => {
 
   it('should create about page without id', async () => {
     const aboutPageMock = {
-      title: generate(),
-      description: generate(),
+      title: generateString(),
+      description: generateString(),
       user_id: userMock.id
     }
     const response = await request(app)
@@ -60,10 +60,10 @@ describe('Express - About Page', () => {
 
   it('should create about page with id', async () => {
     const aboutPageMock = {
-      id: generate(),
-      title: generate(),
-      description: generate(),
-      user_id: generate()
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
     }
     const response = await request(app)
       .post('/about')
@@ -92,19 +92,19 @@ describe('Express - About Page', () => {
 
   it('should get about page data', async () => {
     const userMock = {
-      id: generate(),
-      name: generate(),
-      username: generate(),
-      email: `${generate()}@katoo.com`,
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generate()}.com.br`
+      domain: `${generateString()}.com.br`
     }
     await createUserUseCase.execute(userMock)
 
     const aboutPageMock = {
-      id: generate(),
-      title: generate(),
-      description: generate(),
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
       user_id: userMock.id
     }
 

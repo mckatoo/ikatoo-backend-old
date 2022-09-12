@@ -1,5 +1,5 @@
 import { AboutPageRepository } from '@infra/db/about'
-import { generate } from '@infra/generate'
+import { generateString } from '@infra/generate'
 import { CreateAboutPageUseCase } from './create-about-page.use-case'
 
 describe('Create About Page use-case Test', () => {
@@ -8,9 +8,9 @@ describe('Create About Page use-case Test', () => {
 
   it('should create a new about page', async () => {
     const data = {
-      title: generate(),
-      description: generate(),
-      user_id: generate()
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
     }
 
     const output = await createUseCase.execute(data)
@@ -25,10 +25,10 @@ describe('Create About Page use-case Test', () => {
 
   it('should create a new about page using a id', async () => {
     const data = {
-      id: generate(),
-      title: generate(),
-      description: generate(),
-      user_id: generate()
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
     }
 
     const aboutPage = await createUseCase.execute(data)

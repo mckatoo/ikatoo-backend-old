@@ -1,5 +1,6 @@
 import { AboutPageWithId } from '@domain/about/about-page.repository'
 import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
+import { generateString } from '@infra/generate'
 
 import { AboutPagesSqliteRepository } from './about-page-sqlite.repository'
 import database from './database'
@@ -8,98 +9,113 @@ describe('About Sqlite repository', () => {
   const repository = new AboutPagesSqliteRepository()
 
   it('Should insert about page', async () => {
-    await repository.create({
-      title: 'page1',
-      description: 'page 1 description',
-      user_id: 'user_test_id'
-    })
+    const aboutPageData = {
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
+    }
+    await repository.create(aboutPageData)
 
     const db = await database()
     const user = await db.get<AboutPageWithId>(
-      'select * from aboutPages where user_id = ?',
-      'user_test_id'
+      'select * from aboutPages where title = ? and description = ? and user_id = ?',
+      aboutPageData.title,
+      aboutPageData.description,
+      aboutPageData.user_id
     )
 
     expect(user).toEqual({
       id: user?.id,
-      title: 'page1',
-      description: 'page 1 description',
-      user_id: 'user_test_id'
+      ...aboutPageData
     })
   })
 
   it('Should insert about page with id', async () => {
-    await repository.create({
-      id: 'test_id',
-      title: 'page2',
-      description: 'page 2 description',
-      user_id: 'user_test_id2'
-    })
+    const aboutPageData = {
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
+    }
+    await repository.create(aboutPageData)
 
     const db = await database()
     const user = await db.get<AboutPageWithId>(
       'select * from aboutPages where id = ?',
-      'test_id'
+      aboutPageData.id
     )
 
-    expect(user).toEqual({
-      id: 'test_id',
-      title: 'page2',
-      description: 'page 2 description',
-      user_id: 'user_test_id2'
-    })
+    expect(user).toEqual(aboutPageData)
   })
 
   it('Should not insert about page with unique id', async () => {
+    const aboutPageData = {
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
+    }
+    await repository.create({
+      id: aboutPageData.id,
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
+    })
     await expect(
-      repository.create({
-        id: 'test_id',
-        title: 'title test3',
-        description: 'desc3 sqlite',
-        user_id: 'user_test_id3'
-      })
+      repository.create(aboutPageData)
     ).rejects.toThrowError(/unique/i)
   })
 
   it('Should not insert about page with unique user_id', async () => {
+    const aboutPageData = {
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
+    }
+    await repository.create({
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
+      user_id: aboutPageData.user_id
+    })
     await expect(
-      repository.create({
-        title: 'title test',
-        description: 'desc sqlite',
-        user_id: 'user_test_id'
-      })
+      repository.create(aboutPageData)
     ).rejects.toThrowError(/unique/i)
   })
 
-  it('should get a about page by', async () => {
-    const aboutPage = await repository.getByUserId('user_test_id2')
+  it('should get a about page by user_id', async () => {
+    const aboutPageData = {
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
+    }
+    await repository.create(aboutPageData)
+    const aboutPage = await repository.getByUserId(aboutPageData.user_id)
 
-    expect(aboutPage).toEqual({
-      id: 'test_id',
-      title: 'page2',
-      description: 'page 2 description',
-      user_id: 'user_test_id2'
-    })
+    expect(aboutPage).toEqual(aboutPageData)
   })
 
   it('should get a about page by domain', async () => {
     const userRepository = new UserSqliteRepository()
-    await userRepository.create({
-      id: 'id_7',
-      name: 'User test',
-      username: 'user_test',
-      email: 'test@user.com',
-      password: '123123kj',
-      domain: 'test.com.ts'
-    })
+    const userData = {
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@user.com`,
+      password: generateString(),
+      domain: `${generateString()}.com.ts`
+    }
+    await userRepository.create(userData)
     const aboutPageData = {
-      id: 'about_page_id',
-      title: 'about page title',
-      description: 'about page desc',
-      user_id: 'id_7'
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
+      user_id: userData.id
     }
     await repository.create(aboutPageData)
-    const aboutPage = await repository.getByDomain('test.com.ts')
+    const aboutPage = await repository.getByDomain(userData.domain)
 
     expect(aboutPage).toEqual(aboutPageData)
   })

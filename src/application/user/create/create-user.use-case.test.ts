@@ -1,5 +1,5 @@
 import { UserRepository } from '@infra/db/user'
-import { generate } from '@infra/generate'
+import { generateString } from '@infra/generate'
 
 import { CreateUserUseCase } from './create-user.use-case'
 
@@ -9,11 +9,11 @@ describe('Create User use-case Test', () => {
 
   it('should create a new user without id', async () => {
     const mock = {
-      name: generate(),
-      email: `${generate()}@mail.com`,
-      username: generate(),
-      password: generate(),
-      domain: `${generate()}.com`
+      name: generateString(),
+      email: `${generateString()}@mail.com`,
+      username: generateString(),
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
 
     await createUseCase.execute(mock)
@@ -28,12 +28,12 @@ describe('Create User use-case Test', () => {
 
   it('should create a new user with id', async () => {
     const mock = {
-      id: generate(),
-      name: generate(),
-      email: `${generate()}@mail.com`,
-      username: generate(),
-      password: generate(),
-      domain: `${generate()}.com`
+      id: generateString(),
+      name: generateString(),
+      email: `${generateString()}@mail.com`,
+      username: generateString(),
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
 
     await createUseCase.execute(mock)
@@ -47,12 +47,12 @@ describe('Create User use-case Test', () => {
 
   it('should not create a duplicated user', async () => {
     const mock = {
-      id: generate(),
-      name: generate(),
-      email: `${generate()}@mail.com`,
-      username: generate(),
-      password: generate(),
-      domain: `${generate()}.com`
+      id: generateString(),
+      name: generateString(),
+      email: `${generateString()}@mail.com`,
+      username: generateString(),
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
 
     await createUseCase.execute(mock)

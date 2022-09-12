@@ -1,3 +1,4 @@
+import { generateNumber, generateString } from '@infra/generate'
 import { AboutPage, AboutPageProps } from './about-page.entity'
 
 describe('Test About Page Test', () => {
@@ -8,53 +9,44 @@ describe('Test About Page Test', () => {
   })
 
   it('constructor without id', () => {
-    let aboutPageData: AboutPageProps = {
-      title: 'title',
-      description: 'description',
-      user_id: 'user_id'
+    const aboutPageData: AboutPageProps = {
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
     }
-    let aboutPage = AboutPage.create(aboutPageData)
-    expect(aboutPage.props).toStrictEqual({
+    const aboutPage = AboutPage.create(aboutPageData)
+
+    expect(aboutPage.toJson()).toEqual({
+      id: aboutPage.id,
       ...aboutPageData,
-      skills: [],
-      image: { src: '', alt: '' }
+      image: { alt: '', src: '' },
+      skills: []
     })
-
-    aboutPageData = {
-      ...aboutPageData,
-      skills: [
-        { name: 'skill1', levelPercent: 60 },
-        { name: 'skill2', levelPercent: 40 }
-      ],
-      image: { src: 'src test', alt: 'alt test' }
-    }
-    aboutPage = AboutPage.create(aboutPageData)
-    expect(aboutPage.props).toStrictEqual(aboutPageData)
-
-    expect(aboutPage.id).toBeDefined()
   })
 
   it('should constructor with id', () => {
     const aboutPageData: AboutPageProps = {
-      title: 'title',
-      description: 'description',
-      user_id: 'ctor_user_id'
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
     }
-    const aboutPage = AboutPage.create(aboutPageData, 'test_id')
+    const id = generateString()
+    const aboutPage = AboutPage.create(aboutPageData, id)
 
-    expect(aboutPage.id).toBe('test_id')
+    expect(aboutPage.id).toBe(id)
   })
 
   it('should update title method', () => {
     const aboutPageData: AboutPageProps = {
-      title: 'title',
-      description: 'description',
-      user_id: 'title_user_id'
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
     }
     const aboutPage = AboutPage.create(aboutPageData)
-    aboutPage.updateTitle('new title')
+    const newTitle = generateString()
+    aboutPage.updateTitle(newTitle)
 
-    expect(aboutPage.title).toBe('new title')
+    expect(aboutPage.title).toBe(newTitle)
   })
 
   it('should update skills method', () => {
@@ -64,7 +56,7 @@ describe('Test About Page Test', () => {
       user_id: 'skils_user_id'
     }
     const aboutPage = AboutPage.create(aboutPageData)
-    const skills = [{ name: 'skill test', levelPercent: 30 }]
+    const skills = [{ title: generateString(), weight: generateNumber(), user_id: generateString() }]
     aboutPage.updateSkills(skills)
 
     expect(aboutPage.skills).toHaveLength(1)
@@ -73,12 +65,12 @@ describe('Test About Page Test', () => {
 
   it('should update image method', () => {
     const aboutPageData: AboutPageProps = {
-      title: 'title',
-      description: 'description',
-      user_id: 'img_user_id'
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
     }
     const aboutPage = AboutPage.create(aboutPageData)
-    const image = { src: 'src update test', alt: 'alt update test' }
+    const image = { src: generateString(), alt: generateString() }
     aboutPage.updateImage(image)
 
     expect(aboutPage.image).toStrictEqual(image)
@@ -86,13 +78,14 @@ describe('Test About Page Test', () => {
 
   it('should update description method', () => {
     const aboutPageData: AboutPageProps = {
-      title: 'title',
-      description: 'description',
-      user_id: 'desc_user_id'
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
     }
     const aboutPage = AboutPage.create(aboutPageData)
-    aboutPage.updateDescription('new description')
+    const newDescription = generateString()
+    aboutPage.updateDescription(newDescription)
 
-    expect(aboutPage.description).toBe('new description')
+    expect(aboutPage.description).toBe(newDescription)
   })
 })

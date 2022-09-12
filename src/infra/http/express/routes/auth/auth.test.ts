@@ -3,7 +3,7 @@ import request from 'supertest'
 
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
-import { generate } from '@infra/generate'
+import { generateString } from '@infra/generate'
 
 describe('Express - Auth', () => {
   const repository = new UserSqliteRepository()
@@ -11,12 +11,12 @@ describe('Express - Auth', () => {
 
   it('should authenticate a valid username', async () => {
     const user = await createUseCase.execute({
-      id: generate(),
-      name: generate(),
-      username: generate(),
-      email: `${generate()}@katoo.com`,
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generate()}.com.br`
+      domain: `${generateString()}.com.br`
     })
     const response = await request(app).post('/auth').send({
       username: user.username,

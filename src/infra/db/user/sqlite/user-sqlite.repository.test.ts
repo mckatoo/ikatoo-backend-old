@@ -1,5 +1,5 @@
 import { UserProps } from '@domain/user/user.entity'
-import { generate } from '@infra/generate'
+import { generateString } from '@infra/generate'
 import database from './database'
 import { UserSqliteRepository } from './user-sqlite.repository'
 
@@ -8,25 +8,25 @@ describe('User Sqlite repository', () => {
 
   it('Should insert user', async () => {
     const mock1 = {
-      name: generate(),
-      username: generate(),
-      email: generate(),
-      password: generate(),
-      domain: generate()
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
     }
     const mock2 = {
-      name: generate(),
-      username: generate(),
-      email: generate(),
-      password: generate(),
-      domain: generate()
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
     }
     const mock3 = {
-      name: generate(),
-      username: generate(),
-      email: generate(),
-      password: generate(),
-      domain: generate()
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
     }
     await repository.create(mock1)
     await repository.create(mock2)
@@ -43,11 +43,11 @@ describe('User Sqlite repository', () => {
 
   it('Should not insert user with duplicated data', async () => {
     const mock = {
-      name: generate(),
-      username: generate(),
-      email: generate(),
-      password: generate(),
-      domain: generate()
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
     }
     await repository.create(mock)
     await expect(
@@ -57,11 +57,11 @@ describe('User Sqlite repository', () => {
 
   it('should get a user by username', async () => {
     const mock = {
-      name: generate(),
-      username: generate(),
-      email: generate(),
-      password: generate(),
-      domain: generate()
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
     }
     await repository.create(mock)
     const user = await repository.getByUsername(mock.username)
@@ -74,11 +74,11 @@ describe('User Sqlite repository', () => {
 
   it('should get a user by email', async () => {
     const mock = {
-      name: generate(),
-      username: generate(),
-      email: generate(),
-      password: generate(),
-      domain: generate()
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
     }
     await repository.create(mock)
 
@@ -92,11 +92,11 @@ describe('User Sqlite repository', () => {
 
   it('should get a user by domain', async () => {
     const mock = {
-      name: generate(),
-      username: generate(),
-      email: generate(),
-      password: generate(),
-      domain: generate()
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
     }
     await repository.create(mock)
     const user = await repository.getByDomain(mock.domain)
@@ -109,18 +109,18 @@ describe('User Sqlite repository', () => {
 
   it('should get users with contain partial name', async () => {
     const mock1 = {
-      name: `${generate()} Search`,
-      username: generate(),
-      email: generate(),
-      password: generate(),
-      domain: generate()
+      name: `${generateString()} Search`,
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
     }
     const mock2 = {
-      name: `${generate()} Search`,
-      username: generate(),
-      email: generate(),
-      password: generate(),
-      domain: generate()
+      name: `${generateString()} Search`,
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
     }
     await repository.create(mock1)
     await repository.create(mock2)
@@ -143,36 +143,36 @@ describe('User Sqlite repository', () => {
     const db = await database()
     await db.run('delete from users')
     const user1 = {
-      id: generate(),
-      name: generate(),
-      username: generate(),
-      email: `${generate()}@mail.com`,
-      password: generate(),
-      domain: `${generate()}.com`
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@mail.com`,
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
     const user2 = {
-      id: generate(),
-      name: generate(),
-      username: generate(),
-      email: `${generate()}@mail.com`,
-      password: generate(),
-      domain: `${generate()}.com`
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@mail.com`,
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
     const user3 = {
-      id: generate(),
-      name: generate(),
-      username: generate(),
-      email: `${generate()}@mail.com`,
-      password: generate(),
-      domain: `${generate()}.com`
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@mail.com`,
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
     const user4 = {
-      id: generate(),
-      name: generate(),
-      username: generate(),
-      email: `${generate()}@mail.com`,
-      password: generate(),
-      domain: `${generate()}.com`
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@mail.com`,
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
     await db.run(`insert into users (id, name, username, email, password, domain) values
     ('${user1.id}', '${user1.name}', '${user1.username}', '${user1.email}', '${user1.password}', '${user1.domain}'),
@@ -188,11 +188,11 @@ describe('User Sqlite repository', () => {
 
   it('should delete a row of the registers', async () => {
     const mock = {
-      name: generate(),
-      username: generate(),
-      email: `${generate()}@sqlite.com4`,
-      password: generate(),
-      domain: `${generate()}.com`
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@sqlite.com4`,
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
     await repository.create(mock)
     const user = await repository.getByEmail(mock.email)

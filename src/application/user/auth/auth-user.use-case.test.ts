@@ -1,5 +1,5 @@
 import { UserRepository } from '@infra/db/user'
-import { generate } from '@infra/generate'
+import { generateString } from '@infra/generate'
 import { isValid } from '@infra/jwt'
 
 import { CreateUserUseCase } from '../create/create-user.use-case'
@@ -12,11 +12,11 @@ describe('Auth User use-case Test', () => {
 
   it('should authenticate a new user using username and password', async () => {
     const mock = {
-      name: generate(),
-      email: `${generate()}@mail.com`,
-      username: generate(),
-      password: generate(),
-      domain: `${generate()}.com`
+      name: generateString(),
+      email: `${generateString()}@mail.com`,
+      username: generateString(),
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
     await createUseCase.execute(mock)
     const { accessToken, refreshToken } = await authUseCase.authByUsername(
@@ -30,11 +30,11 @@ describe('Auth User use-case Test', () => {
 
   it('should authenticate a user using email and password', async () => {
     const mock = {
-      name: generate(),
-      email: `${generate()}@mail.com`,
-      username: generate(),
-      password: generate(),
-      domain: `${generate()}.com`
+      name: generateString(),
+      email: `${generateString()}@mail.com`,
+      username: generateString(),
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
     await createUseCase.execute(mock)
     const { accessToken, refreshToken } = await authUseCase.authByEmail(

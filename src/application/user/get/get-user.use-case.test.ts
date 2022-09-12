@@ -1,5 +1,5 @@
 import { UserRepository } from '@infra/db/user'
-import { generate } from '@infra/generate'
+import { generateString } from '@infra/generate'
 import { CreateUserUseCase } from '../create/create-user.use-case'
 import { GetUserUseCase } from './get-user.use-case'
 
@@ -10,11 +10,11 @@ describe('Get User use-case Test', () => {
 
   it('should get a user by email', async () => {
     const user = {
-      name: generate(),
-      email: `${generate()}@email.com`,
-      username: generate(),
-      password: generate(),
-      domain: `${generate()}.com`
+      name: generateString(),
+      email: `${generateString()}@email.com`,
+      username: generateString(),
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
     await createUseCase.execute(user)
     const expected = await getUseCase.byEmail(user.email)
@@ -28,11 +28,11 @@ describe('Get User use-case Test', () => {
 
   it('should get a user by username', async () => {
     const user = {
-      name: generate(),
-      email: `${generate()}@email.com`,
-      username: generate(),
-      password: generate(),
-      domain: `${generate()}.com`
+      name: generateString(),
+      email: `${generateString()}@email.com`,
+      username: generateString(),
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
     await createUseCase.execute(user)
     const expected = await getUseCase.byUsername(user.username)
@@ -46,11 +46,11 @@ describe('Get User use-case Test', () => {
 
   it('should get a user by domain', async () => {
     const user = {
-      name: generate(),
-      email: `${generate()}@email.com`,
-      username: generate(),
-      password: generate(),
-      domain: `${generate()}.com`
+      name: generateString(),
+      email: `${generateString()}@email.com`,
+      username: generateString(),
+      password: generateString(),
+      domain: `${generateString()}.com`
     }
     await createUseCase.execute(user)
     const expected = await getUseCase.byUsername(user.username)

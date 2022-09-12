@@ -1,4 +1,5 @@
 import { SkillWithId } from '@domain/skill/skill.repository'
+import { generateNumber, generateString } from '@infra/generate'
 
 import database from './database'
 import { SkillsSqliteRepository } from './skill-sqlite.repository'
@@ -7,86 +8,87 @@ describe('Skill Sqlite repository', () => {
   const repository = new SkillsSqliteRepository()
 
   it('Should insert skill', async () => {
-    await repository.create({
-      title: 'page1',
-      weight: 6,
-      user_id: 'user_test_id'
-    })
-
-    const db = await database()
-    const user = await db.get<SkillWithId>(
-      'select * from skills where user_id = ?',
-      'user_test_id'
-    )
-
-    expect(user).toEqual({
-      id: user?.id,
-      title: 'page1',
-      weight: 6,
-      user_id: 'user_test_id'
-    })
-  })
-
-  it('Should insert skill with id', async () => {
     const skillData = {
-      id: 'skill_id',
-      title: 'skill1',
-      weight: 6,
-      user_id: 'user2_id'
+      id: generateString(),
+      title: `${generateString()} title`,
+      weight: generateNumber(),
+      user_id: generateString()
     }
     await repository.create(skillData)
 
     const db = await database()
     const skill = await db.get<SkillWithId>(
       'select * from skills where id = ?',
-      'skill_id'
+      skillData.id
     )
 
     expect(skill).toEqual(skillData)
   })
 
-  it('Should not insert skill with unique id', async () => {
+  it('Should not insert skill with existing id', async () => {
+    const skillData = {
+      id: generateString(),
+      title: generateString(),
+      weight: generateNumber(),
+      user_id: generateString()
+    }
+    await repository.create(skillData)
     await expect(
-      repository.create({
-        id: 'skill_id',
-        title: 'title2',
-        weight: 3,
-        user_id: 'user3_id'
-      })
+      repository.create(skillData)
     ).rejects.toThrowError(/unique/i)
   })
 
-  it('should get a skill by user_id', async () => {
-    const skill = await repository.getByUserId('user2_id')
+  it('should get skills by user_id', async () => {
+    const userId = generateString()
+    const skillsData = [{
+      id: generateString(),
+      title: generateString(),
+      weight: generateNumber(),
+      user_id: userId
+    }, {
+      id: generateString(),
+      title: generateString(),
+      weight: generateNumber(),
+      user_id: userId
+    }, {
+      id: generateString(),
+      title: generateString(),
+      weight: generateNumber(),
+      user_id: userId
+    }]
+    for (let index = 0; index < skillsData.length; index++) {
+      await repository.create(skillsData[index])
+    }
 
-    expect(skill).toEqual({
-      id: 'skill_id',
-      title: 'skill1',
-      weight: 6,
-      user_id: 'user2_id'
-    })
+    const skills = await repository.getByUserId(userId)
+
+    expect(skills).toEqual(skillsData)
   })
 
   it('should search skill by title', async () => {
-    await repository.create({
-      id: 'skill_id4',
-      title: 'skill4',
-      weight: 4,
-      user_id: 'user4_id'
-    })
-    const skills = await repository.searchByTitle('skill')
-    expect(skills).toEqual([
-      {
-        id: 'skill_id',
-        title: 'skill1',
-        weight: 6,
-        user_id: 'user2_id'
-      }, {
-        id: 'skill_id4',
-        title: 'skill4',
-        weight: 4,
-        user_id: 'user4_id'
-      }
-    ])
+    const commonTitle = generateString()
+    const skillsData = [{
+      id: generateString(),
+      title: `${generateString()} ${commonTitle}`,
+      weight: generateNumber(),
+      user_id: generateString()
+    },
+    {
+      id: generateString(),
+      title: `${generateString()} ${commonTitle}`,
+      weight: generateNumber(),
+      user_id: generateString()
+    },
+    {
+      id: generateString(),
+      title: `${generateString()} ${commonTitle}`,
+      weight: generateNumber(),
+      user_id: generateString()
+    }]
+    for (let index = 0; index < skillsData.length; index++) {
+      await repository.create(skillsData[index])
+    }
+    const skills = await repository.searchByTitle(commonTitle.toUpperCase())
+    expect(skills).toEqual(skillsData)
   })
 })

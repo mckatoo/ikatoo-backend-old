@@ -1,6 +1,6 @@
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
-import { generate } from '@infra/generate'
+import { generateString } from '@infra/generate'
 import app from '@infra/http/express/app'
 import request from 'supertest'
 
@@ -10,12 +10,12 @@ describe('Express - User', () => {
   let accessToken: string
 
   const userMock = {
-    id: generate(),
-    name: generate(),
-    username: generate(),
-    email: `${generate()}@domain.com`,
+    id: generateString(),
+    name: generateString(),
+    username: generateString(),
+    email: `${generateString()}@domain.com`,
     password: 'teste12345',
-    domain: `${generate()}.com.br`
+    domain: `${generateString()}.com.br`
   }
 
   beforeAll(async () => {
@@ -31,11 +31,11 @@ describe('Express - User', () => {
     const response = await request(app)
       .post('/user')
       .send({
-        name: generate(),
-        username: generate(),
-        email: `${generate()}@user2.com`,
+        name: generateString(),
+        username: generateString(),
+        email: `${generateString()}@user2.com`,
         password: '123teste312',
-        domain: `${generate()}.com.br`
+        domain: `${generateString()}.com.br`
       })
 
     expect(response.status).toBe(401)
@@ -47,11 +47,11 @@ describe('Express - User', () => {
       .post('/user')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        name: generate(),
-        username: generate(),
-        email: `${generate()}@user2.com`,
+        name: generateString(),
+        username: generateString(),
+        email: `${generateString()}@user2.com`,
         password: '123teste312',
-        domain: `${generate()}.com.br`
+        domain: `${generateString()}.com.br`
       })
 
     expect(response.status).toBe(201)
@@ -60,12 +60,12 @@ describe('Express - User', () => {
 
   it('should create user with id', async () => {
     const userData = {
-      id: generate(),
-      name: generate(),
-      username: generate(),
-      email: `${generate()}@katoo.com`,
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generate()}.com.br`
+      domain: `${generateString()}.com.br`
     }
     const response = await request(app)
       .post('/user')
@@ -79,12 +79,12 @@ describe('Express - User', () => {
 
   it('should not create duplicated user', async () => {
     const userData = {
-      id: generate(),
-      name: generate(),
-      username: generate(),
-      email: `${generate()}@katoo.com`,
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generate()}.com.br`
+      domain: `${generateString()}.com.br`
     }
     await request(app)
       .post('/user')

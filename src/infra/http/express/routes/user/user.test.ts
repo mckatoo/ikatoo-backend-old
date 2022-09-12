@@ -27,6 +27,21 @@ describe('Express - User', () => {
     accessToken = authResponse.body.accessToken
   })
 
+  it('should not create user without authorization', async () => {
+    const response = await request(app)
+      .post('/user')
+      .send({
+        name: generate(),
+        username: generate(),
+        email: `${generate()}@user2.com`,
+        password: '123teste312',
+        domain: `${generate()}.com.br`
+      })
+
+    expect(response.status).toBe(401)
+    expect(response.body.message).toBe('Token is missing')
+  })
+
   it('should create user without id', async () => {
     const response = await request(app)
       .post('/user')

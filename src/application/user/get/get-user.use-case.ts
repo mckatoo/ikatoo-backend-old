@@ -33,7 +33,7 @@ export class GetUserUseCase {
     }
   }
 
-  async bydomain (domain: string): Promise<GetUserOutput> {
+  async byDomain (domain: string): Promise<GetUserOutput> {
     const user = await this.userRepository.getByDomain(domain)
     if (user == null) throw new NotFoundError('User not found.')
 

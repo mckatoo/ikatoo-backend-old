@@ -87,4 +87,41 @@ describe('Express - Skill', () => {
     expect(response.status).toBe(200)
     expect(response.body).toEqual(skills)
   })
+
+  it('should get skills for a user thrown access token', async () => {
+    const userMock = {
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@mail.com`,
+      password: generateString(),
+      domain: `${generateString()}.com`
+    }
+    const user = await createUserUseCase.execute(userMock)
+    const authResponse = await request(app).post('/auth').send({
+      username: userMock.username,
+      password: userMock.password
+    })
+    const token: string = authResponse.body.accessToken
+
+    let skills: SkillWithId[] = []
+    for (let i = 0; i < 3; i++) {
+      const newSkill = await createSkillUseCase.execute({
+        title: generateString(),
+        weight: generateNumber(),
+        user_id: user.id
+      })
+      skills = [...skills, newSkill]
+    }
+
+    const response = await request(app)
+      .get('/skill')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        title: generateString(),
+        weight: generateNumber()
+      })
+
+    expect(response.status).toBe(200)
+    expect(response.body).toEqual(skills)
+  })
 })

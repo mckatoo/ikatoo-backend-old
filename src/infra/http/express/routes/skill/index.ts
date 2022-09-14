@@ -30,4 +30,13 @@ skillRoute.get('/skill/user/:userId', expressVerifyToken, async (req: Request, r
   res.status(200).json(output)
 })
 
+skillRoute.get('/skill', expressVerifyToken, async (req: Request, res: Response) => {
+  const accessToken = req.headers.authorization
+  const { userId } = decodeToken(accessToken?.split(' ')[1] ?? '')
+  const getUseCase = new GetSkillUseCase(skillRepository)
+  const output = await getUseCase.byUserId(userId)
+
+  res.status(200).json(output)
+})
+
 export default skillRoute

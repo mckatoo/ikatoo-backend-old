@@ -1,12 +1,18 @@
 import { decode } from 'jsonwebtoken'
 
-const decodeToken = (accessToken: string) => {
-  const token = JSON.parse(JSON.stringify(decode(accessToken)))
+interface DecodeTokenOutput {
+  userId: string
+  expiresIn: number
+  generatedAt: number
+}
+
+const decodeToken = (accessToken: string): DecodeTokenOutput => {
+  const decodedToken = JSON.parse(JSON.stringify(decode(accessToken)))
 
   return {
-    userId: token.sub,
-    expiresIn: token.exp,
-    generatedAt: token.iat
+    userId: decodedToken.sub,
+    expiresIn: decodedToken.exp,
+    generatedAt: decodedToken.iat
   }
 }
 export { decodeToken }

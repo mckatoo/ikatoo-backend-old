@@ -13,9 +13,7 @@ const expressVerifyToken = async (
     throw new UnauthorizedError('Token is missing')
   }
 
-  const [, token] = authToken.split(' ')
-
-  if (isValid(token)) return next()
+  if (isValid(authToken.split(' ')[1])) return next()
 
   throw new UnauthorizedError('Invalid token')
 }

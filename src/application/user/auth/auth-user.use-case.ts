@@ -10,14 +10,14 @@ interface AuthUserOutput {
 
 const validateCredentials = async (user: UserWithId, password: string) => {
   const isValid = await comparePassword(password, user.password)
-  if (!isValid) throw new Error('Credentials invalid.')
+  if (!isValid || (user.id == null)) throw new Error('Credentials invalid.')
 
   const accessToken = sign({
-    options: { id: user.id },
+    userId: user.id,
     expiresIn: '60s'
   })
   const refreshToken = sign({
-    options: { id: user.id },
+    userId: user.id,
     expiresIn: '600s'
   })
 

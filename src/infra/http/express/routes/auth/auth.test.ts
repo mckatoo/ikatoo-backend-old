@@ -4,6 +4,7 @@ import request from 'supertest'
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
 import { generateString } from '@infra/generate'
+import { decodeToken } from './decodeToken'
 
 describe('Express - Auth', () => {
   const repository = new UserSqliteRepository()
@@ -37,19 +38,30 @@ describe('Express - Auth', () => {
     expect(response.status).toBe(401)
   })
 
-  // it("should get user data an through access token", async () => {
-  //   const login = await request(app).post("/auth").send();
-  // });
+  it('should get user id an through token', async () => {
+    const user = await createUseCase.execute({
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
+      password: 'teste12345',
+      domain: `${generateString()}.com.br`
+    })
+    const response = await request(app).post('/auth').send({
+      username: user.username,
+      password: 'teste12345'
+    })
 
-  // it("should not get user data an through invalid access token", async () => {
-  //   const login = await request(app).post("/auth").send();
-  // });
+    const accessToken: string = response.body.accessToken
+    const decodedAccessToken = decodeToken(accessToken)
 
-  // it("should renew access token and refresh token", async () => {
-  //   const login = await request(app).post("/auth").send();
-  // });
+    expect(decodedAccessToken.userId).toBe(user.id)
+    expect(decodedAccessToken.expiresIn - decodedAccessToken.generatedAt).toBe(60)
 
-  // it("should not renew access token and refresh token", async () => {
-  //   const login = await request(app).post("/auth").send();
-  // });
+    const refreshToken: string = response.body.refreshToken
+    const decodedRefreshToken = decodeToken(refreshToken)
+
+    expect(decodedRefreshToken.userId).toBe(user.id)
+    expect(decodedRefreshToken.expiresIn - decodedRefreshToken.generatedAt).toBe(600)
+  })
 })

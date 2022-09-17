@@ -26,7 +26,11 @@ export class RefreshTokenSqliteRepository implements RefreshTokenRepositoryInter
   async getByUserId (userId: string): Promise<RefreshTokenWithId | undefined> {
     const db = await database()
     const refreshToken = await db.get<RefreshTokenWithId>(
-      'select * from refreshToken where user_id = $userId',
+      `select 
+        id,
+        cast(expires_in as integer) as expiresIn,
+        user_id as userId
+      from refreshToken where user_id = $userId`,
       {
         $userId: userId
       }

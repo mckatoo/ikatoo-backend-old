@@ -85,8 +85,7 @@ describe('Refresh-Token Sqlite repository', () => {
 
     expect(refreshToken).toEqual({
       id: refreshToken?.id,
-      expires_in: refreshToken?.expiresIn,
-      user_id: refreshToken?.userId
+      ...refreshTokenData
     })
   })
 
@@ -100,8 +99,7 @@ describe('Refresh-Token Sqlite repository', () => {
 
     expect(refreshToken).toEqual({
       id: refreshToken?.id,
-      expires_in: refreshToken?.expiresIn,
-      user_id: refreshToken?.userId
+      ...refreshTokenData
     })
 
     await repository.delete(refreshTokenData.userId)

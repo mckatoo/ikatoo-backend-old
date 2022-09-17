@@ -23,6 +23,17 @@ export class UserSqliteRepository implements UserRepositoryInterface {
     await db.close()
   }
 
+  async getById (id: string): Promise<UserWithId | undefined> {
+    const db = await database()
+    const user = await db.get<UserWithId>(
+      'select * from users where id = $id',
+      { $id: id }
+    )
+    await db.close()
+
+    return user
+  }
+
   async getByUsername (username: string): Promise<UserWithId | undefined> {
     const db = await database()
     const user = await db.get<UserWithId>(

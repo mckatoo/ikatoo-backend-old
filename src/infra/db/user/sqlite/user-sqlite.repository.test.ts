@@ -55,6 +55,21 @@ describe('User Sqlite repository', () => {
     ).rejects.toThrowError(/unique/i)
   })
 
+  it('should get a user by id', async () => {
+    const mock = {
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
+    }
+    await repository.create(mock)
+    const user = await repository.getById(mock.id)
+
+    expect(user).toEqual(mock)
+  })
+
   it('should get a user by username', async () => {
     const mock = {
       name: generateString(),

@@ -10,6 +10,7 @@
   "license": "CC0-1.0",
   "scripts": {
     "typecheck": "tsc --project tsconfig.json --noEmit",
+    "lint": "eslint --fix src",
     "test": "rimraf sqlite.db && NODE_ENV=test jest",
     "test:coverage": "rimraf sqlite.db,coverage && NODE_ENV=test jest ./src --coverage",
     "test:express": "rimraf sqlite.db && NODE_ENV=test jest src/infra/http/express",

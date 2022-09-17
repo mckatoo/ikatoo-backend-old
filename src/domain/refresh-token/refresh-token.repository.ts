@@ -4,5 +4,6 @@ export type RefreshTokenWithId = RefreshTokenProps & { id?: string }
 
 export interface RefreshTokenRepositoryInterface {
   create: (refreshToken: RefreshTokenWithId) => Promise<void>
-  getByUserId: (userId: string) => Promise<RefreshTokenWithId>
+  getByUserId: (userId: string) => Promise<RefreshTokenWithId | undefined>
+  delete: (userId: string) => Promise<void>
 }

@@ -84,9 +84,28 @@ describe('Refresh-Token Sqlite repository', () => {
     const refreshToken = await repository.getByUserId(refreshTokenData.userId)
 
     expect(refreshToken).toEqual({
-      id: refreshToken.id,
-      expires_in: refreshToken.expiresIn,
-      user_id: refreshToken.userId
+      id: refreshToken?.id,
+      expires_in: refreshToken?.expiresIn,
+      user_id: refreshToken?.userId
     })
+  })
+
+  it('should delete a refresh-token', async () => {
+    const refreshTokenData = {
+      expiresIn: 60,
+      userId: generateString()
+    }
+    await repository.create(refreshTokenData)
+    const refreshToken = await repository.getByUserId(refreshTokenData.userId)
+
+    expect(refreshToken).toEqual({
+      id: refreshToken?.id,
+      expires_in: refreshToken?.expiresIn,
+      user_id: refreshToken?.userId
+    })
+
+    await repository.delete(refreshTokenData.userId)
+    const refreshTokenAfterDelete = await repository.getByUserId(refreshTokenData.userId)
+    expect(refreshTokenAfterDelete).toBeUndefined()
   })
 })

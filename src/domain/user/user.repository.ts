@@ -4,6 +4,7 @@ export type UserWithId = UserProps & { id?: string }
 
 export interface UserRepositoryInterface {
   create: (user: UserWithId) => Promise<void>
+  getById: (id: string) => Promise<UserWithId | undefined>
   getByUsername: (username: string) => Promise<UserWithId | undefined>
   getByEmail: (email: string) => Promise<UserWithId | undefined>
   getByDomain: (domain: string) => Promise<UserWithId | undefined>

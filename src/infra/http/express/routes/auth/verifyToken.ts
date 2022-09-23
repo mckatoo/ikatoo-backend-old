@@ -8,14 +8,16 @@ const expressVerifyToken = async (
   next: NextFunction
 ) => {
   const authToken = req.headers.authorization
-
   if (authToken === undefined) {
     throw new UnauthorizedError('Token is missing')
   }
 
-  if (isValid(authToken.split(' ')[1])) return next()
-
-  throw new UnauthorizedError('Invalid token')
+  try {
+    const valid = isValid(authToken.split(' ')[1])
+    if (valid) return next()
+  } catch (_error) {
+    throw new UnauthorizedError('Invalid token')
+  }
 }
 
 export { expressVerifyToken }

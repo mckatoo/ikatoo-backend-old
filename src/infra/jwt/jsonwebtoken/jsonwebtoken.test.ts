@@ -29,7 +29,7 @@ describe('JsonWebToken Test', () => {
     expect(() => isValid(token.replace(token[3], ')'))).toThrowError('invalid token')
   })
 
-  it('should invalidate token after expiration', async () => {
+  it('should invalidate token after expiration', () => {
     const token = sign({
       userId: generateString(),
       expiresIn: '60s'
@@ -38,10 +38,8 @@ describe('JsonWebToken Test', () => {
     expect(isValid(token)).toBe(true)
 
     jest.useFakeTimers()
-    jest.spyOn(global, 'setTimeout')
-    setTimeout(async () => {
-      expect(() => isValid(token)).toThrowError(TokenExpiredError)
-    }, 60000)
-    jest.runAllTimers()
+    jest.advanceTimersByTime(61000)
+
+    expect(() => isValid(token)).toThrowError(TokenExpiredError)
   })
 })

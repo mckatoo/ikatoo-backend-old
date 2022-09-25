@@ -7,7 +7,7 @@ import { CreateRefreshTokenUseCase } from './create-refresh-token.use-case'
 describe('Create Refresh-Token use-case Test', () => {
   const refreshTokenRepository = new RefreshTokenRepository()
   const userRepository = new UserRepository()
-  const refreshTokenUseCase = new CreateRefreshTokenUseCase(
+  const createRefreshTokenUseCase = new CreateRefreshTokenUseCase(
     refreshTokenRepository,
     userRepository
   )
@@ -21,10 +21,26 @@ describe('Create Refresh-Token use-case Test', () => {
       password: generateString(),
       domain: `${generateString()}.com`
     })
-    await refreshTokenUseCase.execute(user.id)
+    await createRefreshTokenUseCase.execute(user.id)
 
     const refreshToken = await refreshTokenRepository.getByUserId(user.id)
 
     expect(refreshToken?.userId).toBe(user.id)
+  })
+
+  it('should expire on 15 seconds', async () => {
+    const user = await userUseCase.execute({
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@mail.com`,
+      password: generateString(),
+      domain: `${generateString()}.com`
+    })
+    const expiresIn = parseInt(((new Date().getTime() / 1000) + 15).toFixed(0))
+    await createRefreshTokenUseCase.execute(user.id)
+    const refreshToken = await refreshTokenRepository.getByUserId(user.id)
+
+    expect(refreshToken?.expiresIn).toBeGreaterThanOrEqual(expiresIn - 1)
+    expect(refreshToken?.expiresIn).toBeLessThanOrEqual(expiresIn + 1)
   })
 })

@@ -65,13 +65,12 @@ describe('Express - Auth', () => {
     expect(decodedAccessToken.userId).toBe(user.id)
     expect(decodedAccessToken.expiresIn - decodedAccessToken.generatedAt).toBe(60)
 
-    const refreshToken: string = response.body.refreshToken
-    const decodedRefreshToken = decodeToken(refreshToken)
+    const refreshToken = response.body.refreshToken
 
-    expect(decodedRefreshToken.userId).toBe(user.id)
+    expect(decodeToken(refreshToken).userId).toBe(user.id)
     const expectedExpiresIn = (new Date().getTime() / 1000) + 15
-    expect(decodedRefreshToken.expiresIn).toBeGreaterThanOrEqual(expectedExpiresIn - 1)
-    expect(decodedRefreshToken.expiresIn).toBeLessThanOrEqual(expectedExpiresIn + 1)
+    expect(decodeToken(refreshToken).expiresIn).toBeGreaterThanOrEqual(expectedExpiresIn - 1)
+    expect(decodeToken(refreshToken).expiresIn).toBeLessThanOrEqual(expectedExpiresIn + 1)
   })
 
   it.skip('should expire token', async () => {

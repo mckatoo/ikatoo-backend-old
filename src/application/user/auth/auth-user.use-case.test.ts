@@ -26,7 +26,7 @@ describe('Auth User use-case Test', () => {
     )
 
     expect(isValid(accessToken)).toBeDefined()
-    expect(isValid(refreshToken)).toBeDefined()
+    expect(refreshToken).toBeDefined()
   })
 
   it('should authenticate a user using email and password', async () => {
@@ -44,7 +44,7 @@ describe('Auth User use-case Test', () => {
     )
 
     expect(isValid(accessToken)).toBeDefined()
-    expect(isValid(refreshToken)).toBeDefined()
+    expect(refreshToken).toBeDefined()
   })
 
   it('should fail on authenticate a user using invalid username', async () => {
@@ -91,9 +91,8 @@ describe('Auth User use-case Test', () => {
       mock.username,
       mock.password
     )
-    const decodedRefreshToken = decodeToken(refreshToken)
     const expectedExpiresIn = (new Date().getTime() / 1000) + 15
-    expect(decodedRefreshToken.expiresIn).toBeGreaterThanOrEqual(expectedExpiresIn - 1)
-    expect(decodedRefreshToken.expiresIn).toBeLessThanOrEqual(expectedExpiresIn + 1)
+    expect(decodeToken(refreshToken).expiresIn).toBeGreaterThanOrEqual(expectedExpiresIn - 1)
+    expect(decodeToken(refreshToken).expiresIn).toBeLessThanOrEqual(expectedExpiresIn + 1)
   })
 })

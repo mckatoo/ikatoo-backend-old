@@ -75,7 +75,7 @@ describe('Auth User use-case Test', () => {
     const decodedAccessToken = decodeToken(accessToken)
     expect(
       decodedAccessToken.expiresIn - decodedAccessToken.generatedAt
-    ).toBe(60)
+    ).toBe(60 * 60)
   })
 
   it('refreshToken should have expiresIn 15 seconds ahead', async () => {
@@ -91,7 +91,7 @@ describe('Auth User use-case Test', () => {
       mock.username,
       mock.password
     )
-    const expectedExpiresIn = (new Date().getTime() / 1000) + 15
+    const expectedExpiresIn = (new Date().getTime() / 1000) + (((60 * 60) * 24) * 2)
     expect(decodeToken(refreshToken).expiresIn).toBeGreaterThanOrEqual(expectedExpiresIn - 1)
     expect(decodeToken(refreshToken).expiresIn).toBeLessThanOrEqual(expectedExpiresIn + 1)
   })

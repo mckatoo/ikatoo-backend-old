@@ -13,7 +13,7 @@ export class CreateRefreshTokenUseCase {
 
     const refreshToken = sign({
       userId,
-      expiresIn: '15s'
+      expiresIn: '2 days'
     })
 
     return refreshToken

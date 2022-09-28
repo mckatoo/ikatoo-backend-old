@@ -16,7 +16,7 @@ const validateCredentials = async (user: UserWithId, password: string) => {
 
   const accessToken = sign({
     userId: user.id,
-    expiresIn: '60s'
+    expiresIn: '1h'
   })
   const userRepository = new UserRepository()
   const refreshTokenUseCase = new CreateRefreshTokenUseCase(userRepository)

@@ -2,6 +2,7 @@ import { UnauthorizedError } from '@application/helpers/api-erros'
 import { UserRepositoryInterface, UserWithId } from '@domain/user/user.repository'
 import { UserRepository } from '@infra/db/user'
 import { comparePassword } from '@infra/hashing-password'
+import { decodeToken } from '@infra/http/express/routes/auth/decodeToken'
 import { sign } from '@infra/jwt'
 import { CreateRefreshTokenUseCase } from '../refresh-token/create/create-refresh-token.use-case'
 
@@ -48,9 +49,11 @@ export class AuthUserUseCase {
     return await validateCredentials(user, password)
   }
 
-  // async authByToken(refreshToken: string): Promise<AuthUserOutput> {
+  async authByRefreshToken (refreshToken: string): Promise<AuthUserOutput> {
+    const decodedRefreshToken = decodeToken(refreshToken)
+    const user = await this.userRepository.getById(decodedRefreshToken.userId)
+    if (user == null) throw new UnauthorizedError('User not found')
 
-  //   const user = await this.userRepository.getByUsername(username);
-  //   return validateCredentials(user, password);
-  // }
+    return await validateCredentials(user, user.password)
+  }
 }

@@ -73,6 +73,33 @@ describe('Express - Auth', () => {
     expect(decodeToken(refreshToken).expiresIn).toBeLessThanOrEqual(expectedExpiresIn + 1)
   })
 
+  it('should get new accessTokens and refreshToken using the refreshToken', async () => {
+    const user = await createUseCase.execute({
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
+      password: 'teste12345',
+      domain: `${generateString()}.com.br`
+    })
+    const response = await request(app).post('/auth').send({
+      username: user.username,
+      password: 'teste12345'
+    })
+
+    const refreshToken: string = response.body.refreshToken
+    const responseRefreshToken = await request(app).get('/refresh-token')
+      .auth(refreshToken, { type: 'bearer' })
+      .send()
+    const decodedTokens = {
+      accessToken: decodeToken(responseRefreshToken.body.accessToken),
+      refreshToken: decodeToken(responseRefreshToken.body.refreshToken)
+    }
+    expect(responseRefreshToken.status).toBe(200)
+    expect(decodedTokens.accessToken.userId).toBe(user.id)
+    expect(decodedTokens.refreshToken.userId).toBe(user.id)
+  })
+
   it.skip('should expire token', async () => {
     const user = await createUseCase.execute({
       id: generateString(),

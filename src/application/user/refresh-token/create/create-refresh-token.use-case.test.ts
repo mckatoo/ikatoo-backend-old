@@ -32,7 +32,7 @@ describe('Create Refresh-Token use-case Test', () => {
       password: generateString(),
       domain: `${generateString()}.com`
     })
-    const expiresIn = parseInt(((new Date().getTime() / 1000) + 15).toFixed(0))
+    const expiresIn = parseInt(((new Date().getTime() / 1000) + (((60 * 60) * 24) * 2)).toFixed(0))
     const refreshToken = await createRefreshTokenUseCase.execute(user.id)
 
     expect(decodeToken(refreshToken).expiresIn).toBeGreaterThanOrEqual(expiresIn - 1)

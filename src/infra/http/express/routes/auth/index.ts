@@ -17,12 +17,12 @@ authRoute.post('/auth', async (req: Request, res: Response) => {
   res.status(200).json(tokens)
 })
 
-// authRoute.get("/refresh", async (req: Request, res: Response) => {
-//   const { refreshToken } = req.params;
-//   const getUseCase = new AuthUserUseCase(userRepository);
-//   const output = await getUseCase.authByToken(username);
+authRoute.post('/refresh-token', async (req: Request, res: Response) => {
+  const refreshToken = req.headers.authorization?.split(' ')[1] ?? ''
+  const getUseCase = new AuthUserUseCase(userRepository)
+  const tokens = await getUseCase.authByRefreshToken(refreshToken)
 
-//   res.status(200).json(output);
-// });
+  res.status(200).json(tokens)
+})
 
 export default authRoute

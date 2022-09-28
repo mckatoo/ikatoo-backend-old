@@ -42,7 +42,7 @@ describe('Express - Auth', () => {
     })
 
     expect(response.status).toBe(401)
-    expect(response.body.message).toBe('User not found')
+    expect(response.body.message).toBe('Credentials invalid.')
   })
 
   it('should get user id an through token', async () => {
@@ -63,14 +63,107 @@ describe('Express - Auth', () => {
     const decodedAccessToken = decodeToken(accessToken)
 
     expect(decodedAccessToken.userId).toBe(user.id)
-    expect(decodedAccessToken.expiresIn - decodedAccessToken.generatedAt).toBe(60)
 
     const refreshToken = response.body.refreshToken
 
     expect(decodeToken(refreshToken).userId).toBe(user.id)
-    const expectedExpiresIn = (new Date().getTime() / 1000) + 15
-    expect(decodeToken(refreshToken).expiresIn).toBeGreaterThanOrEqual(expectedExpiresIn - 1)
-    expect(decodeToken(refreshToken).expiresIn).toBeLessThanOrEqual(expectedExpiresIn + 1)
+  })
+
+  it('should get accessToken with expiration time in 1h', async () => {
+    const user = await createUseCase.execute({
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
+      password: 'teste12345',
+      domain: `${generateString()}.com.br`
+    })
+    const response = await request(app).post('/auth').send({
+      username: user.username,
+      password: 'teste12345'
+    })
+
+    const accessToken: string = response.body.accessToken
+    const decodedAccessToken = decodeToken(accessToken)
+
+    expect(decodedAccessToken.userId).toBe(user.id)
+    expect(
+      decodedAccessToken.expiresIn - decodedAccessToken.generatedAt
+    ).toBe(60 * 60)
+  })
+
+  it('should get refreshToken with expiration time in 2 days', async () => {
+    const user = await createUseCase.execute({
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
+      password: 'teste12345',
+      domain: `${generateString()}.com.br`
+    })
+    const response = await request(app).post('/auth').send({
+      username: user.username,
+      password: 'teste12345'
+    })
+
+    const refreshToken = response.body.refreshToken
+    const decodedRefreshToken = decodeToken(refreshToken)
+
+    expect(
+      decodedRefreshToken.expiresIn - decodedRefreshToken.generatedAt
+    ).toBe(((60 * 60) * 24) * 2)
+  })
+
+  it('should get new accessTokens and refreshToken using the refreshToken', async () => {
+    const user = await createUseCase.execute({
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
+      password: 'teste12345',
+      domain: `${generateString()}.com.br`
+    })
+    const response = await request(app).post('/auth').send({
+      username: user.username,
+      password: 'teste12345'
+    })
+
+    const responseRefreshToken = await request(app).post('/refresh-token')
+      .auth(response.body.refreshToken, { type: 'bearer' })
+      .send()
+    const { accessToken, refreshToken } = responseRefreshToken.body
+    const decodedAccessToken = decodeToken(accessToken)
+    const decodedRefreshToken = decodeToken(refreshToken)
+
+    expect(responseRefreshToken.status).toBe(200)
+    expect(decodedAccessToken.userId).toBe(user.id)
+    expect(decodedRefreshToken.userId).toBe(user.id)
+  })
+
+  it('should access protected route with AccessToken obtained through RefreshToken', async () => {
+    const user = await createUseCase.execute({
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
+      password: 'teste12345',
+      domain: `${generateString()}.com.br`
+    })
+    const responseAuth = await request(app).post('/auth').send({
+      username: user.username,
+      password: 'teste12345'
+    })
+
+    const responseRefreshToken = await request(app).post('/refresh-token')
+      .auth(responseAuth.body.refreshToken, { type: 'bearer' })
+      .send()
+    const { accessToken } = responseRefreshToken.body
+
+    const response = await request(app).get('/test')
+      .auth(accessToken, { type: 'bearer' })
+      .send()
+
+    expect(response.status).toBe(200)
   })
 
   it.skip('should expire token', async () => {

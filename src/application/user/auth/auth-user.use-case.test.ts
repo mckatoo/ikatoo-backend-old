@@ -50,13 +50,13 @@ describe('Auth User use-case Test', () => {
   it('should fail on authenticate a user using invalid username', async () => {
     const token = authUseCase.authByUsername('fail', '123passauth')
 
-    await expect(token).rejects.toThrowError('User not found')
+    await expect(token).rejects.toThrowError('Credentials invalid.')
   })
 
   it('should fail on authenticate a user using invalid email', async () => {
     const token = authUseCase.authByEmail('fail@auth.com', '123passauth')
 
-    await expect(token).rejects.toThrowError('User not found')
+    await expect(token).rejects.toThrowError('Credentials invalid.')
   })
 
   it('accessToken should have expiresIn 60 seconds ahead', async () => {

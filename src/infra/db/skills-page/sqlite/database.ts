@@ -10,8 +10,8 @@ export default async () => {
   await db.exec(`create table if not exists skillsPages (
     id text NOT NULL UNIQUE PRIMARY KEY, 
     title text NOT NULL, 
-    description integer NOT NULL, 
-    user_id text NOT NULL 
+    description text NOT NULL, 
+    user_id text NOT NULL UNIQUE 
     )`)
 
   return db

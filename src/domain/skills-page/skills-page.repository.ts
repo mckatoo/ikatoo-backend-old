@@ -5,4 +5,5 @@ export type SkillsPageWithId = SkillsPageProps & { id?: string }
 export interface SkillsPageRepositoryInterface {
   create: (skill: SkillsPageWithId) => Promise<void>
   getByUserId: (userId: string) => Promise<SkillsPageWithId>
+  getByDomain: (domain: string) => Promise<SkillsPageWithId>
 }

@@ -25,7 +25,7 @@ describe('Skills Pages Sqlite repository', () => {
     expect(skill).toEqual(skillsPageData)
   })
 
-  it('Should not insert skill with existing id', async () => {
+  it('Should not insert skills page with existing id', async () => {
     const skillsPageData = {
       id: generateString(),
       title: generateString(),
@@ -34,34 +34,44 @@ describe('Skills Pages Sqlite repository', () => {
     }
     await repository.create(skillsPageData)
     await expect(
-      repository.create(skillsPageData)
+      repository.create({
+        id: skillsPageData.id,
+        title: generateString(),
+        description: generateString(),
+        user_id: generateString()
+      })
     ).rejects.toThrowError(/unique/i)
   })
 
-  it('should get skills by user_id', async () => {
-    const userId = generateString()
-    const skillsData = [{
+  it('Should not insert skills page with existing user_id', async () => {
+    const skillsPageData = {
       id: generateString(),
       title: generateString(),
       description: generateString(),
-      user_id: userId
-    }, {
-      id: generateString(),
-      title: generateString(),
-      description: generateString(),
-      user_id: userId
-    }, {
-      id: generateString(),
-      title: generateString(),
-      description: generateString(),
-      user_id: userId
-    }]
-    for (let index = 0; index < skillsData.length; index++) {
-      await repository.create(skillsData[index])
+      user_id: generateString()
     }
+    await repository.create(skillsPageData)
+    await expect(
+      repository.create({
+        id: generateString(),
+        title: generateString(),
+        description: generateString(),
+        user_id: skillsPageData.user_id
+      })
+    ).rejects.toThrowError(/unique/i)
+  })
 
-    const skills = await repository.getByUserId(userId)
+  it('should get skills page by user_id', async () => {
+    const skillsPageData = {
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
+    }
+    await repository.create(skillsPageData)
 
-    expect(skills).toEqual(skillsData)
+    const skills = await repository.getByUserId(skillsPageData.user_id)
+
+    expect(skills).toEqual(skillsPageData)
   })
 })

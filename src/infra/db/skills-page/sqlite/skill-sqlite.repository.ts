@@ -18,15 +18,17 @@ export class SkillsPagesSqliteRepository implements SkillsPageRepositoryInterfac
     await db.close()
   }
 
-  async getByUserId (userId: string): Promise<SkillsPageWithId[]> {
+  async getByUserId (userId: string): Promise<SkillsPageWithId> {
     const db = await database()
-    const skillsPage = await db.all<SkillsPageWithId[]>(
+    const skillsPage = await db.get<SkillsPageWithId>(
       'select * from skillsPages where user_id = $userId',
       {
         $userId: userId
       }
     )
     await db.close()
+
+    if (skillsPage == null) throw new Error('Skills page not found')
 
     return skillsPage
   }

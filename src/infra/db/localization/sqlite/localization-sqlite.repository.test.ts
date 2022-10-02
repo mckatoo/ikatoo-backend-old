@@ -38,6 +38,23 @@ describe('Localizations Sqlite repository', () => {
     ).rejects.toThrowError(/unique/i)
   })
 
+  it('Should not insert localization with existing user-id', async () => {
+    const existingUserId = generateString()
+    const localizationData = {
+      id: generateString(),
+      latitude: generateString(),
+      longitude: generateString(),
+      user_id: existingUserId
+    }
+    await repository.create(localizationData)
+    await expect(
+      repository.create({
+        ...localizationData,
+        user_id: existingUserId
+      })
+    ).rejects.toThrowError(/unique/i)
+  })
+
   it('should get localizations by id', async () => {
     const localizationData: LocalizationWithId = {
       id: generateString(),
@@ -52,30 +69,29 @@ describe('Localizations Sqlite repository', () => {
     expect(localization).toEqual(localizationData)
   })
 
-  it('should get localizations by user_id', async () => {
-    const userId = generateString()
+  it('should get localization by user_id', async () => {
     const localizationsData: LocalizationWithId[] = [{
       id: generateString(),
       latitude: generateString(),
       longitude: generateString(),
-      user_id: userId
+      user_id: generateString()
     }, {
       id: generateString(),
       latitude: generateString(),
       longitude: generateString(),
-      user_id: userId
+      user_id: generateString()
     }, {
       id: generateString(),
       latitude: generateString(),
       longitude: generateString(),
-      user_id: userId
+      user_id: generateString()
     }]
     for (let index = 0; index < localizationsData.length; index++) {
       await repository.create(localizationsData[index])
     }
 
-    const localizations = await repository.getByUserId(userId)
+    const localization = await repository.getByUserId(localizationsData[1].user_id)
 
-    expect(localizations).toEqual(localizationsData)
+    expect(localization).toEqual(localizationsData[1])
   })
 })

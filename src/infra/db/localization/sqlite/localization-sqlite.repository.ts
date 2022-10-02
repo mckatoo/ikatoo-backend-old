@@ -33,17 +33,18 @@ export class LocalizationsSqliteRepository implements LocalizationRepositoryInte
     return localization
   }
 
-  async getByUserId (userId: string): Promise<LocalizationWithId[]> {
+  async getByUserId (userId: string): Promise<LocalizationWithId> {
     const db = await database()
-    const localizations = await db.all<LocalizationWithId[]>(
+    const localization = await db.get<LocalizationWithId>(
       'select * from localizations where user_id = $userId',
       {
         $userId: userId
       }
     )
     await db.close()
+    if (localization == null) throw new Error('Localizations not found')
 
-    return localizations
+    return localization
   }
 
   async getAll (): Promise<LocalizationWithId[]> {

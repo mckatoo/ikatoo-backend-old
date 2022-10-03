@@ -11,7 +11,7 @@ export default async () => {
     id text NOT NULL UNIQUE PRIMARY KEY, 
     latitude text NOT NULL, 
     longitude text NOT NULL, 
-    user_id text UNIQUE NOT NULL 
+    user_id text UNIQUE NOT NULL
     )`)
 
   return db

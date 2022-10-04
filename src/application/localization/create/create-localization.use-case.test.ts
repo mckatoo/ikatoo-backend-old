@@ -18,7 +18,7 @@ describe('Create Localization use-case Test', () => {
     const expectedResult = await repository.getByUserId(mock.user_id)
 
     expect(expectedResult).toEqual({
-      id: expectedResult.id,
+      id: expectedResult?.id,
       ...mock
     })
   })

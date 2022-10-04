@@ -1,33 +1,28 @@
 import { randomUUID } from 'crypto'
 
 export interface SkillsPageProps {
+  id?: string
   title: string
   description: string
   user_id: string
 }
 
 export class SkillsPage {
-  readonly id: string
-  props: Required<SkillsPageProps>
+  readonly props: Required<SkillsPageProps>
 
-  private constructor (props?: SkillsPageProps, id?: string) {
-    this.id = id ?? randomUUID()
-
-    if (props == null) throw new Error('Props required on contructor')
-
-    this.props = props
+  private constructor (props: SkillsPageProps) {
+    this.props = {
+      ...props,
+      id: props.id ?? randomUUID()
+    }
   }
 
-  static create (props?: SkillsPageProps, id?: string) {
-    return new SkillsPage(props, id)
+  static create (props: SkillsPageProps) {
+    return new SkillsPage(props)
   }
 
-  updateTitle (title: string) {
-    this.props.title = title
-  }
-
-  updateDescription (description: string) {
-    this.props.description = description
+  get id (): string {
+    return this.props.id
   }
 
   get title (): string {
@@ -43,9 +38,6 @@ export class SkillsPage {
   }
 
   toJson () {
-    return {
-      id: this.id,
-      ...this.props
-    }
+    return this.props
   }
 }

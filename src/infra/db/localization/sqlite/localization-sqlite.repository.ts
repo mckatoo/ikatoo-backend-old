@@ -1,4 +1,3 @@
-import { ConflictError } from '@application/helpers/api-erros'
 import { LocalizationRepositoryInterface, LocalizationWithId } from '@domain/localization/localization.repository'
 import { randomUUID } from 'crypto'
 
@@ -19,7 +18,7 @@ export class LocalizationsSqliteRepository implements LocalizationRepositoryInte
     await db.close()
   }
 
-  async getById (id: string): Promise<LocalizationWithId> {
+  async getById (id: string): Promise<LocalizationWithId | undefined> {
     const db = await database()
     const localization = await db.get<LocalizationWithId>(
       'select * from localizations where id = $id',
@@ -28,12 +27,12 @@ export class LocalizationsSqliteRepository implements LocalizationRepositoryInte
       }
     )
     await db.close()
-    if (localization == null) throw new ConflictError('Localization not found.')
-
-    return localization
+    if (localization != null) {
+      return localization
+    }
   }
 
-  async getByUserId (userId: string): Promise<LocalizationWithId> {
+  async getByUserId (userId: string): Promise<LocalizationWithId | undefined> {
     const db = await database()
     const localization = await db.get<LocalizationWithId>(
       'select * from localizations where user_id = $userId',
@@ -42,9 +41,9 @@ export class LocalizationsSqliteRepository implements LocalizationRepositoryInte
       }
     )
     await db.close()
-    if (localization == null) throw new Error('Localizations not found')
-
-    return localization
+    if (localization != null) {
+      return localization
+    }
   }
 
   async getAll (): Promise<LocalizationWithId[]> {

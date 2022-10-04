@@ -1,18 +1,16 @@
 import { ConflictError } from '@application/helpers/api-erros'
 import { SkillsPage, SkillsPageProps } from '@domain/skills-page/skills-page.entity'
-import { SkillsPageRepositoryInterface, SkillsPageWithId } from '@domain/skills-page/skills-page.repository'
+import { SkillsPageRepositoryInterface } from '@domain/skills-page/skills-page.repository'
 
 type CreateSkillsPageInput = SkillsPageProps & { id?: string }
 
 export class CreateSkillsPageUseCase {
   constructor (private readonly repository: SkillsPageRepositoryInterface) {}
 
-  async execute (input: CreateSkillsPageInput): Promise<Required<SkillsPageWithId>> {
+  async execute (input: CreateSkillsPageInput): Promise<void> {
     try {
       const skillsPage = SkillsPage.create(input)
       await this.repository.create(skillsPage)
-
-      return skillsPage.toJson()
     } catch (error) {
       if (
         error instanceof Error &&

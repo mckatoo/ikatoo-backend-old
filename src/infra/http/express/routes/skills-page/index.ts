@@ -11,9 +11,9 @@ const skillsPageRepository = new SkillsPagesRepository()
 
 skillsPageRoute.post('/skills-page', expressVerifyToken, async (req: Request, res: Response) => {
   const createUseCase = new CreateSkillsPageUseCase(skillsPageRepository)
-  const skillsPage = await createUseCase.execute(req.body)
+  await createUseCase.execute(req.body)
 
-  res.status(201).json(skillsPage)
+  res.status(201).send()
 })
 
 skillsPageRoute.get('/skills-page', async (req: Request, res: Response) => {

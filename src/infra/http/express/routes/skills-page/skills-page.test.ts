@@ -35,7 +35,7 @@ describe('Express - Skills Page', () => {
     accessToken = authResponse.body.accessToken
   })
 
-  it.skip('should create skills page without id', async () => {
+  it('should create skills page without id', async () => {
     const skillsPageMock = {
       title: generateString(),
       description: generateString(),
@@ -45,20 +45,16 @@ describe('Express - Skills Page', () => {
       .post('/skills-page')
       .set('Authorization', `Bearer ${accessToken}`)
       .send(skillsPageMock)
+    const skills = await skillsPageRepository.getByUserId(skillsPageMock.user_id)
 
     expect(response.status).toBe(201)
-    expect(response.body).toEqual({
-      id: response.body.id,
-      ...skillsPageMock,
-      image: {
-        alt: '',
-        src: ''
-      },
-      skills: []
+    expect(skills).toEqual({
+      id: skills.id,
+      ...skillsPageMock
     })
   })
 
-  it.skip('should create skills page with id', async () => {
+  it('should create skills page with id', async () => {
     const skillsPageMock = {
       id: generateString(),
       title: generateString(),
@@ -72,22 +68,7 @@ describe('Express - Skills Page', () => {
     const skillsPage = await getSkillsPageUseCase.getByUserId(skillsPageMock.user_id)
 
     expect(response.status).toBe(201)
-    expect(response.body).toEqual({
-      ...skillsPage,
-      image: {
-        alt: '',
-        src: ''
-      },
-      skills: []
-    })
-    expect(response.body).toEqual({
-      ...skillsPageMock,
-      image: {
-        alt: '',
-        src: ''
-      },
-      skills: []
-    })
+    expect(skillsPage).toEqual(skillsPageMock)
   })
 
   it('should get skills page data', async () => {

@@ -9,7 +9,7 @@ export class CreateSkillsPageUseCase {
 
   async execute (input: CreateSkillsPageInput): Promise<Required<SkillsPageWithId>> {
     try {
-      const skillsPage = SkillsPage.create(input, input.id)
+      const skillsPage = SkillsPage.create(input)
       await this.repository.create(skillsPage)
 
       return skillsPage.toJson()

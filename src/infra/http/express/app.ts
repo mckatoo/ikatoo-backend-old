@@ -7,6 +7,21 @@ import routes from './routes'
 
 const app = express()
 app.use(express.json())
+
+app.use((req, res, next) => {
+  const whitelist = [
+    'https://ikatoo.com.br',
+    'https://www.ikatoo.com.br'
+  ]
+  const origin = req.headers.origin
+  if (process.env.NODE_ENV === 'prod' &&
+    !(origin == null) &&
+    whitelist.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin)
+  }
+  next()
+})
+
 app.use(express.urlencoded({ extended: true }))
 
 app.disable('x-powered-by').disable('etag')

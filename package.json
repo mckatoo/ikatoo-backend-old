@@ -20,7 +20,7 @@
     "express": "ts-node -r tsconfig-paths/register src/infra/http/express/index.ts",
     "dev": "NODE_ENV=test tsnd -r tsconfig-paths/register --watch src/ --respawn --transpile-only src/infra/http/express/index.ts",
     "dev:express": "NODE_ENV=test tsnd -r tsconfig-paths/register src/infra/http/express/index.ts",
-    "start": "yarn express"
+    "start": "NODE_ENV=prod yarn express"
   },
   "devDependencies": {
     "@swc/core": "1.2.203",

@@ -2,6 +2,7 @@ import { Router } from 'express'
 
 import aboutPageRoute from './aboutPage'
 import authRoute from './auth'
+import contactPageRoute from './contact-page'
 import localizationRoute from './localization'
 import projectRoute from './project'
 import skillRoute from './skill'
@@ -19,5 +20,6 @@ routes.use(skillsPageRoute)
 routes.use(projectRoute)
 routes.use(localizationRoute)
 routes.use(socialLinksRoute)
+routes.use(contactPageRoute)
 
 export default routes

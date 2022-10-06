@@ -1,4 +1,3 @@
-import { NotFoundError } from '@application/helpers/api-erros'
 import { CreateSocialLinksUseCase } from '@application/social-links/create/create-social-links.use-case'
 import { GetSocialLinksUseCase } from '@application/social-links/get/get-social-links.use-case'
 import { SocialLinksRepository } from '@infra/db/social-links'
@@ -32,8 +31,11 @@ socialLinksRoute.get('/social-links/user/:userId', expressVerifyToken, async (re
 })
 
 socialLinksRoute.get('/social-links', async (req: Request, res: Response) => {
-  const domain = (req.headers.origin ?? '').split('/')[2].replace('www.', '')
-  if (domain == null) throw new NotFoundError('Domain not found.')
+  const origin = req.headers.origin
+  if (origin == null) return res.status(200).json([])
+
+  const domain = origin.split('/')[2].replace('www.', '')
+  if (domain == null) return []
 
   const getUseCase = new GetSocialLinksUseCase(socialLinksRepository)
   const socialLinks = await getUseCase.byDomain(domain)

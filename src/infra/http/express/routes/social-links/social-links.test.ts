@@ -177,7 +177,7 @@ describe('Express - Social Links', () => {
       .set('origin', `https://www.${generateString()}`)
       .send()
 
-    expect(response.status).toBe(404)
-    expect(response.body.message).toEqual('Not found social links for this domain')
+    expect(response.status).toBe(200)
+    expect(response.body).toStrictEqual([])
   })
 })

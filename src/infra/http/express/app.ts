@@ -18,6 +18,8 @@ app.use((req, res, next) => {
     !(origin == null) &&
     whitelist.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin)
+  } else if (process.env.NODE_ENV === 'test') {
+    res.header('Access-Control-Allow-Origin', '*')
   }
   next()
 })

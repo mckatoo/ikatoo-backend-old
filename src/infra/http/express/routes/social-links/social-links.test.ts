@@ -64,7 +64,7 @@ describe('Express - Social Links', () => {
     expect(response.status).toBe(201)
   })
 
-  it('should get social links for a user', async () => {
+  it('should get social links of the user', async () => {
     const user = await createUserUseCase.execute({
       name: generateString(),
       username: generateString(),
@@ -97,7 +97,7 @@ describe('Express - Social Links', () => {
     expect(response.body).toEqual(socialLinks)
   })
 
-  it('should get social links for a user thrown access token', async () => {
+  it('should get social links of the user thrown access token', async () => {
     const userMock = {
       name: generateString(),
       username: generateString(),
@@ -130,9 +130,54 @@ describe('Express - Social Links', () => {
     const response = await request(app)
       .get('/social-links')
       .set('Authorization', `Bearer ${token}`)
+      .set('origin', `https://www.${userMock.domain}`)
       .send()
 
     expect(response.status).toBe(200)
     expect(response.body).toEqual(socialLinks)
+  })
+
+  it('should get social links of the user thrown domain url', async () => {
+    const userMock = {
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@mail.com`,
+      password: generateString(),
+      domain: generateString()
+    }
+    const user = await createUserUseCase.execute(userMock)
+
+    let socialLinks: SocialLinksProps[] = []
+    for (let i = 0; i < 5; i++) {
+      const newSocialLink: SocialLinksProps = {
+        id: generateString(),
+        name: generateString(),
+        url: generateString(),
+        icon_url: generateString(),
+        user_id: i % 2 === 0 ? user.id : generateString()
+      }
+      await createSocialLinksUseCase.execute(newSocialLink)
+      if (i % 2 === 0) {
+        socialLinks = [...socialLinks, newSocialLink]
+      }
+    }
+
+    const response = await request(app)
+      .get('/social-links')
+      .set('origin', `https://www.${userMock.domain}`)
+      .send()
+
+    expect(response.status).toBe(200)
+    expect(response.body).toEqual(socialLinks)
+  })
+
+  it('should not get social links', async () => {
+    const response = await request(app)
+      .get('/social-links')
+      .set('origin', `https://www.${generateString()}`)
+      .send()
+
+    expect(response.status).toBe(404)
+    expect(response.body.message).toEqual('Not found social links for this domain')
   })
 })

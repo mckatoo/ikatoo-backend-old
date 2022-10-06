@@ -1,3 +1,4 @@
+import { NotFoundError } from '@application/helpers/api-erros'
 import {
   SocialLinksRepositoryInterface,
   SocialLinksWithId
@@ -10,5 +11,18 @@ export class GetSocialLinksUseCase {
     const socialLinks = await this.repository.getByUserId(userId)
 
     return socialLinks
+  }
+
+  async byDomain (domain: string): Promise<SocialLinksWithId[]> {
+    try {
+      const socialLinks = await this.repository.getByDomain(domain)
+
+      return socialLinks
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Domain not found') {
+        throw new NotFoundError('Not found social links for this domain')
+      }
+    }
+    return []
   }
 }

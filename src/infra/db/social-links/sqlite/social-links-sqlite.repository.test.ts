@@ -1,4 +1,5 @@
 import { SocialLinksWithId } from '@domain/social-links/social-links.repository'
+import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 
 import database from './database'
@@ -97,6 +98,35 @@ describe('SocialLinks Sqlite repository', () => {
       await repository.create(socialLinksData[index])
     }
     const socialLinks = await repository.searchByName(commonName.toUpperCase())
+    expect(socialLinks).toEqual(socialLinksData)
+  })
+
+  it('should search social-link by domain', async () => {
+    const userRepository = new UserRepository()
+    const userMock = {
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      domain: generateString()
+    }
+    await userRepository.create(userMock)
+    let socialLinksData: SocialLinksWithId[] = []
+    for (let index = 0; index < 5; index++) {
+      const newSocialLink: SocialLinksWithId = {
+        id: generateString(),
+        name: generateString(),
+        url: generateString(),
+        icon_url: generateString(),
+        user_id: index % 2 === 0 ? userMock.id : generateString()
+      }
+      await repository.create(newSocialLink)
+      if (index % 2 === 0) {
+        socialLinksData = [...socialLinksData, newSocialLink]
+      }
+    }
+    const socialLinks = await repository.getByDomain(userMock.domain)
     expect(socialLinks).toEqual(socialLinksData)
   })
 })

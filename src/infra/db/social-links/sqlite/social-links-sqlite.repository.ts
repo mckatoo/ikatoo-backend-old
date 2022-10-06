@@ -39,7 +39,7 @@ export class SocialLinksSqliteRepository implements SocialLinksRepositoryInterfa
       $domain: domain
     })
 
-    if (user === undefined) throw new Error('Domain not found')
+    if (user === undefined) return []
 
     const socialLinks = await db.all<SocialLinksWithId[]>(
       'select * from socialLinks where user_id = $userId',

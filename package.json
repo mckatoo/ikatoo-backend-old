@@ -20,6 +20,9 @@
     "express": "ts-node -r tsconfig-paths/register src/infra/http/express/index.ts",
     "dev": "NODE_ENV=test tsnd -r tsconfig-paths/register --watch src/ --respawn --transpile-only src/infra/http/express/index.ts",
     "dev:express": "NODE_ENV=test tsnd -r tsconfig-paths/register src/infra/http/express/index.ts",
+    "docker:up": "docker compose --file ./docker/stack.yml up --detach",
+    "docker:down": "docker compose --file ./docker/stack.yml down",
+    "docker:ps": "docker compose --file ./docker/stack.yml ps",
     "start": "NODE_ENV=prod yarn express"
   },
   "devDependencies": {
@@ -58,7 +61,8 @@
     "dotenv": "16.0.1",
     "express": "4.18.1",
     "express-async-errors": "3.1.1",
-    "jsonwebtoken": "8.5.1"
+    "jsonwebtoken": "8.5.1",
+    "pg-promise": "10.12.0"
   },
   "importSort": {
     ".js, .jsx, .es6, .es": {

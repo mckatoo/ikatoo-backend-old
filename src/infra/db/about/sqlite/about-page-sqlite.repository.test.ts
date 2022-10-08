@@ -1,5 +1,4 @@
 import { AboutPageWithId } from '@domain/about/about-page.repository'
-import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
 import { generateString } from '@infra/generate'
 
 import { AboutPagesSqliteRepository } from './about-page-sqlite.repository'
@@ -93,29 +92,6 @@ describe('About Sqlite repository', () => {
     }
     await repository.create(aboutPageData)
     const aboutPage = await repository.getByUserId(aboutPageData.user_id)
-
-    expect(aboutPage).toEqual(aboutPageData)
-  })
-
-  it('should get a about page by domain', async () => {
-    const userRepository = new UserSqliteRepository()
-    const userData = {
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@user.com`,
-      password: generateString(),
-      domain: `${generateString()}.com.ts`
-    }
-    await userRepository.create(userData)
-    const aboutPageData = {
-      id: generateString(),
-      title: generateString(),
-      description: generateString(),
-      user_id: userData.id
-    }
-    await repository.create(aboutPageData)
-    const aboutPage = await repository.getByDomain(userData.domain)
 
     expect(aboutPage).toEqual(aboutPageData)
   })

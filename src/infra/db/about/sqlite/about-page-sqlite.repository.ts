@@ -1,5 +1,4 @@
 import { AboutPageRepositoryInterface, AboutPageWithId } from '@domain/about/about-page.repository'
-import { UserWithId } from '@domain/user/user.repository'
 import { randomUUID } from 'crypto'
 
 import database from './database'
@@ -37,27 +36,6 @@ export class AboutPagesSqliteRepository implements AboutPageRepositoryInterface 
       'select * from aboutPages where user_id = $userId',
       {
         $userId: userId
-      }
-    )
-    await db.close()
-
-    if (aboutPage == null) throw new Error('About page not found')
-
-    return aboutPage
-  }
-
-  async getByDomain (domain: string): Promise<AboutPageWithId> {
-    const db = await database()
-    const user = await db.get<UserWithId>('select * from users where domain = $domain', {
-      $domain: domain
-    })
-
-    if (user === undefined) throw new Error('Domain not found')
-
-    const aboutPage = await db.get<AboutPageWithId>(
-      'select * from aboutPages where user_id = $userId',
-      {
-        $userId: user.id
       }
     )
     await db.close()

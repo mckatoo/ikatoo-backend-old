@@ -7,6 +7,7 @@ describe('User Sqlite repository', () => {
   const repository = new UserSqliteRepository()
 
   it('Should insert user', async () => {
+    await repository.clear()
     const mock1 = {
       name: generateString(),
       username: generateString(),

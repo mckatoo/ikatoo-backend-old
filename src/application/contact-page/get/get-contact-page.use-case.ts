@@ -1,5 +1,7 @@
+import { NotFoundError } from '@application/helpers/api-erros'
 import { ContactPageProps } from '@domain/contact-page/contact-page.entity'
 import { ContactPageRepositoryInterface } from '@domain/contact-page/contact-page.repository'
+import { UserRepository } from '@infra/db/user'
 
 export class GetContactPageUseCase {
   constructor (private readonly contactPageRepository: ContactPageRepositoryInterface) {}
@@ -11,7 +13,11 @@ export class GetContactPageUseCase {
   }
 
   async getByDomain (domain: string): Promise<ContactPageProps> {
-    const contactPage = await this.contactPageRepository.getByDomain(domain)
+    const userRepository = new UserRepository()
+    const user = await userRepository.getByDomain(domain)
+    if (user?.id == null) throw new NotFoundError('Domain not found')
+
+    const contactPage = await this.contactPageRepository.getByUserId(user.id)
 
     return contactPage
   }

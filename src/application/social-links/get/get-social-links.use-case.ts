@@ -1,8 +1,8 @@
-import { NotFoundError } from '@application/helpers/api-erros'
 import {
   SocialLinksRepositoryInterface,
   SocialLinksWithId
 } from '@domain/social-links/social-links.repository'
+import { UserRepository } from '@infra/db/user'
 
 export class GetSocialLinksUseCase {
   constructor (private readonly repository: SocialLinksRepositoryInterface) {}
@@ -14,13 +14,16 @@ export class GetSocialLinksUseCase {
   }
 
   async byDomain (domain: string): Promise<SocialLinksWithId[]> {
+    const userRepository = new UserRepository()
     try {
-      const socialLinks = await this.repository.getByDomain(domain)
-
+      const user = await userRepository.getByDomain(domain)
+      // if (user?.id == null) throw new NotFoundError('Domain not found')
+      if (user?.id == null) return []
+      const socialLinks = await this.repository.getByUserId(user.id)
       return socialLinks
     } catch (error) {
-      if (error instanceof Error && error.message === 'Domain not found') {
-        throw new NotFoundError('Not found social links for this domain')
+      if (error instanceof Error && error.message !== 'No data returned from the query.') {
+        throw new Error(error.message)
       }
     }
     return []

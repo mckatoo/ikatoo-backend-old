@@ -12,4 +12,5 @@ export interface UserRepositoryInterface {
   getAll: () => Promise<UserWithId[]>
   update: (user: UserProps, id: string) => Promise<void>
   remove: (id: string) => Promise<void>
+  clear: () => Promise<void>
 }

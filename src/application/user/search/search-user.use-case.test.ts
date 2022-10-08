@@ -9,6 +9,7 @@ describe('Search User use-case Test', () => {
   const searchUseCase = new SearchUserUseCase(repository)
 
   it('should search users with last name', async () => {
+    await repository.clear()
     const lastname = generateString()
     const user1 = {
       name: `${generateString()} ${lastname}`,

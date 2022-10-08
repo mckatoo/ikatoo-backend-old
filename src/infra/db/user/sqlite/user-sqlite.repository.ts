@@ -7,6 +7,13 @@ import { randomUUID } from 'crypto'
 import database from './database'
 
 export class UserSqliteRepository implements UserRepositoryInterface {
+  async clear () {
+    const db = await database()
+    await db.run('delete from users')
+
+    await db.close()
+  }
+
   async create (user: UserWithId): Promise<void> {
     const db = await database()
 

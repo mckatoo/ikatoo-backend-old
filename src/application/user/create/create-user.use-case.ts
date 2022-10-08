@@ -10,21 +10,29 @@ type CreateUserOutput = Omit<UserProps, 'password'> & { id: string }
 export class CreateUserUseCase {
   constructor (private readonly repository: UserRepositoryInterface) {}
 
-  async execute (input: CreateUserInput): Promise<CreateUserOutput> {
-    const userExists = await this.repository.getByEmail(input.email)
+  async execute (input: CreateUserInput): Promise<CreateUserOutput | undefined> {
+    let userExists = await this.repository.getByEmail(input.email)
     if (userExists != null) throw new ConflictError('User already exists')
     const user = User.create(
       { ...input, password: await hashPassword(10, input.password) },
       input.id
     )
     await this.repository.create(user)
-
-    return {
-      id: user.id,
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      domain: user.domain
+    try {
+      userExists = await this.repository.getByEmail(input.email)
+      if (userExists?.id != null) {
+        return {
+          id: userExists.id,
+          name: userExists.name,
+          username: userExists.username,
+          email: userExists.email,
+          domain: userExists.domain
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message)
+      }
     }
   }
 }

@@ -26,12 +26,12 @@ describe('Get Skills Page use-case Test', () => {
     const skillsPageData: SkillsPageWithId = {
       title: generateString(),
       description: generateString(),
-      user_id: user.id
+      user_id: user?.id ?? ''
     }
 
     await repository.create(skillsPageData)
     const skillsPageDataByUserId = await getUseCase.getByUserId(skillsPageData.user_id)
-    const skillsPageByDomain = await getUseCase.getByDomain(user.domain)
+    const skillsPageByDomain = await getUseCase.getByDomain(user?.domain ?? '')
     expect(skillsPageDataByUserId).toHaveProperty('title', skillsPageData.title)
     expect(skillsPageDataByUserId).toHaveProperty('description', skillsPageData.description)
     expect(skillsPageByDomain).toEqual(skillsPageDataByUserId)

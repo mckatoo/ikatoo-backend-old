@@ -1,5 +1,4 @@
 import { SocialLinksRepositoryInterface, SocialLinksWithId } from '@domain/social-links/social-links.repository'
-import { UserWithId } from '@domain/user/user.repository'
 import { randomUUID } from 'crypto'
 
 import database from './database'
@@ -25,26 +24,6 @@ export class SocialLinksSqliteRepository implements SocialLinksRepositoryInterfa
       'select * from socialLinks where user_id = $userId',
       {
         $userId: userId
-      }
-    )
-    await db.close()
-
-    return socialLinks
-  }
-
-  async getByDomain (domain: string): Promise<SocialLinksWithId[]> {
-    const db = await database()
-
-    const user = await db.get<UserWithId>('select * from users where domain = $domain', {
-      $domain: domain
-    })
-
-    if (user === undefined) return []
-
-    const socialLinks = await db.all<SocialLinksWithId[]>(
-      'select * from socialLinks where user_id = $userId',
-      {
-        $userId: user.id
       }
     )
     await db.close()

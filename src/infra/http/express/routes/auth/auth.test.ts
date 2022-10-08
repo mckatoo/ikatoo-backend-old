@@ -2,14 +2,14 @@ import app from '@infra/http/express/app'
 import request from 'supertest'
 
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
-import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
+import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import { Request, Response } from 'express'
 import { decodeToken } from './decodeToken'
 import { expressVerifyToken } from './verifyToken'
 
 describe('Express - Auth', () => {
-  const repository = new UserSqliteRepository()
+  const repository = new UserRepository()
   const createUseCase = new CreateUserUseCase(repository)
 
   app.get('/test', expressVerifyToken, (req: Request, res: Response) => {
@@ -26,7 +26,7 @@ describe('Express - Auth', () => {
       domain: `${generateString()}.com.br`
     })
     const response = await request(app).post('/auth').send({
-      username: user.username,
+      username: user?.username,
       password: 'teste12345'
     })
 
@@ -55,18 +55,18 @@ describe('Express - Auth', () => {
       domain: `${generateString()}.com.br`
     })
     const response = await request(app).post('/auth').send({
-      username: user.username,
+      username: user?.username,
       password: 'teste12345'
     })
 
     const accessToken: string = response.body.accessToken
     const decodedAccessToken = decodeToken(accessToken)
 
-    expect(decodedAccessToken.userId).toBe(user.id)
+    expect(decodedAccessToken.userId).toBe(user?.id)
 
     const refreshToken = response.body.refreshToken
 
-    expect(decodeToken(refreshToken).userId).toBe(user.id)
+    expect(decodeToken(refreshToken).userId).toBe(user?.id)
   })
 
   it('should get accessToken with expiration time in 1h', async () => {
@@ -79,14 +79,14 @@ describe('Express - Auth', () => {
       domain: `${generateString()}.com.br`
     })
     const response = await request(app).post('/auth').send({
-      username: user.username,
+      username: user?.username,
       password: 'teste12345'
     })
 
     const accessToken: string = response.body.accessToken
     const decodedAccessToken = decodeToken(accessToken)
 
-    expect(decodedAccessToken.userId).toBe(user.id)
+    expect(decodedAccessToken.userId).toBe(user?.id)
     expect(
       decodedAccessToken.expiresIn - decodedAccessToken.generatedAt
     ).toBe(60 * 60)
@@ -102,7 +102,7 @@ describe('Express - Auth', () => {
       domain: `${generateString()}.com.br`
     })
     const response = await request(app).post('/auth').send({
-      username: user.username,
+      username: user?.username,
       password: 'teste12345'
     })
 
@@ -124,7 +124,7 @@ describe('Express - Auth', () => {
       domain: `${generateString()}.com.br`
     })
     const response = await request(app).post('/auth').send({
-      username: user.username,
+      username: user?.username,
       password: 'teste12345'
     })
 
@@ -136,8 +136,8 @@ describe('Express - Auth', () => {
     const decodedRefreshToken = decodeToken(refreshToken)
 
     expect(responseRefreshToken.status).toBe(200)
-    expect(decodedAccessToken.userId).toBe(user.id)
-    expect(decodedRefreshToken.userId).toBe(user.id)
+    expect(decodedAccessToken.userId).toBe(user?.id)
+    expect(decodedRefreshToken.userId).toBe(user?.id)
   })
 
   it('should access protected route with AccessToken obtained through RefreshToken', async () => {
@@ -150,7 +150,7 @@ describe('Express - Auth', () => {
       domain: `${generateString()}.com.br`
     })
     const responseAuth = await request(app).post('/auth').send({
-      username: user.username,
+      username: user?.username,
       password: 'teste12345'
     })
 
@@ -177,7 +177,7 @@ describe('Express - Auth', () => {
     })
 
     const { body } = await request(app).post('/auth').send({
-      username: user.username,
+      username: user?.username,
       password: 'teste12345'
     })
     const accessToken: string = body.accessToken

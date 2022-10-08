@@ -1,11 +1,11 @@
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
-import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
+import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import app from '@infra/http/express/app'
 import request from 'supertest'
 
 describe('Express - User', () => {
-  const userRepository = new UserSqliteRepository()
+  const userRepository = new UserRepository()
   const createUseCase = new CreateUserUseCase(userRepository)
   let accessToken: string
 

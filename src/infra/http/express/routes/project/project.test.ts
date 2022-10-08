@@ -2,7 +2,7 @@ import { CreateProjectUseCase } from '@application/project/create/create-project
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { ProjectWithId } from '@domain/projects/project.repository'
 import { ProjectRepository } from '@infra/db/project'
-import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
+import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import request from 'supertest'
 import app from '../../app'
@@ -10,7 +10,7 @@ import app from '../../app'
 const projectRepository = new ProjectRepository()
 const createProjectUseCase = new CreateProjectUseCase(projectRepository)
 
-const userRepository = new UserSqliteRepository()
+const userRepository = new UserRepository()
 const createUserUseCase = new CreateUserUseCase(userRepository)
 let accessToken: string
 
@@ -82,13 +82,13 @@ describe('Express - Project', () => {
         description: generateString(),
         github_link: generateString(),
         snapshot: generateString(),
-        user_id: user.id
+        user_id: user?.id ?? ''
       })
       projects = [...projects, newProject]
     }
 
     const response = await request(app)
-      .get(`/project/user/${user.id}`)
+      .get(`/project/user/${user?.id ?? ''}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         title: generateString(),
@@ -126,7 +126,7 @@ describe('Express - Project', () => {
         description: generateString(),
         github_link: generateString(),
         snapshot: generateString(),
-        user_id: user.id
+        user_id: user?.id ?? ''
       })
       projects = [...projects, newProject]
     }

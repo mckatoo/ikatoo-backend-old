@@ -2,7 +2,7 @@ import { CreateSocialLinksUseCase } from '@application/social-links/create/creat
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { SocialLinksProps } from '@domain/social-links/social-links.entity'
 import { SocialLinksRepository } from '@infra/db/social-links'
-import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
+import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import request from 'supertest'
 
@@ -11,7 +11,7 @@ import app from '../../app'
 const socialLinksRepository = new SocialLinksRepository()
 const createSocialLinksUseCase = new CreateSocialLinksUseCase(socialLinksRepository)
 
-const userRepository = new UserSqliteRepository()
+const userRepository = new UserRepository()
 const createUserUseCase = new CreateUserUseCase(userRepository)
 let accessToken: string
 
@@ -80,7 +80,7 @@ describe('Express - Social Links', () => {
         name: generateString(),
         url: generateString(),
         icon_url: generateString(),
-        user_id: i % 2 === 0 ? user.id : generateString()
+        user_id: i % 2 === 0 ? (user?.id ?? '') : generateString()
       }
       await createSocialLinksUseCase.execute(socialLinksData)
       if (i % 2 === 0) {
@@ -89,7 +89,7 @@ describe('Express - Social Links', () => {
     }
 
     const response = await request(app)
-      .get(`/social-links/user/${user.id}`)
+      .get(`/social-links/user/${user?.id ?? ''}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
@@ -119,7 +119,7 @@ describe('Express - Social Links', () => {
         name: generateString(),
         url: generateString(),
         icon_url: generateString(),
-        user_id: i % 2 === 0 ? user.id : generateString()
+        user_id: i % 2 === 0 ? (user?.id ?? '') : generateString()
       }
       await createSocialLinksUseCase.execute(newSocialLink)
       if (i % 2 === 0) {
@@ -154,7 +154,7 @@ describe('Express - Social Links', () => {
         name: generateString(),
         url: generateString(),
         icon_url: generateString(),
-        user_id: i % 2 === 0 ? user.id : generateString()
+        user_id: i % 2 === 0 ? (user?.id ?? '') : generateString()
       }
       await createSocialLinksUseCase.execute(newSocialLink)
       if (i % 2 === 0) {

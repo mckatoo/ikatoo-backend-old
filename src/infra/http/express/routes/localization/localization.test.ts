@@ -2,7 +2,7 @@ import { CreateLocalizationUseCase } from '@application/localization/create/crea
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { LocalizationWithId } from '@domain/localization/localization.repository'
 import { LocalizationRepository } from '@infra/db/localization'
-import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
+import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import request from 'supertest'
 
@@ -11,7 +11,7 @@ import app from '../../app'
 const localizationRepository = new LocalizationRepository()
 const createLocalizationUseCase = new CreateLocalizationUseCase(localizationRepository)
 
-const userRepository = new UserSqliteRepository()
+const userRepository = new UserRepository()
 const createUserUseCase = new CreateUserUseCase(userRepository)
 let accessToken: string
 

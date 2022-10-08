@@ -29,7 +29,7 @@ describe('Express - Skills Page', () => {
   beforeAll(async () => {
     const user = await createUserUseCase.execute(userMock)
     const authResponse = await request(app).post('/auth').send({
-      username: user.username,
+      username: user?.username,
       password: 'teste12345'
     })
     accessToken = authResponse.body.accessToken

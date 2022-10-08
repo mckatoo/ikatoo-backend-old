@@ -2,13 +2,13 @@ import { CreateAboutPageUseCase } from '@application/about-page/create/create-ab
 import { GetAboutPageUseCase } from '@application/about-page/get/get-about-page.use-case'
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { AboutPageRepository } from '@infra/db/about'
-import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
+import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import app from '@infra/http/express/app'
 import request from 'supertest'
 
 describe('Express - About Page', () => {
-  const userRepository = new UserSqliteRepository()
+  const userRepository = new UserRepository()
   const createUserUseCase = new CreateUserUseCase(userRepository)
 
   const aboutPageRepository = new AboutPageRepository()
@@ -29,7 +29,7 @@ describe('Express - About Page', () => {
   beforeAll(async () => {
     const user = await createUserUseCase.execute(userMock)
     const authResponse = await request(app).post('/auth').send({
-      username: user.username,
+      username: user?.username,
       password: 'teste12345'
     })
     accessToken = authResponse.body.accessToken

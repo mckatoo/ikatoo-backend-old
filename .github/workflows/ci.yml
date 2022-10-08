@@ -18,6 +18,19 @@ jobs:
         node-version: [14.x, 16.x]
         os: [ubuntu-latest, ubuntu-18.04.x, alpine-latest, alpine-3.16.x, centos-latest, centos-7.9.x]
 
+    services:
+      postgres:
+        image: postgres:14-alpine
+        env:
+          POSTGRES_USER: ikatoo
+          POSTGRES_PASSWORD: ikatoo123
+          POSTGRES_DB: ikatoo
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }} & Linux ${{ matrix.os }}
@@ -30,4 +43,9 @@ jobs:
     - name: Test
       env:
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        POSTGRES_HOST: postgres
+        POSTGRES_PORT: 5432
+        POSTGRES_USER: ikatoo
+        POSTGRES_PASSWORD: ikatoo123
+        POSTGRES_DB: ikatoo
       run: yarn test

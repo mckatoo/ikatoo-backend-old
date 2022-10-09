@@ -9,3 +9,4 @@ node_modules/**/*
 .env.development
 dist/**/*
 sqlite.db
+fly.toml

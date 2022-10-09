@@ -25,16 +25,18 @@ describe('Search User use-case Test', () => {
       password: generateString(),
       domain: `${generateString()}.com`
     }
-    await createUseCase.execute(user1)
-    await createUseCase.execute(user2)
+    const id1 = (await createUseCase.execute(user1))?.id
+    const id2 = (await createUseCase.execute(user2))?.id
     const output = await searchUseCase.byNamePart(lastname)
 
     expect(output).toHaveLength(2)
     expect(output).toEqual([
       {
+        id: id1,
         ...user1,
         password: undefined
       }, {
+        id: id2,
         ...user2,
         password: undefined
       }])

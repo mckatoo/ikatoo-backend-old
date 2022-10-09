@@ -1,3 +1,3 @@
-import { UserSqliteRepository } from '@infra/db/user/sqlite/user-sqlite.repository'
+import { UserPostgresRepository } from './postgres/user-postgres.repository'
 
-export { UserSqliteRepository as UserRepository }
+export { UserPostgresRepository as UserRepository }

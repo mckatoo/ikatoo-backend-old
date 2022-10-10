@@ -9,6 +9,7 @@
   "main": "index.js",
   "license": "CC0-1.0",
   "scripts": {
+    "build": "rimraf dist && swc src --out-dir dist",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint": "eslint --fix src",
     "test": "rimraf sqlite.db && NODE_ENV=test jest",
@@ -23,16 +24,18 @@
     "docker:up": "docker compose --file ./docker/stack.yml up --detach",
     "docker:down": "docker compose --file ./docker/stack.yml down",
     "docker:ps": "docker compose --file ./docker/stack.yml ps",
-    "start": "NODE_ENV=prod yarn express"
+    "start": "yarn build && NODE_ENV=prod node dist/infra/http/express/index.js"
   },
   "devDependencies": {
+    "@swc-node/register": "1.5.4",
+    "@swc/cli": "0.1.57",
     "@swc/core": "1.2.203",
     "@swc/jest": "0.2.21",
     "@types/bcrypt": "5.0.0",
     "@types/express": "4.17.13",
     "@types/jest": "28.1.2",
     "@types/jsonwebtoken": "8.5.8",
-    "@types/node": "18.7.11",
+    "@types/node": "18.8.3",
     "@types/sqlite3": "3.1.8",
     "@types/supertest": "2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
@@ -51,7 +54,7 @@
     "sqlite": "4.1.2",
     "sqlite3": "5.0.11",
     "supertest": "6.2.3",
-    "ts-node": "10.8.1",
+    "ts-node": "10.9.1",
     "ts-node-dev": "2.0.0",
     "tsconfig-paths": "4.1.0",
     "typescript": "4.7.3"

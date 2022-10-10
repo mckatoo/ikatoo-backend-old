@@ -1,20 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "incremental": true,
+    "target": "es2020",
     "module": "commonjs",
-    "rootDir": "./src",
     "outDir": "./dist",
     "moduleResolution": "node",
-    "baseUrl": "./",
     "paths": {
       "@application/*": [
-        "src/application/*"
+        "./src/application/*"
       ],
       "@domain/*": [
-        "src/domain/*"
+        "./src/domain/*"
       ],
       "@infra/*": [
-        "src/infra/*"
+        "./src/infra/*"
       ]
     },
     "esModuleInterop": true,
@@ -23,7 +22,9 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*",
-    "test/**/*"
+    "./src/**/*"
   ],
+  "exclude": [
+    "./node_modules"
+  ]
 }

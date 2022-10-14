@@ -14,7 +14,7 @@ const routes = Router()
 
 routes.use(aboutPageRoute)
 routes.use(userRoute)
-routes.use(authRoute)
+routes.use('/auth', authRoute)
 routes.use(skillRoute)
 routes.use(skillsPageRoute)
 routes.use(projectRoute)

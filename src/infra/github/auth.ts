@@ -9,6 +9,8 @@ export default async (code: string) => {
     code,
     redirect_uri: env('REDIRECT_URL')
   }
-  const accessToken = await axios.post(GITHUB_AUTH_URL, params)
+  const { data: accessToken } = await axios.post(GITHUB_AUTH_URL, params, {
+    headers: { 'Accept': 'application/json' }
+  })
   return accessToken
 }

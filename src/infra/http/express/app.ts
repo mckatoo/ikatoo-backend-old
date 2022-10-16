@@ -2,27 +2,27 @@ import 'express-async-errors'
 
 import express, { Request, Response } from 'express'
 
+import { env } from '@infra/env'
+import cors, { CorsOptions } from 'cors'
 import { errorMiddleware } from './middlewares/error'
 import routes from './routes'
 
 const app = express()
 app.use(express.json())
 
-app.use((req, res, next) => {
-  const whitelist = [
-    'https://ikatoo.com.br',
-    'https://www.ikatoo.com.br'
-  ]
-  const origin = req.headers.origin
-  if (process.env.NODE_ENV === 'prod' &&
-    !(origin == null) &&
-    whitelist.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin)
-  } else if (process.env.NODE_ENV === 'test') {
-    res.header('Access-Control-Allow-Origin', '*')
+if (env('NODE_ENV').includes('prod')) {
+  const whitelist = ['https://ikatoo.com.br', 'https://www.ikatoo.com.br']
+  const corsOptions: CorsOptions = {
+    origin (requestOrigin, callback) {
+      if (whitelist.includes(requestOrigin ?? '')) {
+        callback(null, true)
+      } else {
+        callback(new Error(`Deny access to: ${requestOrigin ?? ''}`))
+      }
+    }
   }
-  next()
-})
+  app.use(cors(corsOptions))
+}
 
 app.use(express.urlencoded({ extended: true }))
 

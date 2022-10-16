@@ -3,6 +3,7 @@ import { Request, Response, Router } from 'express'
 import { AuthUserUseCase } from '@application/user/auth/auth-user.use-case'
 import { UserRepository } from '@infra/db/user'
 import auth from '@infra/github/auth'
+import fetchUser from '@infra/github/fetch-user'
 
 const authRoute = Router()
 
@@ -29,8 +30,9 @@ authRoute.post('/refresh-token', async (req: Request, res: Response) => {
 
 authRoute.post('/github', async (req: Request, res: Response) => {
   const { code } = req.body
-  const github = await auth(code)
-  res.status(200).json(github)
+  const accessToken = await auth(code)
+  const user = await fetchUser(accessToken)
+  res.status(200).json(user)
 })
 
 export default authRoute

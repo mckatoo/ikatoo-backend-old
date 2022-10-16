@@ -5,12 +5,13 @@ import { CreateUserUseCase } from '@application/user/create/create-user.use-case
 import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import auth from '@infra/github/auth'
+import fetchUser from '@infra/github/fetch-user'
 import { Request, Response } from 'express'
 import { decodeToken } from './decodeToken'
 import { expressVerifyToken } from './verifyToken'
 
-jest.mock('axios')
 jest.mock('@infra/github/auth')
+jest.mock('@infra/github/fetch-user')
 
 describe('Express - Auth', () => {
   const repository = new UserRepository()
@@ -232,6 +233,7 @@ describe('Express - Auth', () => {
 
     expect(auth).toHaveBeenCalledTimes(1)
     expect(auth).toHaveBeenCalledWith(code)
+    expect(fetchUser).toHaveBeenCalledTimes(1)
     expect(githubResponse.status).toBe(200)
   })
 })

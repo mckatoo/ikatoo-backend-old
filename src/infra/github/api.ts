@@ -1,7 +1,9 @@
 import axios from 'axios'
 
-const api = axios.create({
-  baseURL: 'https://api.github.com'
-})
+const api = (accessToken: string) =>
+  axios.create({
+    baseURL: 'https://api.github.com',
+    headers: { Authorization: `Bearer ${accessToken}` }
+  })
 
 export default api

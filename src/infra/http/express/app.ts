@@ -22,6 +22,8 @@ if (env('NODE_ENV').includes('prod')) {
     }
   }
   app.use(cors(corsOptions))
+} else if (env('NODE_ENV').includes('dev') || env('NODE_ENV').includes('test')) {
+  app.use(cors())
 }
 
 app.use(express.urlencoded({ extended: true }))

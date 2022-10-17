@@ -3,28 +3,34 @@ import 'express-async-errors'
 import express, { Request, Response } from 'express'
 
 import { env } from '@infra/env'
-import cors, { CorsOptions } from 'cors'
+import cors from 'cors'
 import { errorMiddleware } from './middlewares/error'
 import routes from './routes'
 
 const app = express()
 app.use(express.json())
 
-if (env('NODE_ENV').includes('prod')) {
-  const whitelist = ['https://ikatoo.com.br', 'https://www.ikatoo.com.br']
-  const corsOptions: CorsOptions = {
-    origin (requestOrigin, callback) {
-      if (whitelist.includes(requestOrigin ?? '')) {
-        callback(null, true)
-      } else {
-        callback(new Error(`Deny access to: ${requestOrigin ?? ''}`))
-      }
-    }
+app.use((req, res, next) => {
+  const whitelist = [
+    'https://ikatoo.com.br',
+    'https://www.ikatoo.com.br',
+    'https://ikatoo-backend.fly.dev'
+  ]
+
+  const requestOrigin = req.headers.origin
+  const originExists = !(
+    whitelist.find(origin => origin.includes(requestOrigin ?? '')) == null
+  )
+
+  if (env('NODE_ENV').includes('dev') || env('NODE_ENV').includes('test')) {
+    res.header('Access-Control-Allow-Origin', '*')
+  } else if (env('NODE_ENV').includes('prod') && originExists) {
+    res.header('Access-Control-Allow-Origin', requestOrigin)
   }
-  app.use(cors(corsOptions))
-} else if (env('NODE_ENV').includes('dev') || env('NODE_ENV').includes('test')) {
+
   app.use(cors())
-}
+  next()
+})
 
 app.use(express.urlencoded({ extended: true }))
 

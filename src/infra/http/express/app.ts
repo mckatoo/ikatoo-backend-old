@@ -24,6 +24,7 @@ app.use((req, res, next) => {
 
   if (env('NODE_ENV').includes('dev') || env('NODE_ENV').includes('test')) {
     res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Origin', 'GET,PUT,PATCH,POST,DELETE')
   } else if (env('NODE_ENV').includes('prod') && originExists) {
     res.header('Access-Control-Allow-Origin', requestOrigin)
   }

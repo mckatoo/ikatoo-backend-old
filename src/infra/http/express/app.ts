@@ -3,35 +3,22 @@ import 'express-async-errors'
 import express, { Request, Response } from 'express'
 
 import { env } from '@infra/env'
-import cors from 'cors'
+import cors, { CorsOptions } from 'cors'
 import { errorMiddleware } from './middlewares/error'
 import routes from './routes'
 
 const app = express()
 app.use(express.json())
 
-app.use((req, res, next) => {
-  const whitelist = [
-    'https://ikatoo.com.br',
-    'https://www.ikatoo.com.br',
-    'https://ikatoo-backend.fly.dev'
-  ]
-
-  const requestOrigin = req.headers.origin
-  const originExists = !(
-    whitelist.find(origin => origin.includes(requestOrigin ?? '')) == null
-  )
-
-  if (env('NODE_ENV').includes('dev') || env('NODE_ENV').includes('test')) {
-    res.header('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Origin', 'GET,PUT,PATCH,POST,DELETE')
-  } else if (env('NODE_ENV').includes('prod') && originExists) {
-    res.header('Access-Control-Allow-Origin', requestOrigin)
+if (env('NODE_ENV').includes('prod')) {
+  const corsOptions: CorsOptions = {
+    origin: /ikatoo\.com\.br$/,
+    methods: "GET,PUT,PATCH,POST,DELETE"
   }
-
+  app.use(cors(corsOptions))
+} else {
   app.use(cors())
-  next()
-})
+}
 
 app.use(express.urlencoded({ extended: true }))
 

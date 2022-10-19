@@ -4,13 +4,13 @@ import request from 'supertest'
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
-import auth from '@infra/github/auth'
 import fetchUser from '@infra/github/fetch-user'
+import githubAuth from '@infra/github/github-auth'
 import { Request, Response } from 'express'
 import { decodeToken } from './decodeToken'
 import { expressVerifyToken } from './verifyToken'
 
-jest.mock('@infra/github/auth')
+jest.mock('@infra/github/github-auth')
 jest.mock('@infra/github/fetch-user')
 
 describe('Express - Auth', () => {
@@ -18,7 +18,7 @@ describe('Express - Auth', () => {
   const createUseCase = new CreateUserUseCase(repository)
 
   beforeAll(() => {
-    app.get('/test', expressVerifyToken, (req: Request, res: Response) => {
+    app.get('/test', expressVerifyToken, (_req: Request, res: Response) => {
       res.status(200).send()
     })
   })
@@ -231,8 +231,8 @@ describe('Express - Auth', () => {
       .post('/auth/github')
       .send({ code })
 
-    expect(auth).toHaveBeenCalledTimes(1)
-    expect(auth).toHaveBeenCalledWith(code)
+    expect(githubAuth).toHaveBeenCalledTimes(1)
+    expect(githubAuth).toHaveBeenCalledWith(code)
     expect(fetchUser).toHaveBeenCalledTimes(1)
     expect(githubResponse.status).toBe(200)
   })

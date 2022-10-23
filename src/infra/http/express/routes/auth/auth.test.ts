@@ -4,14 +4,14 @@ import request from 'supertest'
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
-import fetchUser from '@infra/github/fetch-user'
 import githubAuth from '@infra/github/github-auth'
+import githubFetchUser from '@infra/github/github-fetch-user'
 import { Request, Response } from 'express'
 import { decodeToken } from './decodeToken'
 import { expressVerifyToken } from './verifyToken'
 
 jest.mock('@infra/github/github-auth')
-jest.mock('@infra/github/fetch-user')
+jest.mock('@infra/github/github-fetch-user')
 
 describe('Express - Auth', () => {
   const repository = new UserRepository()
@@ -226,14 +226,24 @@ describe('Express - Auth', () => {
 
   it('should get github access-token', async () => {
     const code = 'teste'
+    const mockedData = {
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      domain: `${generateString()}.com`
+    }
+    ;(githubFetchUser as jest.Mock).mockReturnValue(Promise.resolve(mockedData))
 
     const githubResponse = await request(app)
       .post('/auth/github')
+      .set('origin', `https://www.${mockedData.domain}`)
       .send({ code })
 
     expect(githubAuth).toHaveBeenCalledTimes(1)
     expect(githubAuth).toHaveBeenCalledWith(code)
-    expect(fetchUser).toHaveBeenCalledTimes(1)
+    expect(githubFetchUser).toHaveBeenCalledTimes(1)
     expect(githubResponse.status).toBe(200)
+    expect(githubResponse.body).toHaveProperty('user', mockedData)
   })
 })

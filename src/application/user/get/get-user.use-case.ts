@@ -2,7 +2,7 @@ import { UserProps } from '@domain/user/user.entity'
 import { UserRepositoryInterface } from '@domain/user/user.repository'
 import { NotFoundError } from '@application/helpers/api-erros'
 
-type GetUserOutput = Omit<UserProps, 'password'> & { id?: string }
+export type GetUserOutput = Omit<UserProps, 'password'> & { id?: string }
 
 export class GetUserUseCase {
   constructor (private readonly userRepository: UserRepositoryInterface) {}

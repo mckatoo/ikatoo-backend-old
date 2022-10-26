@@ -39,21 +39,27 @@ authRoute.post('/github', async (req: Request, res: Response) => {
     const createUserUseCase = new CreateUserUseCase(userRepository)
     const origin = req.headers.origin
     const domain = origin?.split('/')[2].replace('www.', '') ?? ''
-    const password = generateString()
-    await createUserUseCase.execute({
-      id: githubUser.id,
-      domain,
-      email: githubUser.email,
-      name: githubUser.name,
-      username: githubUser.username,
-      password
-    })
+    let password = generateString()
     const getUserUseCase = new GetUserUseCase(userRepository)
-    const user = await getUserUseCase.byEmail(githubUser.email)
+    let user
+    try {
+      user = await getUserUseCase.byEmail(githubUser.email)
+    } catch {
+      await createUserUseCase.execute({
+        domain,
+        email: githubUser.email,
+        name: githubUser.name,
+        username: githubUser.login,
+        password
+      })
+      user = await getUserUseCase.byEmail(githubUser.email)
+      password =
+        (await userRepository.getByEmail(githubUser.email))?.password ?? ''
+    }
     const tokens =
-      githubUser.username === undefined
+      githubUser.login === undefined
         ? await authUseCase.authByEmail(githubUser.email, password)
-        : await authUseCase.authByUsername(githubUser.username, password)
+        : await authUseCase.authByUsername(githubUser.login, password)
     return res.status(200).json({ user, ...tokens })
   }
   res.status(500).send()

@@ -1,7 +1,7 @@
 import { randomBytes } from 'crypto'
 
-export const generateString = () => {
-  return randomBytes(20).toString('hex')
+export const generateString = (size = 20) => {
+  return randomBytes(size).toString('hex')
 }
 
 interface Options {

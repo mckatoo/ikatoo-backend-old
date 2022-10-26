@@ -8,11 +8,12 @@ describe('Search User use-case Test', () => {
   const createUseCase = new CreateUserUseCase(repository)
   const searchUseCase = new SearchUserUseCase(repository)
 
+  beforeEach(async () => {
+    await repository.clear()
+  })
+
   it('should search users with last name', async () => {
-    setTimeout(async () => {
-      await repository.clear()
-    }, 0)
-    const lastname = generateString()
+    const lastname = 'search-user-use-case-test'
     const user1 = {
       name: `${generateString()} ${lastname}`,
       email: `${generateString()}@user.com`,

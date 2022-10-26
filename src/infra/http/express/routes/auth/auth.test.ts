@@ -227,23 +227,33 @@ describe('Express - Auth', () => {
   it('should get github access-token', async () => {
     const code = 'teste'
     const mockedData = {
-      id: generateString(),
       name: generateString(),
-      username: generateString(),
+      login: generateString(),
       email: generateString(),
       domain: `${generateString()}.com`
     }
-    ;(githubFetchUser as jest.Mock).mockReturnValue(Promise.resolve(mockedData))
+
+    const githubAuthMock = githubAuth as jest.Mock
+    githubAuthMock.mockReturnValue(Promise.resolve(generateString()))
+    const githubFetchUserMock = githubFetchUser as jest.Mock
+    githubFetchUserMock.mockReturnValue(Promise.resolve(mockedData))
 
     const githubResponse = await request(app)
       .post('/auth/github')
       .set('origin', `https://www.${mockedData.domain}`)
       .send({ code })
 
+    const databaseUser = await repository.getByEmail(mockedData.email)
+
     expect(githubAuth).toHaveBeenCalledTimes(1)
     expect(githubAuth).toHaveBeenCalledWith(code)
     expect(githubFetchUser).toHaveBeenCalledTimes(1)
     expect(githubResponse.status).toBe(200)
-    expect(githubResponse.body).toHaveProperty('user', mockedData)
+    expect(githubResponse.body).toHaveProperty('user', {
+      ...mockedData,
+      username: mockedData.login,
+      id: databaseUser?.id,
+      login: undefined
+    })
   })
 })

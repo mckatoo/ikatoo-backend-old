@@ -1,12 +1,15 @@
 import { Request, Response, Router } from 'express'
 
+import { UnauthorizedError } from '@application/helpers/api-erros'
 import { AuthUserUseCase } from '@application/user/auth/auth-user.use-case'
+import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
+import { GetUserUseCase } from '@application/user/get/get-user.use-case'
+import { CreateRefreshTokenUseCase } from '@application/user/refresh-token/create/create-refresh-token.use-case'
 import { UserRepository } from '@infra/db/user'
+import { generateString } from '@infra/generate'
 import githubAuth from '@infra/github/github-auth'
 import githubFetchUser from '@infra/github/github-fetch-user'
-import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
-import { generateString } from '@infra/generate'
-import { GetUserUseCase } from '@application/user/get/get-user.use-case'
+import { sign } from '@infra/jwt'
 
 const authRoute = Router()
 
@@ -34,12 +37,14 @@ authRoute.post('/refresh-token', async (req: Request, res: Response) => {
 authRoute.post('/github', async (req: Request, res: Response) => {
   const { code } = req.body
   const githubAccessToken = await githubAuth(code)
+  if (githubAccessToken == null) throw new UnauthorizedError('Unauthorized github access')
+
   const githubUser = await githubFetchUser(githubAccessToken)
   if (githubUser != null) {
     const createUserUseCase = new CreateUserUseCase(userRepository)
     const origin = req.headers.origin
     const domain = origin?.split('/')[2].replace('www.', '') ?? ''
-    let password = generateString()
+    const password = generateString()
     const getUserUseCase = new GetUserUseCase(userRepository)
     let user
     try {
@@ -53,13 +58,16 @@ authRoute.post('/github', async (req: Request, res: Response) => {
         password
       })
       user = await getUserUseCase.byEmail(githubUser.email)
-      password =
-        (await userRepository.getByEmail(githubUser.email))?.password ?? ''
     }
-    const tokens =
-      githubUser.login === undefined
-        ? await authUseCase.authByEmail(githubUser.email, password)
-        : await authUseCase.authByUsername(githubUser.login, password)
+
+    const accessToken = sign({
+      userId: user.id ?? '',
+      expiresIn: '1h'
+    })
+    const refreshTokenUseCase = new CreateRefreshTokenUseCase(userRepository)
+    const refreshToken = await refreshTokenUseCase.execute(user.id ?? '')
+    const tokens = { accessToken, refreshToken }
+
     return res.status(200).json({ user, ...tokens })
   }
   res.status(500).send()

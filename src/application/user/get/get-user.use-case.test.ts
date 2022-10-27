@@ -61,4 +61,22 @@ describe('Get User use-case Test', () => {
       password: undefined
     })
   })
+
+  it('should get a user by id', async () => {
+    const user = {
+      id: generateString(),
+      name: generateString(),
+      email: `${generateString()}@email.com`,
+      username: generateString(),
+      password: generateString(),
+      domain: `${generateString()}.com`
+    }
+    await createUseCase.execute(user)
+    const expected = await getUseCase.byId(user.id)
+
+    expect(expected).toEqual({
+      ...user,
+      password: undefined
+    })
+  })
 })

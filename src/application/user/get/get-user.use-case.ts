@@ -45,4 +45,17 @@ export class GetUserUseCase {
       domain: user.domain
     }
   }
+
+  async byId (id: string): Promise<GetUserOutput> {
+    const user = await this.userRepository.getById(id)
+    if (user == null) throw new NotFoundError('User not found.')
+
+    return {
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      domain: user.domain
+    }
+  }
 }

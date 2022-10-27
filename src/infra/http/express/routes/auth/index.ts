@@ -9,12 +9,16 @@ import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import githubAuth from '@infra/github/github-auth'
 import githubFetchUser from '@infra/github/github-fetch-user'
+import { AuthWithAccessTokenResponseType } from '@infra/http/types/Auth'
 import { sign } from '@infra/jwt'
+import { decodeToken } from './decodeToken'
+import { expressVerifyToken } from './verifyToken'
 
 const authRoute = Router()
 
 const userRepository = new UserRepository()
 const authUseCase = new AuthUserUseCase(userRepository)
+const getUserUseCase = new GetUserUseCase(userRepository)
 
 authRoute.post('/', async (req: Request, res: Response) => {
   const { username, email, password } = req.body
@@ -37,7 +41,9 @@ authRoute.post('/refresh-token', async (req: Request, res: Response) => {
 authRoute.post('/github', async (req: Request, res: Response) => {
   const { code } = req.body
   const githubAccessToken = await githubAuth(code)
-  if (githubAccessToken == null) throw new UnauthorizedError('Unauthorized github access')
+  if (githubAccessToken == null) {
+    throw new UnauthorizedError('Unauthorized github access')
+  }
 
   const githubUser = await githubFetchUser(githubAccessToken)
   if (githubUser != null) {
@@ -72,5 +78,30 @@ authRoute.post('/github', async (req: Request, res: Response) => {
   }
   res.status(500).send()
 })
+
+authRoute.post(
+  '/access-token',
+  expressVerifyToken,
+  async (req: Request, res: Response) => {
+    const { authorization } = req.headers
+
+    if (authorization != null) {
+      const accessToken = authorization.split(' ')[1]
+      const { userId } = decodeToken(accessToken)
+      const user = await getUserUseCase.byId(userId)
+      const data: AuthWithAccessTokenResponseType = {
+        user: {
+          id: user.id ?? '',
+          username: user.username,
+          email: user.email,
+          name: user.name
+        }
+      }
+      return res.status(200).send(data)
+    }
+
+    return res.status(500).send()
+  }
+)
 
 export default authRoute

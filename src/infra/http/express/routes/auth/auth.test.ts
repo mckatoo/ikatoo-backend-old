@@ -1,11 +1,14 @@
 import app from '@infra/http/express/app'
 import request from 'supertest'
 
+import { AuthUserUseCase } from '@application/user/auth/auth-user.use-case'
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
+import { GetUserUseCase } from '@application/user/get/get-user.use-case'
 import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import githubAuth from '@infra/github/github-auth'
 import githubFetchUser from '@infra/github/github-fetch-user'
+import { AuthWithAccessTokenResponseType } from '@infra/http/types/Auth'
 import { Request, Response } from 'express'
 import { decodeToken } from './decodeToken'
 import { expressVerifyToken } from './verifyToken'
@@ -14,8 +17,10 @@ jest.mock('@infra/github/github-auth')
 jest.mock('@infra/github/github-fetch-user')
 
 describe('Express - Auth', () => {
-  const repository = new UserRepository()
-  const createUseCase = new CreateUserUseCase(repository)
+  const userRepository = new UserRepository()
+  const createUserUseCase = new CreateUserUseCase(userRepository)
+  const getUserUseCase = new GetUserUseCase(userRepository)
+  const authUseCase = new AuthUserUseCase(userRepository)
 
   beforeAll(() => {
     app.get('/test', expressVerifyToken, (_req: Request, res: Response) => {
@@ -24,7 +29,7 @@ describe('Express - Auth', () => {
   })
 
   it('should authenticate a valid username', async () => {
-    const user = await createUseCase.execute({
+    const user = await createUserUseCase.execute({
       id: generateString(),
       name: generateString(),
       username: generateString(),
@@ -57,7 +62,7 @@ describe('Express - Auth', () => {
   })
 
   it('should get user id an through token', async () => {
-    const user = await createUseCase.execute({
+    const user = await createUserUseCase.execute({
       id: generateString(),
       name: generateString(),
       username: generateString(),
@@ -83,7 +88,7 @@ describe('Express - Auth', () => {
   })
 
   it('should get accessToken with expiration time in 1h', async () => {
-    const user = await createUseCase.execute({
+    const user = await createUserUseCase.execute({
       id: generateString(),
       name: generateString(),
       username: generateString(),
@@ -108,7 +113,7 @@ describe('Express - Auth', () => {
   })
 
   it('should get refreshToken with expiration time in 2 days', async () => {
-    const user = await createUseCase.execute({
+    const user = await createUserUseCase.execute({
       id: generateString(),
       name: generateString(),
       username: generateString(),
@@ -132,7 +137,7 @@ describe('Express - Auth', () => {
   })
 
   it('should get new accessTokens and refreshToken using the refreshToken', async () => {
-    const user = await createUseCase.execute({
+    const user = await createUserUseCase.execute({
       id: generateString(),
       name: generateString(),
       username: generateString(),
@@ -161,7 +166,7 @@ describe('Express - Auth', () => {
   })
 
   it('should access protected route with AccessToken obtained through RefreshToken', async () => {
-    const user = await createUseCase.execute({
+    const user = await createUserUseCase.execute({
       id: generateString(),
       name: generateString(),
       username: generateString(),
@@ -191,7 +196,7 @@ describe('Express - Auth', () => {
   })
 
   it.skip('should expire token', async () => {
-    const user = await createUseCase.execute({
+    const user = await createUserUseCase.execute({
       id: generateString(),
       name: generateString(),
       username: generateString(),
@@ -243,7 +248,7 @@ describe('Express - Auth', () => {
       .set('origin', `https://www.${mockedData.domain}`)
       .send({ code })
 
-    const databaseUser = await repository.getByEmail(mockedData.email)
+    const databaseUser = await userRepository.getByEmail(mockedData.email)
 
     expect(githubAuth).toHaveBeenCalledTimes(1)
     expect(githubAuth).toHaveBeenCalledWith(code)
@@ -255,5 +260,40 @@ describe('Express - Auth', () => {
       id: databaseUser?.id,
       login: undefined
     })
+  })
+
+  it('should authenticate with access-token', async () => {
+    const mockedUser = {
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@${generateString(5)}.com`,
+      domain: `${generateString()}.com`,
+      password: generateString()
+    }
+    await createUserUseCase.execute(mockedUser)
+    const user = await getUserUseCase.byUsername(mockedUser.username)
+
+    const { accessToken } = await authUseCase.authByEmail(
+      user.email,
+      mockedUser.password
+    )
+
+    const mockedData: AuthWithAccessTokenResponseType = {
+      user: {
+        id: user.id ?? '',
+        username: user.username,
+        email: user.email,
+        name: user.name
+      }
+    }
+
+    const authResponse = await request(app)
+      .post('/auth/access-token')
+      .set('origin', `https://www.${mockedUser.domain}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+
+    expect(authResponse.status).toBe(200)
+    expect(authResponse.body).toStrictEqual(mockedData)
   })
 })

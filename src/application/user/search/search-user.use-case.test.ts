@@ -1,3 +1,4 @@
+import { UserWithId } from '@domain/user/user.repository'
 import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import { CreateUserUseCase } from '../create/create-user.use-case'
@@ -14,40 +15,38 @@ describe('Search User use-case Test', () => {
 
   it('should search users with last name', async () => {
     const lastname = 'search-user-use-case-test'
-    const user1 = {
-      name: `${generateString()} ${lastname}`,
-      email: `${generateString()}@user.com`,
-      username: generateString(),
-      password: generateString(),
-      domain: `${generateString()}.com`,
-      avatar_url: '',
-      avatar_alt: ''
+    let users: Array<Omit<UserWithId, 'password'>> = []
+    for (let index = 0; index < 4; index++) {
+      const user = {
+        id: generateString(),
+        name: `${generateString()} ${lastname}`,
+        email: `${generateString()}@user.com`,
+        username: generateString(),
+        password: generateString(),
+        domain: `${generateString()}.com`,
+        avatar_url: '',
+        avatar_alt: ''
+      }
+      await createUseCase.execute(user)
+      users = [
+        ...users,
+        {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          username: user.username,
+          domain: user.domain,
+          avatar_url: user.avatar_url,
+          avatar_alt: user.avatar_alt
+        }
+      ]
     }
-    const user2 = {
-      name: `${generateString()} ${lastname}`,
-      email: `${generateString()}@user.com`,
-      username: generateString(),
-      password: generateString(),
-      domain: `${generateString()}.com`,
-      avatar_url: '',
-      avatar_alt: ''
-    }
-    const id1 = (await createUseCase.execute(user1))?.id
-    const id2 = (await createUseCase.execute(user2))?.id
     const output = await searchUseCase.byNamePart(lastname)
 
-    expect(output).toHaveLength(2)
-    expect(output).toEqual([
-      {
-        id: id1,
-        ...user1,
-        password: undefined
-      },
-      {
-        id: id2,
-        ...user2,
-        password: undefined
-      }
-    ])
+    const sort = (array: any[]) =>
+      array.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+
+    expect(output).toHaveLength(4)
+    expect(sort(output)).toEqual(sort(users))
   })
 })

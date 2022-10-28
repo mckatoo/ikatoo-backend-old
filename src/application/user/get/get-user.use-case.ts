@@ -7,9 +7,9 @@ export type GetUserOutput = Omit<UserProps, 'password'> & { id?: string }
 export class GetUserUseCase {
   constructor (private readonly userRepository: UserRepositoryInterface) {}
 
-  async byUsername (username: string): Promise<GetUserOutput> {
+  async byUsername (username: string): Promise<Required<GetUserOutput>> {
     const user = await this.userRepository.getByUsername(username)
-    if (user == null) throw new NotFoundError('User not found.')
+    if (user == null || user.id == null) throw new NotFoundError('User not found.')
 
     return {
       id: user.id,
@@ -22,9 +22,9 @@ export class GetUserUseCase {
     }
   }
 
-  async byEmail (email: string): Promise<GetUserOutput> {
+  async byEmail (email: string): Promise<Required<GetUserOutput>> {
     const user = await this.userRepository.getByEmail(email)
-    if (user == null) throw new NotFoundError('User not found.')
+    if (user == null || user.id == null) throw new NotFoundError('User not found.')
 
     return {
       id: user.id,
@@ -37,9 +37,9 @@ export class GetUserUseCase {
     }
   }
 
-  async byDomain (domain: string): Promise<GetUserOutput> {
+  async byDomain (domain: string): Promise<Required<GetUserOutput>> {
     const user = await this.userRepository.getByDomain(domain)
-    if (user == null) throw new NotFoundError('User not found.')
+    if (user == null || user.id == null) throw new NotFoundError('User not found.')
 
     return {
       id: user.id,
@@ -52,9 +52,9 @@ export class GetUserUseCase {
     }
   }
 
-  async byId (id: string): Promise<GetUserOutput> {
+  async byId (id: string): Promise<Required<GetUserOutput>> {
     const user = await this.userRepository.getById(id)
-    if (user == null) throw new NotFoundError('User not found.')
+    if (user == null || user.id == null) throw new NotFoundError('User not found.')
 
     return {
       id: user.id,

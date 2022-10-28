@@ -9,7 +9,9 @@ import request from 'supertest'
 import app from '../../app'
 
 const localizationRepository = new LocalizationRepository()
-const createLocalizationUseCase = new CreateLocalizationUseCase(localizationRepository)
+const createLocalizationUseCase = new CreateLocalizationUseCase(
+  localizationRepository
+)
 
 const userRepository = new UserRepository()
 const createUserUseCase = new CreateUserUseCase(userRepository)
@@ -28,10 +30,12 @@ const userMock = {
 
 beforeAll(async () => {
   await createUserUseCase.execute(userMock)
-  const authResponse = await request(app).post('/auth').send({
-    username: userMock.username,
-    password: 'teste12345'
-  })
+  const authResponse = await request(app)
+    .post('/auth')
+    .send({
+      username: userMock.username,
+      password: 'teste12345'
+    })
   accessToken = authResponse.body.accessToken
 })
 
@@ -65,12 +69,15 @@ describe('Express - Localization', () => {
   it('should get localizations for a user', async () => {
     let localizations: LocalizationWithId[] = []
     for (let i = 0; i < 3; i++) {
-      localizations = [...localizations, {
-        id: generateString(),
-        latitude: generateString(),
-        longitude: generateString(),
-        user_id: generateString()
-      }]
+      localizations = [
+        ...localizations,
+        {
+          id: generateString(),
+          latitude: generateString(),
+          longitude: generateString(),
+          user_id: generateString()
+        }
+      ]
       await createLocalizationUseCase.execute(localizations[i])
     }
 
@@ -94,10 +101,12 @@ describe('Express - Localization', () => {
       avatar_alt: ''
     }
     await createUserUseCase.execute(userMock)
-    const authResponse = await request(app).post('/auth').send({
-      username: userMock.username,
-      password: userMock.password
-    })
+    const authResponse = await request(app)
+      .post('/auth')
+      .send({
+        username: userMock.username,
+        password: userMock.password
+      })
     const token: string = authResponse.body.accessToken
 
     const response = await request(app)
@@ -121,10 +130,12 @@ describe('Express - Localization', () => {
       avatar_alt: ''
     }
     await createUserUseCase.execute(userMock)
-    const authResponse = await request(app).post('/auth').send({
-      username: userMock.username,
-      password: userMock.password
-    })
+    const authResponse = await request(app)
+      .post('/auth')
+      .send({
+        username: userMock.username,
+        password: userMock.password
+      })
     const token: string = authResponse.body.accessToken
     const localization: LocalizationWithId = {
       id: generateString(),

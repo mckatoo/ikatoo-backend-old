@@ -36,10 +36,16 @@ describe('Create Refresh-Token use-case Test', () => {
       avatar_url: '',
       avatar_alt: ''
     })
-    const expiresIn = parseInt(((new Date().getTime() / 1000) + (((60 * 60) * 24) * 2)).toFixed(0))
+    const expiresIn = parseInt(
+      (new Date().getTime() / 1000 + 60 * 60 * 24 * 2).toFixed(0)
+    )
     const refreshToken = await createRefreshTokenUseCase.execute(user?.id ?? '')
 
-    expect(decodeToken(refreshToken).expiresIn).toBeGreaterThanOrEqual(expiresIn - 1)
-    expect(decodeToken(refreshToken).expiresIn).toBeLessThanOrEqual(expiresIn + 1)
+    expect(decodeToken(refreshToken).expiresIn).toBeGreaterThanOrEqual(
+      expiresIn - 1
+    )
+    expect(decodeToken(refreshToken).expiresIn).toBeLessThanOrEqual(
+      expiresIn + 1
+    )
   })
 })

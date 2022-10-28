@@ -27,10 +27,12 @@ const userMock = {
 
 beforeAll(async () => {
   await createUserUseCase.execute(userMock)
-  const authResponse = await request(app).post('/auth').send({
-    username: userMock.username,
-    password: 'teste12345'
-  })
+  const authResponse = await request(app)
+    .post('/auth')
+    .send({
+      username: userMock.username,
+      password: 'teste12345'
+    })
   accessToken = authResponse.body.accessToken
 })
 
@@ -103,10 +105,12 @@ describe('Express - Skill', () => {
       avatar_alt: ''
     }
     const user = await createUserUseCase.execute(userMock)
-    const authResponse = await request(app).post('/auth').send({
-      username: userMock.username,
-      password: userMock.password
-    })
+    const authResponse = await request(app)
+      .post('/auth')
+      .send({
+        username: userMock.username,
+        password: userMock.password
+      })
     const token: string = authResponse.body.accessToken
 
     let skills: SkillWithId[] = []

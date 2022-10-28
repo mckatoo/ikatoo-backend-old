@@ -1,4 +1,7 @@
-import { UserRepositoryInterface, UserWithId } from '@domain/user/user.repository'
+import {
+  UserRepositoryInterface,
+  UserWithId
+} from '@domain/user/user.repository'
 
 type SearchUserOutput = Omit<UserWithId, 'password'>
 

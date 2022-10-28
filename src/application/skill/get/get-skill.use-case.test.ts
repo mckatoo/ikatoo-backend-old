@@ -22,27 +22,32 @@ describe('Get Skill use-case Test', () => {
       avatar_alt: ''
     }
     await userRepository.create(userMock)
-    const skillsMock: SkillWithId[] = [{
-      title: generateString(),
-      weight: generateNumber(),
-      user_id: userMock.id ?? ''
-    },
-    {
-      title: generateString(),
-      weight: generateNumber(),
-      user_id: userMock.id ?? ''
-    }]
+    const skillsMock: SkillWithId[] = [
+      {
+        title: generateString(),
+        weight: generateNumber(),
+        user_id: userMock.id ?? ''
+      },
+      {
+        title: generateString(),
+        weight: generateNumber(),
+        user_id: userMock.id ?? ''
+      }
+    ]
     await repository.create(skillsMock[0])
     await repository.create(skillsMock[1])
 
     const expectedResult = await getUseCase.byUserId(userMock.id ?? '')
 
-    expect(expectedResult).toEqual([{
-      id: expectedResult[0].id,
-      ...skillsMock[0]
-    }, {
-      id: expectedResult[1].id,
-      ...skillsMock[1]
-    }])
+    expect(expectedResult).toEqual([
+      {
+        id: expectedResult[0].id,
+        ...skillsMock[0]
+      },
+      {
+        id: expectedResult[1].id,
+        ...skillsMock[1]
+      }
+    ])
   })
 })

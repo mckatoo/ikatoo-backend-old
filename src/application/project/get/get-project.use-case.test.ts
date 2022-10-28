@@ -22,33 +22,38 @@ describe('Get Project use-case Test', () => {
       avatar_alt: ''
     }
     await userRepository.create(userMock)
-    const projectsMock: ProjectWithId[] = [{
-      title: generateString(),
-      sub_title: generateString(),
-      description: generateString(),
-      github_link: generateString(),
-      snapshot: generateString(),
-      user_id: userMock.id ?? ''
-    },
-    {
-      title: generateString(),
-      sub_title: generateString(),
-      description: generateString(),
-      github_link: generateString(),
-      snapshot: generateString(),
-      user_id: userMock.id ?? ''
-    }]
+    const projectsMock: ProjectWithId[] = [
+      {
+        title: generateString(),
+        sub_title: generateString(),
+        description: generateString(),
+        github_link: generateString(),
+        snapshot: generateString(),
+        user_id: userMock.id ?? ''
+      },
+      {
+        title: generateString(),
+        sub_title: generateString(),
+        description: generateString(),
+        github_link: generateString(),
+        snapshot: generateString(),
+        user_id: userMock.id ?? ''
+      }
+    ]
     await repository.create(projectsMock[0])
     await repository.create(projectsMock[1])
 
     const expectedResult = await getUseCase.byUserId(userMock.id ?? '')
 
-    expect(expectedResult).toEqual([{
-      id: expectedResult[0].id,
-      ...projectsMock[0]
-    }, {
-      id: expectedResult[1].id,
-      ...projectsMock[1]
-    }])
+    expect(expectedResult).toEqual([
+      {
+        id: expectedResult[0].id,
+        ...projectsMock[0]
+      },
+      {
+        id: expectedResult[1].id,
+        ...projectsMock[1]
+      }
+    ])
   })
 })

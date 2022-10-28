@@ -63,6 +63,8 @@ describe('Create User use-case Test', () => {
 
     await createUseCase.execute(mock)
 
-    await expect(createUseCase.execute(mock)).rejects.toThrowError('User already exists')
+    await expect(createUseCase.execute(mock)).rejects.toThrowError(
+      'User already exists'
+    )
   })
 })

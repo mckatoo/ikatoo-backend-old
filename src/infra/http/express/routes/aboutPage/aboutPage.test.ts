@@ -30,10 +30,12 @@ describe('Express - About Page', () => {
 
   beforeAll(async () => {
     const user = await createUserUseCase.execute(userMock)
-    const authResponse = await request(app).post('/auth').send({
-      username: user?.username,
-      password: 'teste12345'
-    })
+    const authResponse = await request(app)
+      .post('/auth')
+      .send({
+        username: user?.username,
+        password: 'teste12345'
+      })
     accessToken = authResponse.body.accessToken
   })
 
@@ -71,7 +73,9 @@ describe('Express - About Page', () => {
       .post('/about')
       .set('Authorization', `Bearer ${accessToken}`)
       .send(aboutPageMock)
-    const aboutPage = await getAboutPageUseCase.getByUserId(aboutPageMock.user_id)
+    const aboutPage = await getAboutPageUseCase.getByUserId(
+      aboutPageMock.user_id
+    )
 
     expect(response.status).toBe(201)
     expect(response.body).toEqual({

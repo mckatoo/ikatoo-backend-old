@@ -13,7 +13,7 @@ app.use(express.json())
 if (env('NODE_ENV').includes('prod')) {
   const corsOptions: CorsOptions = {
     origin: /ikatoo\.com\.br$/,
-    methods: "GET,PUT,PATCH,POST,DELETE"
+    methods: 'GET,PUT,PATCH,POST,DELETE'
   }
   app.use(cors(corsOptions))
 } else {

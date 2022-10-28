@@ -22,10 +22,12 @@ describe('Express - User', () => {
 
   beforeAll(async () => {
     await createUseCase.execute(userMock)
-    const authResponse = await request(app).post('/auth').send({
-      username: userMock.username,
-      password: 'teste12345'
-    })
+    const authResponse = await request(app)
+      .post('/auth')
+      .send({
+        username: userMock.username,
+        password: 'teste12345'
+      })
     accessToken = authResponse.body.accessToken
   })
 

@@ -13,7 +13,9 @@ describe('Express - Contact Page', () => {
 
   const contactPageRepository = new ContactPagesRepository()
   const getContactPageUseCase = new GetContactPageUseCase(contactPageRepository)
-  const createContactPageUseCase = new CreateContactPageUseCase(contactPageRepository)
+  const createContactPageUseCase = new CreateContactPageUseCase(
+    contactPageRepository
+  )
 
   let accessToken: string
 
@@ -30,10 +32,12 @@ describe('Express - Contact Page', () => {
 
   beforeAll(async () => {
     const user = await createUserUseCase.execute(userMock)
-    const authResponse = await request(app).post('/auth').send({
-      username: user?.username,
-      password: 'teste12345'
-    })
+    const authResponse = await request(app)
+      .post('/auth')
+      .send({
+        username: user?.username,
+        password: 'teste12345'
+      })
     accessToken = authResponse.body.accessToken
   })
 
@@ -47,7 +51,9 @@ describe('Express - Contact Page', () => {
       .post('/contact-page')
       .set('Authorization', `Bearer ${accessToken}`)
       .send(contactPageMock)
-    const contact = await contactPageRepository.getByUserId(contactPageMock.user_id)
+    const contact = await contactPageRepository.getByUserId(
+      contactPageMock.user_id
+    )
 
     expect(response.status).toBe(201)
     expect(contact).toEqual({
@@ -67,7 +73,9 @@ describe('Express - Contact Page', () => {
       .post('/contact-page')
       .set('Authorization', `Bearer ${accessToken}`)
       .send(contactPageMock)
-    const contactPage = await getContactPageUseCase.getByUserId(contactPageMock.user_id)
+    const contactPage = await getContactPageUseCase.getByUserId(
+      contactPageMock.user_id
+    )
 
     expect(response.status).toBe(201)
     expect(contactPage).toEqual(contactPageMock)

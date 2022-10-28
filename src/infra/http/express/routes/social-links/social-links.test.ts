@@ -9,7 +9,9 @@ import request from 'supertest'
 import app from '../../app'
 
 const socialLinksRepository = new SocialLinksRepository()
-const createSocialLinksUseCase = new CreateSocialLinksUseCase(socialLinksRepository)
+const createSocialLinksUseCase = new CreateSocialLinksUseCase(
+  socialLinksRepository
+)
 
 const userRepository = new UserRepository()
 const createUserUseCase = new CreateUserUseCase(userRepository)
@@ -28,10 +30,12 @@ const userMock = {
 
 beforeAll(async () => {
   await createUserUseCase.execute(userMock)
-  const authResponse = await request(app).post('/auth').send({
-    username: userMock.username,
-    password: 'teste12345'
-  })
+  const authResponse = await request(app)
+    .post('/auth')
+    .send({
+      username: userMock.username,
+      password: 'teste12345'
+    })
   accessToken = authResponse.body.accessToken
 })
 
@@ -84,7 +88,7 @@ describe('Express - Social Links', () => {
         name: generateString(),
         url: generateString(),
         icon_url: generateString(),
-        user_id: i % 2 === 0 ? (user?.id ?? '') : generateString()
+        user_id: i % 2 === 0 ? user?.id ?? '' : generateString()
       }
       await createSocialLinksUseCase.execute(socialLinksData)
       if (i % 2 === 0) {
@@ -112,10 +116,12 @@ describe('Express - Social Links', () => {
       avatar_alt: ''
     }
     const user = await createUserUseCase.execute(userMock)
-    const authResponse = await request(app).post('/auth').send({
-      username: userMock.username,
-      password: userMock.password
-    })
+    const authResponse = await request(app)
+      .post('/auth')
+      .send({
+        username: userMock.username,
+        password: userMock.password
+      })
     const token: string = authResponse.body.accessToken
 
     let socialLinks: SocialLinksProps[] = []
@@ -125,7 +131,7 @@ describe('Express - Social Links', () => {
         name: generateString(),
         url: generateString(),
         icon_url: generateString(),
-        user_id: i % 2 === 0 ? (user?.id ?? '') : generateString()
+        user_id: i % 2 === 0 ? user?.id ?? '' : generateString()
       }
       await createSocialLinksUseCase.execute(newSocialLink)
       if (i % 2 === 0) {
@@ -162,7 +168,7 @@ describe('Express - Social Links', () => {
         name: generateString(),
         url: generateString(),
         icon_url: generateString(),
-        user_id: i % 2 === 0 ? (user?.id ?? '') : generateString()
+        user_id: i % 2 === 0 ? user?.id ?? '' : generateString()
       }
       await createSocialLinksUseCase.execute(newSocialLink)
       if (i % 2 === 0) {

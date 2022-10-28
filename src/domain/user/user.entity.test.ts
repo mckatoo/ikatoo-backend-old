@@ -7,7 +7,9 @@ describe('Test User Test', () => {
     email: 'test@email.com',
     username: 'user1',
     password: 'pass123',
-    domain: 'localhost'
+    domain: 'localhost',
+    avatar_url: '',
+    avatar_alt: ''
   }
 
   it('constructor without id', () => {

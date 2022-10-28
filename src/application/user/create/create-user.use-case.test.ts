@@ -13,7 +13,9 @@ describe('Create User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
 
     await createUseCase.execute(mock)
@@ -33,7 +35,9 @@ describe('Create User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
 
     await createUseCase.execute(mock)
@@ -52,7 +56,9 @@ describe('Create User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
 
     await createUseCase.execute(mock)

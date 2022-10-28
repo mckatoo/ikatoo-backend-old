@@ -15,13 +15,15 @@ export class UserPostgresRepository implements UserRepositoryInterface {
   async create (user: UserWithId): Promise<void> {
     const db = await database()
     await db.none(
-      'insert into users values($1, $2, $3, $4, $5, $6)', [
+      'insert into users values($1, $2, $3, $4, $5, $6, $7, $8)', [
         user.id ?? randomUUID(),
         user.name,
         user.username,
         user.password,
         user.email,
-        user.domain
+        user.domain,
+        user.avatar_url,
+        user.avatar_alt
       ]
     )
   }
@@ -93,14 +95,18 @@ export class UserPostgresRepository implements UserRepositoryInterface {
       username = $3,
       password = $4,
       email = $5,
-      domain = $6
+      domain = $6,
+      avatar_url = $7,
+      avatar_alt = $8
       where id = $1`, [
         id,
         user.name,
         user.username,
         user.password,
         user.email,
-        user.domain
+        user.domain,
+        user.avatar_url,
+        user.avatar_alt
       ]
     )
   }

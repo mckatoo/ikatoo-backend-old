@@ -19,14 +19,18 @@ describe('Search User use-case Test', () => {
       email: `${generateString()}@user.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     const user2 = {
       name: `${generateString()} ${lastname}`,
       email: `${generateString()}@user.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     const id1 = (await createUseCase.execute(user1))?.id
     const id2 = (await createUseCase.execute(user2))?.id

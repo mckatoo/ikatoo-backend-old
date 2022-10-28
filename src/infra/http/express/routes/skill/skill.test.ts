@@ -20,7 +20,9 @@ const userMock = {
   username: generateString(),
   email: `${generateString()}@domain.com`,
   password: 'teste12345',
-  domain: `${generateString()}.com.br`
+  domain: `${generateString()}.com.br`,
+  avatar_url: '',
+  avatar_alt: ''
 }
 
 beforeAll(async () => {
@@ -63,7 +65,9 @@ describe('Express - Skill', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     })
 
     let skills: SkillWithId[] = []
@@ -94,7 +98,9 @@ describe('Express - Skill', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     const user = await createUserUseCase.execute(userMock)
     const authResponse = await request(app).post('/auth').send({

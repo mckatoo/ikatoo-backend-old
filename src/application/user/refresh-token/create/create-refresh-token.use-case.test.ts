@@ -17,7 +17,9 @@ describe('Create Refresh-Token use-case Test', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     })
     const refreshToken = await createRefreshTokenUseCase.execute(user?.id ?? '')
 
@@ -30,7 +32,9 @@ describe('Create Refresh-Token use-case Test', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     })
     const expiresIn = parseInt(((new Date().getTime() / 1000) + (((60 * 60) * 24) * 2)).toFixed(0))
     const refreshToken = await createRefreshTokenUseCase.execute(user?.id ?? '')

@@ -23,7 +23,9 @@ describe('Express - About Page', () => {
     username: generateString(),
     email: `${generateString()}@katoo.com`,
     password: 'teste12345',
-    domain: `${generateString()}.com.br`
+    domain: `${generateString()}.com.br`,
+    avatar_url: '',
+    avatar_alt: ''
   }
 
   beforeAll(async () => {
@@ -97,7 +99,9 @@ describe('Express - About Page', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await createUserUseCase.execute(userMock)
 

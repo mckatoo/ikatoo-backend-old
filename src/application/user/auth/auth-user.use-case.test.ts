@@ -17,7 +17,9 @@ describe('Auth User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await createUseCase.execute(mock)
     const { accessToken, refreshToken } = await authUseCase.authByUsername(
@@ -35,7 +37,9 @@ describe('Auth User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await createUseCase.execute(mock)
     const { accessToken, refreshToken } = await authUseCase.authByEmail(
@@ -65,7 +69,9 @@ describe('Auth User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await createUseCase.execute(mock)
     const { accessToken } = await authUseCase.authByUsername(

@@ -17,7 +17,9 @@ describe('Get Social Links use-case Test', () => {
       email: `${generateString()}@email.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await userRepository.create(userMock)
     let socialLinksMock: SocialLinksWithId[] = []

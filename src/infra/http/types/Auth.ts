@@ -5,6 +5,10 @@ export interface AuthResponseType {
     name: string
     username: string
     email: string
+    avatar: {
+      url: string
+      alt: string
+    }
   }
   accessToken: string
   refreshToken: string

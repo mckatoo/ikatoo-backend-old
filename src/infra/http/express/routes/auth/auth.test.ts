@@ -35,7 +35,9 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: 'should authenticate a valid username -url',
+      avatar_alt: 'should authenticate a valid username -alt'
     })
     const response = await request(app)
       .post('/auth')
@@ -68,7 +70,9 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: 'should authenticate a valid username -url',
+      avatar_alt: 'should authenticate a valid username -alt'
     })
     const response = await request(app)
       .post('/auth')
@@ -94,7 +98,9 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: 'should authenticate a valid username -url',
+      avatar_alt: 'should authenticate a valid username -alt'
     })
     const response = await request(app)
       .post('/auth')
@@ -119,7 +125,9 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: 'should authenticate a valid username -url',
+      avatar_alt: 'should authenticate a valid username -alt'
     })
     const response = await request(app)
       .post('/auth')
@@ -143,7 +151,9 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: '',
+      avatar_alt: ''
     })
     const response = await request(app)
       .post('/auth')
@@ -172,7 +182,9 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: 'should authenticate a valid username -url',
+      avatar_alt: 'should authenticate a valid username -alt'
     })
     const responseAuth = await request(app)
       .post('/auth')
@@ -202,7 +214,9 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: 'should authenticate a valid username -url',
+      avatar_alt: 'should authenticate a valid username -alt'
     })
 
     const { body } = await request(app)
@@ -231,34 +245,47 @@ describe('Express - Auth', () => {
 
   it('should get github access-token', async () => {
     const code = 'teste'
-    const mockedData = {
-      name: generateString(),
+    const name = generateString()
+    const mockedApiResponse = {
+      name,
       login: generateString(),
       email: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar: {
+        url: 'should get github access-token -url',
+        alt: name
+      }
     }
 
     const githubAuthMock = githubAuth as jest.Mock
     githubAuthMock.mockReturnValue(Promise.resolve(generateString()))
     const githubFetchUserMock = githubFetchUser as jest.Mock
-    githubFetchUserMock.mockReturnValue(Promise.resolve(mockedData))
+    githubFetchUserMock.mockReturnValue(
+      Promise.resolve({
+        ...mockedApiResponse,
+        avatarURL: mockedApiResponse.avatar.url
+      })
+    )
 
     const githubResponse = await request(app)
       .post('/auth/github')
-      .set('origin', `https://www.${mockedData.domain}`)
+      .set('origin', `https://www.${mockedApiResponse.domain}`)
       .send({ code })
 
-    const databaseUser = await userRepository.getByEmail(mockedData.email)
+    const databaseUser = await userRepository.getByEmail(
+      mockedApiResponse.email
+    )
 
     expect(githubAuth).toHaveBeenCalledTimes(1)
     expect(githubAuth).toHaveBeenCalledWith(code)
     expect(githubFetchUser).toHaveBeenCalledTimes(1)
     expect(githubResponse.status).toBe(200)
     expect(githubResponse.body).toHaveProperty('user', {
-      ...mockedData,
-      username: mockedData.login,
       id: databaseUser?.id,
-      login: undefined
+      name: mockedApiResponse.name,
+      username: mockedApiResponse.login,
+      email: mockedApiResponse.email,
+      avatar: mockedApiResponse.avatar
     })
   })
 
@@ -268,6 +295,8 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@${generateString(5)}.com`,
       domain: `${generateString()}.com`,
+      avatar_url: generateString(),
+      avatar_alt: generateString(),
       password: generateString()
     }
     await createUserUseCase.execute(mockedUser)
@@ -280,10 +309,14 @@ describe('Express - Auth', () => {
 
     const mockedData: AuthWithAccessTokenResponseType = {
       user: {
-        id: user.id ?? '',
+        id: user.id,
         username: user.username,
         email: user.email,
-        name: user.name
+        name: user.name,
+        avatar: {
+          url: user.avatar_url,
+          alt: user.avatar_alt
+        }
       }
     }
 

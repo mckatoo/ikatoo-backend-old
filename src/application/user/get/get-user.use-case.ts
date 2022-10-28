@@ -16,7 +16,9 @@ export class GetUserUseCase {
       name: user.name,
       username: user.username,
       email: user.email,
-      domain: user.domain
+      domain: user.domain,
+      avatar_url: user.avatar_url,
+      avatar_alt: user.avatar_alt
     }
   }
 
@@ -29,7 +31,9 @@ export class GetUserUseCase {
       name: user.name,
       username: user.username,
       email: user.email,
-      domain: user.domain
+      domain: user.domain,
+      avatar_url: user.avatar_url,
+      avatar_alt: user.avatar_alt
     }
   }
 
@@ -42,7 +46,9 @@ export class GetUserUseCase {
       name: user.name,
       username: user.username,
       email: user.email,
-      domain: user.domain
+      domain: user.domain,
+      avatar_url: user.avatar_url,
+      avatar_alt: user.avatar_alt
     }
   }
 
@@ -55,7 +61,9 @@ export class GetUserUseCase {
       name: user.name,
       username: user.username,
       email: user.email,
-      domain: user.domain
+      domain: user.domain,
+      avatar_url: user.avatar_url,
+      avatar_alt: user.avatar_alt
     }
   }
 }

@@ -1,4 +1,5 @@
 import { UserProps } from '@domain/user/user.entity'
+import { UserWithId } from '@domain/user/user.repository'
 import { generateString } from '@infra/generate'
 import database from './database'
 import { UserPostgresRepository } from './user-postgres.repository'
@@ -6,27 +7,38 @@ import { UserPostgresRepository } from './user-postgres.repository'
 describe('User Postgres repository', () => {
   const repository = new UserPostgresRepository()
 
+  beforeEach(async () => {
+    const db = await database()
+    await db.none('delete from users;')
+  })
+
   it('Should insert user', async () => {
     const mock1 = {
       name: generateString(),
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     const mock2 = {
       name: generateString(),
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     const mock3 = {
       name: generateString(),
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock1)
     await repository.create(mock2)
@@ -34,7 +46,8 @@ describe('User Postgres repository', () => {
 
     const db = await database()
     const user = await db.one<UserProps>(
-      'select * from users where username = $1', mock2.username
+      'select * from users where username = $1',
+      mock2.username
     )
 
     expect(user?.username).toBe(mock2.username)
@@ -46,12 +59,12 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
-    await expect(
-      repository.create(mock)
-    ).rejects.toThrowError(/unique/i)
+    await expect(repository.create(mock)).rejects.toThrowError(/unique/i)
   })
 
   it('should get a user by id', async () => {
@@ -61,7 +74,9 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
     const user = await repository.getById(mock.id)
@@ -75,7 +90,9 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
     const user = await repository.getByUsername(mock.username)
@@ -92,7 +109,9 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
 
@@ -110,7 +129,9 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
     const user = await repository.getByDomain(mock.domain)
@@ -122,21 +143,23 @@ describe('User Postgres repository', () => {
   })
 
   it('should get users with contain partial name', async () => {
-    const db = await database()
-    await db.none('delete from users;')
     const mock1 = {
       name: `${generateString()} Search`,
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     const mock2 = {
       name: `${generateString()} Search`,
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock1)
     await repository.create(mock2)
@@ -156,50 +179,47 @@ describe('User Postgres repository', () => {
   })
 
   it('should get all registers on users table', async () => {
-    const db = await database()
-    await db.none('delete from users')
-    const user1 = {
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@mail.com`,
-      password: generateString(),
-      domain: `${generateString()}.com`
+    let mockedUsers: Array<Required<UserWithId>> = []
+    for (let index = 0; index < 4; index++) {
+      const newUser = {
+        id: generateString(),
+        name: generateString(),
+        username: generateString(),
+        email: `${generateString()}@mail.com`,
+        password: generateString(),
+        domain: `${generateString()}.com`,
+        avatar_url: generateString(),
+        avatar_alt: generateString()
+      }
+      mockedUsers = [...mockedUsers, newUser]
     }
-    const user2 = {
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@mail.com`,
-      password: generateString(),
-      domain: `${generateString()}.com`
-    }
-    const user3 = {
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@mail.com`,
-      password: generateString(),
-      domain: `${generateString()}.com`
-    }
-    const user4 = {
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@mail.com`,
-      password: generateString(),
-      domain: `${generateString()}.com`
-    }
-    await db.none(`insert into users (id, name, username, email, password, domain) values
-    ('${user1.id}', '${user1.name}', '${user1.username}', '${user1.email}', '${user1.password}', '${user1.domain}'),
-    ('${user2.id}', '${user2.name}', '${user2.username}', '${user2.email}', '${user2.password}', '${user2.domain}'),
-    ('${user3.id}', '${user3.name}', '${user3.username}', '${user3.email}', '${user3.password}', '${user3.domain}'),
-    ('${user4.id}', '${user4.name}', '${user4.username}', '${user4.email}', '${user4.password}', '${user4.domain}')
-    `)
 
+    let formatedUsers = ''
+    for (let index = 0; index < mockedUsers.length; index++) {
+      formatedUsers =
+        formatedUsers +
+        `
+          ('${mockedUsers[index].id}',
+          '${mockedUsers[index].name}',
+          '${mockedUsers[index].username}',
+          '${mockedUsers[index].email}',
+          '${mockedUsers[index].password}',
+          '${mockedUsers[index].domain}',
+          '${mockedUsers[index].avatar_url}',
+          '${mockedUsers[index].avatar_alt}')
+          ${index < mockedUsers.length - 1 ? ',' : ''}
+        `
+    }
+
+    const insertQuery = `insert into users (
+      id, name, username, email, password, domain, avatar_url, avatar_alt
+      ) values ${formatedUsers}`
+
+    const db = await database()
+    await db.none(insertQuery)
     const users = await repository.getAll()
 
-    expect(users).toEqual([user1, user2, user3, user4])
+    expect(users).toEqual(mockedUsers)
   })
 
   it('should delete a row of the registers', async () => {
@@ -208,7 +228,9 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: `${generateString()}@postgres.com4`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
     const user = await repository.getByEmail(mock.email)

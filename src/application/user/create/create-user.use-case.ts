@@ -26,7 +26,9 @@ export class CreateUserUseCase {
           name: userExists.name,
           username: userExists.username,
           email: userExists.email,
-          domain: userExists.domain
+          domain: userExists.domain,
+          avatar_url: userExists.avatar_url,
+          avatar_alt: userExists.avatar_alt
         }
       }
     } catch (error) {

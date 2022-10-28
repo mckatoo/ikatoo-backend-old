@@ -6,6 +6,8 @@ export interface UserProps {
   password: string
   email: string
   domain: string
+  avatar_url: string
+  avatar_alt: string
 }
 
 export class User {
@@ -63,6 +65,14 @@ export class User {
 
   get domain (): string {
     return this.props.domain
+  }
+
+  get avatar_url () {
+    return this.props.avatar_url
+  }
+
+  get avatar_alt () {
+    return this.props.avatar_alt
   }
 
   toJson () {

@@ -19,7 +19,9 @@ describe('Get Skills Page use-case Test', () => {
       username: generateString(),
       email: `${generateString()}@email.com`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     })
     const user = await createUserUseCase.execute(userData)
 

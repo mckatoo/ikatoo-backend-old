@@ -23,7 +23,9 @@ describe('Express - Contact Page', () => {
     username: generateString(),
     email: `${generateString()}@katoo.com`,
     password: 'teste12345',
-    domain: `${generateString()}.com.br`
+    domain: `${generateString()}.com.br`,
+    avatar_url: '',
+    avatar_alt: ''
   }
 
   beforeAll(async () => {
@@ -78,7 +80,9 @@ describe('Express - Contact Page', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await createUserUseCase.execute(userMock)
 
@@ -93,7 +97,9 @@ describe('Express - Contact Page', () => {
     const response = await request(app)
       .get('/contact-page')
       .send({
-        domain: userMock.domain
+        domain: userMock.domain,
+        avatar_url: '',
+        avatar_alt: ''
       })
 
     expect(response.status).toBe(200)

@@ -14,7 +14,9 @@ describe('Get User use-case Test', () => {
       email: `${generateString()}@email.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await createUseCase.execute(user)
     const expected = await getUseCase.byEmail(user.email)
@@ -32,7 +34,9 @@ describe('Get User use-case Test', () => {
       email: `${generateString()}@email.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await createUseCase.execute(user)
     const expected = await getUseCase.byUsername(user.username)
@@ -50,7 +54,9 @@ describe('Get User use-case Test', () => {
       email: `${generateString()}@email.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await createUseCase.execute(user)
     const expected = await getUseCase.byUsername(user.username)
@@ -69,7 +75,9 @@ describe('Get User use-case Test', () => {
       email: `${generateString()}@email.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await createUseCase.execute(user)
     const expected = await getUseCase.byId(user.id)

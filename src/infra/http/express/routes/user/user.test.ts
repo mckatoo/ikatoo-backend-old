@@ -15,7 +15,9 @@ describe('Express - User', () => {
     username: generateString(),
     email: `${generateString()}@domain.com`,
     password: 'teste12345',
-    domain: `${generateString()}.com.br`
+    domain: `${generateString()}.com.br`,
+    avatar_url: '',
+    avatar_alt: ''
   }
 
   beforeAll(async () => {
@@ -35,7 +37,9 @@ describe('Express - User', () => {
         username: generateString(),
         email: `${generateString()}@user2.com`,
         password: '123teste312',
-        domain: `${generateString()}.com.br`
+        domain: `${generateString()}.com.br`,
+        avatar_url: '',
+        avatar_alt: ''
       })
 
     expect(response.status).toBe(401)
@@ -51,7 +55,9 @@ describe('Express - User', () => {
         username: generateString(),
         email: `${generateString()}@user2.com`,
         password: '123teste312',
-        domain: `${generateString()}.com.br`
+        domain: `${generateString()}.com.br`,
+        avatar_url: '',
+        avatar_alt: ''
       })
 
     expect(response.status).toBe(201)
@@ -65,7 +71,9 @@ describe('Express - User', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     const response = await request(app)
       .post('/user')
@@ -84,7 +92,9 @@ describe('Express - User', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`
+      domain: `${generateString()}.com.br`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await request(app)
       .post('/user')

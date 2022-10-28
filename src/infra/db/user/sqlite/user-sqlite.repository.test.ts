@@ -13,21 +13,27 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     const mock2 = {
       name: generateString(),
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     const mock3 = {
       name: generateString(),
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock1)
     await repository.create(mock2)
@@ -48,7 +54,9 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
     await expect(
@@ -63,7 +71,9 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
     const user = await repository.getById(mock.id)
@@ -77,7 +87,9 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
     const user = await repository.getByUsername(mock.username)
@@ -94,7 +106,9 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
 
@@ -112,7 +126,9 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
     const user = await repository.getByDomain(mock.domain)
@@ -129,14 +145,18 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     const mock2 = {
       name: `${generateString()} Search`,
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString()
+      domain: generateString(),
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock1)
     await repository.create(mock2)
@@ -164,7 +184,9 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     const user2 = {
       id: generateString(),
@@ -172,7 +194,9 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     const user3 = {
       id: generateString(),
@@ -180,7 +204,9 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     const user4 = {
       id: generateString(),
@@ -188,13 +214,15 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
-    await db.run(`insert into users (id, name, username, email, password, domain) values
-    ('${user1.id}', '${user1.name}', '${user1.username}', '${user1.email}', '${user1.password}', '${user1.domain}'),
-    ('${user2.id}', '${user2.name}', '${user2.username}', '${user2.email}', '${user2.password}', '${user2.domain}'),
-    ('${user3.id}', '${user3.name}', '${user3.username}', '${user3.email}', '${user3.password}', '${user3.domain}'),
-    ('${user4.id}', '${user4.name}', '${user4.username}', '${user4.email}', '${user4.password}', '${user4.domain}')
+    await db.run(`insert into users (id, name, username, email, password, domain, avatar_url, avatar_alt) values
+    ('${user1.id}', '${user1.name}', '${user1.username}', '${user1.email}', '${user1.password}', '${user1.domain}', '${user1.avatar_url}', '${user1.avatar_alt}'),
+    ('${user2.id}', '${user2.name}', '${user2.username}', '${user2.email}', '${user2.password}', '${user2.domain}', '${user2.avatar_url}', '${user2.avatar_alt}'),
+    ('${user3.id}', '${user3.name}', '${user3.username}', '${user3.email}', '${user3.password}', '${user3.domain}', '${user3.avatar_url}', '${user3.avatar_alt}'),
+    ('${user4.id}', '${user4.name}', '${user4.username}', '${user4.email}', '${user4.password}', '${user4.domain}', '${user4.avatar_url}', '${user4.avatar_alt}')
     `)
 
     const users = await repository.getAll()
@@ -208,7 +236,9 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: `${generateString()}@sqlite.com4`,
       password: generateString(),
-      domain: `${generateString()}.com`
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
     }
     await repository.create(mock)
     const user = await repository.getByEmail(mock.email)

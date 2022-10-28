@@ -18,13 +18,15 @@ export class UserSqliteRepository implements UserRepositoryInterface {
     const db = await database()
 
     await db.run(
-      'insert into users values(?,?,?,?,?,?)',
+      'insert into users values(?,?,?,?,?,?,?,?)',
       user.id ?? randomUUID(),
       user.name,
       user.username,
       user.password,
       user.email,
-      user.domain
+      user.domain,
+      user.avatar_url,
+      user.avatar_alt
     )
 
     await db.close()
@@ -105,7 +107,9 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       username = ?,
       password = ?,
       email = ?,
-      domain = ?
+      domain = ?,
+      avatar_url = ?,
+      avatar_alt = ?
       where id = ?`,
       id,
       user.name,
@@ -113,6 +117,8 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       user.password,
       user.email,
       user.domain,
+      user.avatar_url,
+      user.avatar_alt,
       id
     )
 

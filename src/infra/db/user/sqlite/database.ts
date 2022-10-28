@@ -13,7 +13,9 @@ export default async () => {
     username text NOT NULL UNIQUE, 
     password text NOT NULL, 
     email text NOT NULL UNIQUE,
-    domain text NOT NULL UNIQUE
+    domain text NOT NULL UNIQUE,
+    avatar_url text,
+    avatar_alt text
     )`)
 
   return db

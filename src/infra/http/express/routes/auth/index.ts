@@ -19,6 +19,8 @@ const authRoute = Router()
 const userRepository = new UserRepository()
 const authUseCase = new AuthUserUseCase(userRepository)
 const getUserUseCase = new GetUserUseCase(userRepository)
+const createUserUseCase = new CreateUserUseCase(userRepository)
+const refreshTokenUseCase = new CreateRefreshTokenUseCase(userRepository)
 
 authRoute.post('/', async (req: Request, res: Response) => {
   const { username, email, password } = req.body
@@ -47,11 +49,9 @@ authRoute.post('/github', async (req: Request, res: Response) => {
 
   const githubUser = await githubFetchUser(githubAccessToken)
   if (githubUser != null) {
-    const createUserUseCase = new CreateUserUseCase(userRepository)
     const origin = req.headers.origin
     const domain = origin?.split('/')[2].replace('www.', '') ?? ''
     const password = generateString()
-    const getUserUseCase = new GetUserUseCase(userRepository)
     let user
     try {
       user = await getUserUseCase.byEmail(githubUser.email)
@@ -61,20 +61,33 @@ authRoute.post('/github', async (req: Request, res: Response) => {
         email: githubUser.email,
         name: githubUser.name,
         username: githubUser.login,
-        password
+        password,
+        avatar_url: githubUser.avatarURL,
+        avatar_alt: githubUser.name
       })
       user = await getUserUseCase.byEmail(githubUser.email)
     }
 
     const accessToken = sign({
-      userId: user.id ?? '',
+      userId: user.id,
       expiresIn: '1h'
     })
-    const refreshTokenUseCase = new CreateRefreshTokenUseCase(userRepository)
     const refreshToken = await refreshTokenUseCase.execute(user.id ?? '')
     const tokens = { accessToken, refreshToken }
 
-    return res.status(200).json({ user, ...tokens })
+    return res.status(200).json({
+      user: {
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        avatar: {
+          url: user.avatar_url,
+          alt: user.avatar_alt
+        }
+      },
+      ...tokens
+    })
   }
   res.status(500).send()
 })
@@ -94,7 +107,11 @@ authRoute.post(
           id: user.id ?? '',
           username: user.username,
           email: user.email,
-          name: user.name
+          name: user.name,
+          avatar: {
+            url: user.avatar_url,
+            alt: user.avatar_alt
+          }
         }
       }
       return res.status(200).send(data)

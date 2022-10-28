@@ -14,13 +14,15 @@ describe('Get Skills Page use-case Test', () => {
     const repository = new ContactPagesRepository()
     const getUseCase = new GetContactPageUseCase(repository)
 
-    const userData: UserWithId = ({
+    const userData: UserWithId = {
       name: generateString(),
       username: generateString(),
       email: `${generateString()}@email.com`,
       password: generateString(),
-      domain: `${generateString()}.com`
-    })
+      domain: `${generateString()}.com`,
+      avatar_url: '',
+      avatar_alt: ''
+    }
     const user = await createUserUseCase.execute(userData)
 
     const contactPageData: ContactPageProps = {

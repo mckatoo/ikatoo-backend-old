@@ -263,7 +263,7 @@ describe('Express - Auth', () => {
     githubFetchUserMock.mockReturnValue(
       Promise.resolve({
         ...mockedApiResponse,
-        avatarURL: mockedApiResponse.avatar.url
+        avatar_url: mockedApiResponse.avatar.url
       })
     )
 

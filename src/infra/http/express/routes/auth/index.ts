@@ -62,7 +62,7 @@ authRoute.post('/github', async (req: Request, res: Response) => {
         name: githubUser.name,
         username: githubUser.login,
         password,
-        avatar_url: githubUser.avatarURL,
+        avatar_url: githubUser.avatar_url,
         avatar_alt: githubUser.name
       })
       user = await getUserUseCase.byEmail(githubUser.email)

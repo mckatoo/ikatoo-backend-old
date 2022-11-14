@@ -18,8 +18,7 @@ describe('Create About Page use-case Test', () => {
     expect(output).toStrictEqual({
       id: (await repository.getByUserId(data.user_id)).id,
       ...data,
-      image: { alt: '', src: '' },
-      skills: []
+      image: { alt: '', src: '' }
     })
   })
 
@@ -35,8 +34,7 @@ describe('Create About Page use-case Test', () => {
 
     expect(aboutPage).toStrictEqual({
       ...data,
-      image: { alt: '', src: '' },
-      skills: []
+      image: { alt: '', src: '' }
     })
   })
 })

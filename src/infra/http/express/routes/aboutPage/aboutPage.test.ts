@@ -57,8 +57,7 @@ describe('Express - About Page', () => {
       image: {
         alt: '',
         src: ''
-      },
-      skills: []
+      }
     })
   })
 
@@ -83,16 +82,14 @@ describe('Express - About Page', () => {
       image: {
         alt: '',
         src: ''
-      },
-      skills: []
+      }
     })
     expect(response.body).toEqual({
       ...aboutPageMock,
       image: {
         alt: '',
         src: ''
-      },
-      skills: []
+      }
     })
   })
 

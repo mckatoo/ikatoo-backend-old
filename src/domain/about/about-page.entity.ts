@@ -1,4 +1,3 @@
-import { SkillProps } from '@domain/skill/skill.entity'
 import { randomUUID } from 'crypto'
 
 export interface ImageProps {
@@ -7,7 +6,6 @@ export interface ImageProps {
 }
 
 export interface AboutPageProps {
-  skills?: SkillProps[]
   title: string
   description: string
   image?: ImageProps
@@ -25,7 +23,6 @@ export class AboutPage {
 
     this.props = {
       ...props,
-      skills: props.skills ?? [],
       image: props.image ?? { src: '', alt: '' }
     }
   }
@@ -34,32 +31,12 @@ export class AboutPage {
     return new AboutPage(props, id)
   }
 
-  updateSkills (skills: SkillProps[]) {
-    this.props.skills = skills
-  }
-
-  updateTitle (title: string) {
-    this.props.title = title
-  }
-
-  updateDescription (description: string) {
-    this.props.description = description
-  }
-
-  updateImage (image: ImageProps) {
-    this.props.image = image
-  }
-
   get title (): string {
     return this.props.title
   }
 
   get description (): string {
     return this.props.description
-  }
-
-  get skills (): SkillProps[] {
-    return this.props.skills
   }
 
   get image (): ImageProps {

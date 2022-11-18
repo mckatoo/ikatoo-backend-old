@@ -33,7 +33,16 @@ authRoute.post('/', async (req: Request, res: Response) => {
       ? await authUseCase.authByUsername(username, password)
       : await authUseCase.authByEmail(email, password)
 
-  res.status(200).json(tokens)
+  res.status(200).json({
+    ...tokens,
+    user: {
+      ...user,
+      avatar: {
+        url: user.avatar_url,
+        alt: user.avatar_alt
+      }
+    }
+  })
 })
 
 authRoute.post('/refresh-token', async (req: Request, res: Response) => {

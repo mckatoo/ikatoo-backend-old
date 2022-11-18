@@ -24,10 +24,14 @@ const refreshTokenUseCase = new CreateRefreshTokenUseCase(userRepository)
 
 authRoute.post('/', async (req: Request, res: Response) => {
   const { username, email, password } = req.body
+  const user =
+    username !== (null ?? '')
+      ? await getUserUseCase.byUsername(username)
+      : await getUserUseCase.byEmail(email)
   const tokens =
-    username === undefined
-      ? await authUseCase.authByEmail(email, password)
-      : await authUseCase.authByUsername(username, password)
+    username !== (null ?? '')
+      ? await authUseCase.authByUsername(username, password)
+      : await authUseCase.authByEmail(email, password)
 
   res.status(200).json(tokens)
 })

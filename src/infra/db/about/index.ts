@@ -1,3 +1,3 @@
-import { AboutPagesSqliteRepository } from './sqlite/about-page-sqlite.repository'
+import { AboutPagesPostgresRepository } from './postgres/about-page-postgres.repository'
 
-export { AboutPagesSqliteRepository as AboutPageRepository }
+export { AboutPagesPostgresRepository as AboutPageRepository }

@@ -1,5 +1,3 @@
-import { Request, Response, Router } from 'express'
-
 import { UnauthorizedError } from '@application/helpers/api-erros'
 import { AuthUserUseCase } from '@application/user/auth/auth-user.use-case'
 import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
@@ -11,6 +9,8 @@ import githubAuth from '@infra/github/github-auth'
 import githubFetchUser from '@infra/github/github-fetch-user'
 import { AuthWithAccessTokenResponseType } from '@infra/http/types/Auth'
 import { sign } from '@infra/jwt'
+import { Request, Response, Router } from 'express'
+
 import { decodeToken } from './decodeToken'
 import { expressVerifyToken } from './verifyToken'
 
@@ -24,25 +24,30 @@ const refreshTokenUseCase = new CreateRefreshTokenUseCase(userRepository)
 
 authRoute.post('/', async (req: Request, res: Response) => {
   const { username, email, password } = req.body
-  const user =
-    username !== (null ?? '')
-      ? await getUserUseCase.byUsername(username)
-      : await getUserUseCase.byEmail(email)
-  const tokens =
-    username !== (null ?? '')
-      ? await authUseCase.authByUsername(username, password)
-      : await authUseCase.authByEmail(email, password)
+  try {
+    const user =
+      username !== (null ?? '')
+        ? await getUserUseCase.byUsername(username)
+        : await getUserUseCase.byEmail(email)
+    const tokens =
+      username !== (null ?? '')
+        ? await authUseCase.authByUsername(username, password)
+        : await authUseCase.authByEmail(email, password)
 
-  res.status(200).json({
-    ...tokens,
-    user: {
-      ...user,
-      avatar: {
-        url: user.avatar_url,
-        alt: user.avatar_alt
+    return res.status(200).json({
+      ...tokens,
+      user: {
+        ...user,
+        avatar: {
+          url: user.avatar_url,
+          alt: user.avatar_alt
+        }
       }
-    }
-  })
+    })
+  } catch (error) {
+    console.log(error)
+    if (error instanceof Error) throw new UnauthorizedError('Credentials invalid.')
+  }
 })
 
 authRoute.post('/refresh-token', async (req: Request, res: Response) => {

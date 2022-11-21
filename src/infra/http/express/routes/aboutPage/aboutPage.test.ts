@@ -114,11 +114,7 @@ describe('Express - About Page', () => {
     }
 
     await createAboutPageUseCase.execute(aboutPageMock)
-    const response = await request(app)
-      .get('/about')
-      .send({
-        domain: userMock.domain
-      })
+    const response = await request(app).get(`/about/user_id/${userMock.id}`)
 
     expect(response.status).toBe(200)
     expect(response.body).toEqual(aboutPageMock)

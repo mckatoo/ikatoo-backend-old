@@ -9,17 +9,21 @@ const aboutPageRoute = Router()
 
 const aboutPageRepository = new AboutPageRepository()
 
-aboutPageRoute.post('/about', expressVerifyToken, async (req: Request, res: Response) => {
-  const createUseCase = new CreateAboutPageUseCase(aboutPageRepository)
-  const output = await createUseCase.execute(req.body)
+aboutPageRoute.post(
+  '/about',
+  expressVerifyToken,
+  async (req: Request, res: Response) => {
+    const createUseCase = new CreateAboutPageUseCase(aboutPageRepository)
+    const output = await createUseCase.execute(req.body)
 
-  res.status(201).json(output)
-})
+    res.status(201).json(output)
+  }
+)
 
-aboutPageRoute.get('/about', async (req: Request, res: Response) => {
-  const { domain } = req.body
+aboutPageRoute.get('/about/user_id/:userId', async (req: Request, res: Response) => {
+  const { userId } = req.params
   const getUseCase = new GetAboutPageUseCase(aboutPageRepository)
-  const output = await getUseCase.getByDomain(domain)
+  const output = await getUseCase.getByUserId(userId)
 
   res.status(200).json(output)
 })

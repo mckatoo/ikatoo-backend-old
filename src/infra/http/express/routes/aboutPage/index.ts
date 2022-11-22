@@ -20,12 +20,26 @@ aboutPageRoute.post(
   }
 )
 
-aboutPageRoute.get('/about/user_id/:userId', async (req: Request, res: Response) => {
-  const { userId } = req.params
-  const getUseCase = new GetAboutPageUseCase(aboutPageRepository)
-  const output = await getUseCase.getByUserId(userId)
+aboutPageRoute.get(
+  '/about/user_id/:userId',
+  async (req: Request, res: Response) => {
+    const { userId } = req.params
+    const getUseCase = new GetAboutPageUseCase(aboutPageRepository)
+    const output = await getUseCase.getByUserId(userId)
 
-  res.status(200).json(output)
-})
+    res.status(200).json(output)
+  }
+)
+
+aboutPageRoute.get(
+  '/about/domain/:domain',
+  async (req: Request, res: Response) => {
+    const { domain } = req.params
+    const getUseCase = new GetAboutPageUseCase(aboutPageRepository)
+    const output = await getUseCase.getByDomain(domain)
+
+    res.status(200).json(output)
+  }
+)
 
 export default aboutPageRoute

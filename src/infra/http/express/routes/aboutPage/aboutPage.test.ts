@@ -144,4 +144,28 @@ describe('Express - About Page', () => {
     expect(response.status).toBe(200)
     expect(response.body).toEqual(aboutPageMock)
   })
+
+  it('should update about page', async () => {
+    const aboutPageMock = {
+      id: generateString(),
+      title: generateString(),
+      description: generateString(),
+      user_id: generateString()
+    }
+    const newAboutPage = {
+      ...aboutPageMock,
+      title: `New Title ${generateString()}`,
+      description: `New description ${generateString()}`
+    }
+    await aboutPageRepository.create(aboutPageMock)
+    const response = await request(app)
+      .put('/about')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(newAboutPage)
+
+    const aboutPage = await getAboutPageUseCase.getByUserId(aboutPageMock.user_id)
+
+    expect(response.status).toBe(201)
+    expect(aboutPage).toEqual(newAboutPage)
+  })
 })

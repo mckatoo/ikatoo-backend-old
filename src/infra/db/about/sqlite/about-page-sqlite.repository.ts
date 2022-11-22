@@ -1,9 +1,14 @@
-import { AboutPageRepositoryInterface, AboutPageWithId } from '@domain/about/about-page.repository'
+import {
+  AboutPageRepositoryInterface,
+  AboutPageUpdateType,
+  AboutPageWithId
+} from '@domain/about/about-page.repository'
 import { randomUUID } from 'crypto'
 
 import database from './database'
 
-export class AboutPagesSqliteRepository implements AboutPageRepositoryInterface {
+export class AboutPagesSqliteRepository
+implements AboutPageRepositoryInterface {
   async getAll (): Promise<AboutPageWithId[]> {
     const db = await database()
     const allAboutPage = await db.all<AboutPageWithId[]>(
@@ -25,6 +30,20 @@ export class AboutPagesSqliteRepository implements AboutPageRepositoryInterface 
       aboutPage.title,
       aboutPage.description,
       aboutPage.user_id
+    )
+
+    await db.close()
+  }
+
+  async update (aboutPage: AboutPageUpdateType): Promise<void> {
+    const db = await database()
+
+    await db.run(
+      'update aboutPages set(title = ?, description = ?, user_id = ?) where id = ?',
+      aboutPage.title,
+      aboutPage.description,
+      aboutPage.user_id,
+      aboutPage.id
     )
 
     await db.close()

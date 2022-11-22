@@ -1,4 +1,4 @@
-import { AboutPageRepositoryInterface, AboutPageWithId } from '@domain/about/about-page.repository'
+import { AboutPageRepositoryInterface, AboutPageUpdateType, AboutPageWithId } from '@domain/about/about-page.repository'
 import { randomUUID } from 'crypto'
 
 import database from './database'
@@ -23,6 +23,17 @@ export class AboutPagesPostgresRepository implements AboutPageRepositoryInterfac
         aboutPage.title,
         aboutPage.description,
         aboutPage.user_id
+      ]
+    )
+  }
+
+  async update (aboutPage: AboutPageUpdateType): Promise<void> {
+    const db = await database()
+    await db.none(
+      'update aboutPages set title = $2, description = $3 where id = $1', [
+        aboutPage.id,
+        aboutPage.title,
+        aboutPage.description
       ]
     )
   }

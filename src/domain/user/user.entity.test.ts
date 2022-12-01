@@ -7,7 +7,7 @@ describe('Test User Test', () => {
     email: 'test@email.com',
     username: 'user1',
     password: 'pass123',
-    domain: 'localhost',
+    is_admin: true,
     avatar_url: '',
     avatar_alt: ''
   }
@@ -54,12 +54,5 @@ describe('Test User Test', () => {
     user.updatePassword('newPass')
 
     expect(user.password).toBe('newPass')
-  })
-
-  it('should update Domain', () => {
-    const user = new User(userData)
-    user.updateDomain('newHost')
-
-    expect(user.domain).toBe('newHost')
   })
 })

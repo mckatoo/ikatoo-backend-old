@@ -6,14 +6,17 @@ import { UserSqliteRepository } from './user-sqlite.repository'
 describe('User Sqlite repository', () => {
   const repository = new UserSqliteRepository()
 
-  it('Should insert user', async () => {
+  beforeEach(async () => {
     await repository.clear()
+  })
+
+  it('Should insert user', async () => {
     const mock1 = {
       name: generateString(),
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -22,7 +25,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -31,7 +34,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -54,7 +57,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -71,14 +74,17 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
     await repository.create(mock)
     const user = await repository.getById(mock.id)
 
-    expect(user).toEqual(mock)
+    expect(user).toEqual({
+      ...mock,
+      is_admin: +mock.is_admin
+    })
   })
 
   it('should get a user by username', async () => {
@@ -87,7 +93,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -96,7 +102,8 @@ describe('User Sqlite repository', () => {
 
     expect(user).toEqual({
       id: user?.id,
-      ...mock
+      ...mock,
+      is_admin: +mock.is_admin
     })
   })
 
@@ -106,7 +113,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -116,26 +123,28 @@ describe('User Sqlite repository', () => {
 
     expect(user).toEqual({
       id: user?.id,
-      ...mock
+      ...mock,
+      is_admin: +mock.is_admin
     })
   })
 
-  it('should get a user by domain', async () => {
+  it('should get a user by admin', async () => {
     const mock = {
       name: generateString(),
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
     await repository.create(mock)
-    const user = await repository.getByDomain(mock.domain)
+    const user = await repository.getAdmin()
 
     expect(user).toEqual({
       id: user?.id,
-      ...mock
+      ...mock,
+      is_admin: +mock.is_admin
     })
   })
 
@@ -145,7 +154,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -154,7 +163,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -166,11 +175,13 @@ describe('User Sqlite repository', () => {
     expect(users).toEqual([
       {
         id: users[0].id,
-        ...mock1
+        ...mock1,
+        is_admin: +mock1.is_admin
       },
       {
         id: users[1].id,
-        ...mock2
+        ...mock2,
+        is_admin: +mock2.is_admin
       }
     ])
   })
@@ -184,7 +195,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -194,7 +205,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -204,7 +215,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -214,20 +225,25 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
-    await db.run(`insert into users (id, name, username, email, password, domain, avatar_url, avatar_alt) values
-    ('${user1.id}', '${user1.name}', '${user1.username}', '${user1.email}', '${user1.password}', '${user1.domain}', '${user1.avatar_url}', '${user1.avatar_alt}'),
-    ('${user2.id}', '${user2.name}', '${user2.username}', '${user2.email}', '${user2.password}', '${user2.domain}', '${user2.avatar_url}', '${user2.avatar_alt}'),
-    ('${user3.id}', '${user3.name}', '${user3.username}', '${user3.email}', '${user3.password}', '${user3.domain}', '${user3.avatar_url}', '${user3.avatar_alt}'),
-    ('${user4.id}', '${user4.name}', '${user4.username}', '${user4.email}', '${user4.password}', '${user4.domain}', '${user4.avatar_url}', '${user4.avatar_alt}')
+    await db.run(`insert into users (id, name, username, email, password, is_admin, avatar_url, avatar_alt) values
+    ('${user1.id}', '${user1.name}', '${user1.username}', '${user1.email}', '${user1.password}', '${user1.is_admin.toString()}', '${user1.avatar_url}', '${user1.avatar_alt}'),
+    ('${user2.id}', '${user2.name}', '${user2.username}', '${user2.email}', '${user2.password}', '${user2.is_admin.toString()}', '${user2.avatar_url}', '${user2.avatar_alt}'),
+    ('${user3.id}', '${user3.name}', '${user3.username}', '${user3.email}', '${user3.password}', '${user3.is_admin.toString()}', '${user3.avatar_url}', '${user3.avatar_alt}'),
+    ('${user4.id}', '${user4.name}', '${user4.username}', '${user4.email}', '${user4.password}', '${user4.is_admin.toString()}', '${user4.avatar_url}', '${user4.avatar_alt}')
     `)
 
     const users = await repository.getAll()
 
-    expect(users).toEqual([user1, user2, user3, user4])
+    expect(users).toEqual([
+      { ...user1, is_admin: user1.is_admin.toString() },
+      { ...user2, is_admin: user2.is_admin.toString() },
+      { ...user3, is_admin: user3.is_admin.toString() },
+      { ...user4, is_admin: user4.is_admin.toString() }
+    ])
   })
 
   it('should delete a row of the registers', async () => {
@@ -236,7 +252,7 @@ describe('User Sqlite repository', () => {
       username: generateString(),
       email: `${generateString()}@sqlite.com4`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -245,7 +261,8 @@ describe('User Sqlite repository', () => {
 
     expect(user).toEqual({
       id: user?.id,
-      ...mock
+      ...mock,
+      is_admin: +mock.is_admin
     })
     await repository.remove(user?.id ?? '')
 

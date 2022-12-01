@@ -24,7 +24,7 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       user.username,
       user.password,
       user.email,
-      user.domain,
+      user.is_admin,
       user.avatar_url,
       user.avatar_alt
     )
@@ -67,13 +67,10 @@ export class UserSqliteRepository implements UserRepositoryInterface {
     return user
   }
 
-  async getByDomain (domain: string): Promise<UserWithId | undefined> {
+  async getAdmin (): Promise<UserWithId | undefined> {
     const db = await database()
     const user = await db.get<UserWithId>(
-      'select * from users where domain = $domain',
-      {
-        $domain: domain
-      }
+      'select * from users where is_admin = true'
     )
     await db.close()
 
@@ -107,7 +104,7 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       username = ?,
       password = ?,
       email = ?,
-      domain = ?,
+      is_admin = ?,
       avatar_url = ?,
       avatar_alt = ?
       where id = ?`,
@@ -116,7 +113,7 @@ export class UserSqliteRepository implements UserRepositoryInterface {
       user.username,
       user.password,
       user.email,
-      user.domain,
+      user.is_admin,
       user.avatar_url,
       user.avatar_alt,
       id

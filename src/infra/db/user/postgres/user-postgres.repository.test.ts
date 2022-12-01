@@ -18,7 +18,7 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -27,7 +27,7 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -36,7 +36,7 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -59,7 +59,7 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -74,7 +74,7 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -90,7 +90,7 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -109,7 +109,7 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -123,18 +123,28 @@ describe('User Postgres repository', () => {
     })
   })
 
-  it('should get a user by domain', async () => {
+  it('should get the admin user', async () => {
     const mock = {
       name: generateString(),
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
+    const mock2 = {
+      name: generateString(),
+      username: generateString(),
+      email: generateString(),
+      password: generateString(),
+      is_admin: false,
+      avatar_url: '',
+      avatar_alt: ''
+    }
+    await repository.create(mock2)
     await repository.create(mock)
-    const user = await repository.getByDomain(mock.domain)
+    const user = await repository.getAdmin()
 
     expect(user).toEqual({
       id: user?.id,
@@ -148,7 +158,7 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -157,7 +167,7 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: generateString(),
       password: generateString(),
-      domain: generateString(),
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -187,7 +197,7 @@ describe('User Postgres repository', () => {
         username: generateString(),
         email: `${generateString()}@mail.com`,
         password: generateString(),
-        domain: `${generateString()}.com`,
+        is_admin: false,
         avatar_url: generateString(),
         avatar_alt: generateString()
       }
@@ -204,7 +214,7 @@ describe('User Postgres repository', () => {
           '${mockedUsers[index].username}',
           '${mockedUsers[index].email}',
           '${mockedUsers[index].password}',
-          '${mockedUsers[index].domain}',
+          '${mockedUsers[index].is_admin.toString()}',
           '${mockedUsers[index].avatar_url}',
           '${mockedUsers[index].avatar_alt}')
           ${index < mockedUsers.length - 1 ? ',' : ''}
@@ -212,7 +222,7 @@ describe('User Postgres repository', () => {
     }
 
     const insertQuery = `insert into users (
-      id, name, username, email, password, domain, avatar_url, avatar_alt
+      id, name, username, email, password, is_admin, avatar_url, avatar_alt
       ) values ${formatedUsers}`
 
     const db = await database()
@@ -228,7 +238,7 @@ describe('User Postgres repository', () => {
       username: generateString(),
       email: `${generateString()}@postgres.com4`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }

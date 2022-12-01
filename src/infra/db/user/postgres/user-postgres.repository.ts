@@ -21,7 +21,7 @@ export class UserPostgresRepository implements UserRepositoryInterface {
         user.username,
         user.password,
         user.email,
-        user.domain,
+        user.is_admin,
         user.avatar_url,
         user.avatar_alt
       ]
@@ -57,11 +57,11 @@ export class UserPostgresRepository implements UserRepositoryInterface {
     } catch {}
   }
 
-  async getByDomain (domain: string): Promise<UserWithId | undefined> {
+  async getAdmin (): Promise<UserWithId | undefined> {
     const db = await database()
     try {
       const user = await db.one<UserWithId>(
-        'select * from users where domain = $1', domain
+        'select * from users where is_admin = true'
       )
       return user
     } catch (error) {
@@ -95,7 +95,7 @@ export class UserPostgresRepository implements UserRepositoryInterface {
       username = $3,
       password = $4,
       email = $5,
-      domain = $6,
+      is_admin = $6,
       avatar_url = $7,
       avatar_alt = $8
       where id = $1`, [
@@ -104,7 +104,7 @@ export class UserPostgresRepository implements UserRepositoryInterface {
         user.username,
         user.password,
         user.email,
-        user.domain,
+        user.is_admin,
         user.avatar_url,
         user.avatar_alt
       ]

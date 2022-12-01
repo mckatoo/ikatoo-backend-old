@@ -7,7 +7,7 @@ export default async () => {
     username varchar(100) NOT NULL UNIQUE, 
     password varchar(100) NOT NULL, 
     email varchar(100) NOT NULL UNIQUE,
-    domain varchar(100) NOT NULL UNIQUE,
+    is_admin boolean NOT NULL,
     avatar_url varchar(200),
     avatar_alt varchar(200)
     )`)

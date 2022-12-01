@@ -5,7 +5,7 @@ export interface UserProps {
   username: string
   password: string
   email: string
-  domain: string
+  is_admin: boolean
   avatar_url: string
   avatar_alt: string
 }
@@ -59,12 +59,8 @@ export class User {
     return this.props.email
   }
 
-  updateDomain (domain: string) {
-    this.props.domain = domain
-  }
-
-  get domain (): string {
-    return this.props.domain
+  get isAdmin (): boolean {
+    return this.props.is_admin
   }
 
   get avatar_url () {

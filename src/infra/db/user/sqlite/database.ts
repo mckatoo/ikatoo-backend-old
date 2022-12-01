@@ -13,7 +13,7 @@ export default async () => {
     username text NOT NULL UNIQUE, 
     password text NOT NULL, 
     email text NOT NULL UNIQUE,
-    domain text NOT NULL UNIQUE,
+    is_admin boolean NOT NULL,
     avatar_url text,
     avatar_alt text
     )`)

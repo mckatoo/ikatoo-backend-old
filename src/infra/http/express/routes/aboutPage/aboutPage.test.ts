@@ -23,12 +23,13 @@ describe('Express - About Page', () => {
     username: generateString(),
     email: `${generateString()}@katoo.com`,
     password: 'teste12345',
-    domain: `${generateString()}.com.br`,
+    is_admin: true,
     avatar_url: '',
     avatar_alt: ''
   }
 
   beforeAll(async () => {
+    await userRepository.clear()
     const user = await createUserUseCase.execute(userMock)
     const authResponse = await request(app).post('/auth').send({
       username: user?.username,
@@ -98,7 +99,7 @@ describe('Express - About Page', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -113,33 +114,6 @@ describe('Express - About Page', () => {
 
     await createAboutPageUseCase.execute(aboutPageMock)
     const response = await request(app).get(`/about/user_id/${userMock.id}`)
-
-    expect(response.status).toBe(200)
-    expect(response.body).toEqual(aboutPageMock)
-  })
-
-  it('should get about page data by domain', async () => {
-    const userMock = {
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@katoo.com`,
-      password: 'teste12345',
-      domain: `${generateString()}.com.br`,
-      avatar_url: '',
-      avatar_alt: ''
-    }
-    await createUserUseCase.execute(userMock)
-
-    const aboutPageMock = {
-      id: generateString(),
-      title: generateString(),
-      description: generateString(),
-      user_id: userMock.id
-    }
-
-    await createAboutPageUseCase.execute(aboutPageMock)
-    const response = await request(app).get(`/about/domain/${userMock.domain}`)
 
     expect(response.status).toBe(200)
     expect(response.body).toEqual(aboutPageMock)

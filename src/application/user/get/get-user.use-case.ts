@@ -16,7 +16,7 @@ export class GetUserUseCase {
       name: user.name,
       username: user.username,
       email: user.email,
-      domain: user.domain,
+      is_admin: user.is_admin,
       avatar_url: user.avatar_url,
       avatar_alt: user.avatar_alt
     }
@@ -31,14 +31,14 @@ export class GetUserUseCase {
       name: user.name,
       username: user.username,
       email: user.email,
-      domain: user.domain,
+      is_admin: user.is_admin,
       avatar_url: user.avatar_url,
       avatar_alt: user.avatar_alt
     }
   }
 
-  async byDomain (domain: string): Promise<Required<GetUserOutput>> {
-    const user = await this.userRepository.getByDomain(domain)
+  async byAdmin (): Promise<Required<GetUserOutput>> {
+    const user = await this.userRepository.getAdmin()
     if (user == null || user.id == null) throw new NotFoundError('User not found.')
 
     return {
@@ -46,7 +46,7 @@ export class GetUserUseCase {
       name: user.name,
       username: user.username,
       email: user.email,
-      domain: user.domain,
+      is_admin: user.is_admin,
       avatar_url: user.avatar_url,
       avatar_alt: user.avatar_alt
     }
@@ -61,7 +61,7 @@ export class GetUserUseCase {
       name: user.name,
       username: user.username,
       email: user.email,
-      domain: user.domain,
+      is_admin: user.is_admin,
       avatar_url: user.avatar_url,
       avatar_alt: user.avatar_alt
     }

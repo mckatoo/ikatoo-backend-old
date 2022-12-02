@@ -8,13 +8,17 @@ describe('Get User use-case Test', () => {
   const createUseCase = new CreateUserUseCase(repository)
   const getUseCase = new GetUserUseCase(repository)
 
+  beforeEach(async () => {
+    await repository.clear()
+  })
+
   it('should get a user by email', async () => {
     const user = {
       name: generateString(),
       email: `${generateString()}@email.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -34,7 +38,7 @@ describe('Get User use-case Test', () => {
       email: `${generateString()}@email.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -48,18 +52,18 @@ describe('Get User use-case Test', () => {
     })
   })
 
-  it('should get a user by domain', async () => {
+  it('should get the admin user', async () => {
     const user = {
       name: generateString(),
       email: `${generateString()}@email.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
     await createUseCase.execute(user)
-    const expected = await getUseCase.byUsername(user.username)
+    const expected = await getUseCase.byAdmin()
 
     expect(expected).toEqual({
       id: expected.id,
@@ -75,7 +79,7 @@ describe('Get User use-case Test', () => {
       email: `${generateString()}@email.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }

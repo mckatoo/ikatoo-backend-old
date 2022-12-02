@@ -15,12 +15,13 @@ describe('Express - User', () => {
     username: generateString(),
     email: `${generateString()}@domain.com`,
     password: 'teste12345',
-    domain: `${generateString()}.com.br`,
+    is_admin: true,
     avatar_url: '',
     avatar_alt: ''
   }
 
   beforeAll(async () => {
+    await userRepository.clear()
     await createUseCase.execute(userMock)
     const authResponse = await request(app)
       .post('/auth')
@@ -39,7 +40,7 @@ describe('Express - User', () => {
         username: generateString(),
         email: `${generateString()}@user2.com`,
         password: '123teste312',
-        domain: `${generateString()}.com.br`,
+        is_admin: false,
         avatar_url: '',
         avatar_alt: ''
       })
@@ -57,7 +58,7 @@ describe('Express - User', () => {
         username: generateString(),
         email: `${generateString()}@user2.com`,
         password: '123teste312',
-        domain: `${generateString()}.com.br`,
+        is_admin: false,
         avatar_url: '',
         avatar_alt: ''
       })
@@ -73,7 +74,7 @@ describe('Express - User', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -94,7 +95,7 @@ describe('Express - User', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }

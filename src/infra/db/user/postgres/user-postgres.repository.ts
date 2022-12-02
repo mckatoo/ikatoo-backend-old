@@ -66,6 +66,7 @@ export class UserPostgresRepository implements UserRepositoryInterface {
       return user
     } catch (error) {
       if (error instanceof Error) {
+        if (error.message.includes('No data returned from the query')) return
         throw new Error(error.message)
       }
     }

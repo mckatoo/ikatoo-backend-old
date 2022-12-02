@@ -11,6 +11,9 @@ export class CreateUserUseCase {
   constructor (private readonly repository: UserRepositoryInterface) {}
 
   async execute (input: CreateUserInput): Promise<CreateUserOutput | undefined> {
+    const adminUser = await this.repository.getAdmin()
+    if ((adminUser == null) && !input.is_admin) throw new ConflictError('The first user should be an admin.')
+
     let userExists = await this.repository.getByEmail(input.email)
     if (userExists != null) throw new ConflictError('User already exists')
     const user = User.create(

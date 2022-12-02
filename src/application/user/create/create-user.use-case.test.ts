@@ -81,4 +81,23 @@ describe('Create User use-case Test', () => {
       'User already exists'
     )
   })
+
+  it('should first user to be created must be an admin', async () => {
+    const mock = {
+      id: generateString(),
+      name: generateString(),
+      email: `${generateString()}@mail.com`,
+      username: generateString(),
+      password: generateString(),
+      is_admin: false,
+      avatar_url: '',
+      avatar_alt: ''
+    }
+
+    await expect(createUseCase.execute(mock)).rejects.toThrowError(
+      'The first user should be an admin.'
+    )
+  })
+
+  it.todo('should have only one admin')
 })

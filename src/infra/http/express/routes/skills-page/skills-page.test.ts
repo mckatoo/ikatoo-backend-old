@@ -23,12 +23,13 @@ describe('Express - Skills Page', () => {
     username: generateString(),
     email: `${generateString()}@katoo.com`,
     password: 'teste12345',
-    domain: `${generateString()}.com.br`,
+    is_admin: true,
     avatar_url: '',
     avatar_alt: ''
   }
 
   beforeAll(async () => {
+    await userRepository.clear()
     const user = await createUserUseCase.execute(userMock)
     const authResponse = await request(app).post('/auth').send({
       username: user?.username,
@@ -80,7 +81,7 @@ describe('Express - Skills Page', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -95,10 +96,8 @@ describe('Express - Skills Page', () => {
 
     await createSkillsPageUseCase.execute(skillsPageMock)
     const response = await request(app)
-      .get('/skills-page')
-      .send({
-        domain: userMock.domain
-      })
+      .get(`/skills-page/user/${userMock.id}`)
+      .send()
 
     expect(response.status).toBe(200)
     expect(response.body).toEqual(skillsPageMock)

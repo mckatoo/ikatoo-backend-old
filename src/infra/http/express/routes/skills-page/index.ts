@@ -16,10 +16,10 @@ skillsPageRoute.post('/skills-page', expressVerifyToken, async (req: Request, re
   res.status(201).send()
 })
 
-skillsPageRoute.get('/skills-page', async (req: Request, res: Response) => {
-  const { domain } = req.body
+skillsPageRoute.get('/skills-page/user/:userId', async (req: Request, res: Response) => {
+  const { userId } = req.params
   const getUseCase = new GetSkillsPageUseCase(skillsPageRepository)
-  const skillsPage = await getUseCase.getByDomain(domain)
+  const skillsPage = await getUseCase.getByUserId(userId)
 
   res.status(200).json(skillsPage)
 })

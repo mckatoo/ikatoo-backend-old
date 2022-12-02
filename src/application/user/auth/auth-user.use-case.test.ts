@@ -11,13 +11,17 @@ describe('Auth User use-case Test', () => {
   const authUseCase = new AuthUserUseCase(repository)
   const createUseCase = new CreateUserUseCase(repository)
 
+  beforeEach(async () => {
+    await repository.clear()
+  })
+
   it('should authenticate a new user using username and password', async () => {
     const mock = {
       name: generateString(),
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -37,7 +41,7 @@ describe('Auth User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -69,7 +73,7 @@ describe('Auth User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -90,7 +94,7 @@ describe('Auth User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     }

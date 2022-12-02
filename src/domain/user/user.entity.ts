@@ -59,7 +59,7 @@ export class User {
     return this.props.email
   }
 
-  get isAdmin (): boolean {
+  get is_admin (): boolean {
     return this.props.is_admin
   }
 

@@ -20,12 +20,13 @@ const userMock = {
   username: generateString(),
   email: `${generateString()}@domain.com`,
   password: 'teste12345',
-  domain: `${generateString()}.com.br`,
+  is_admin: true,
   avatar_url: '',
   avatar_alt: ''
 }
 
 beforeAll(async () => {
+  await userRepository.clear()
   await createUserUseCase.execute(userMock)
   const authResponse = await request(app)
     .post('/auth')
@@ -67,7 +68,7 @@ describe('Express - Skill', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     })
@@ -100,7 +101,7 @@ describe('Express - Skill', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }

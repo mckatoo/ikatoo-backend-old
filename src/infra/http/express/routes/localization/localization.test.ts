@@ -23,12 +23,13 @@ const userMock = {
   username: generateString(),
   email: `${generateString()}@domain.com`,
   password: 'teste12345',
-  domain: `${generateString()}.com.br`,
+  is_admin: true,
   avatar_url: '',
   avatar_alt: ''
 }
 
 beforeAll(async () => {
+  await userRepository.clear()
   await createUserUseCase.execute(userMock)
   const authResponse = await request(app)
     .post('/auth')
@@ -90,34 +91,6 @@ describe('Express - Localization', () => {
     expect(response.body).toEqual(localizations[1])
   })
 
-  it('should return a error when try a location using access-token', async () => {
-    const userMock = {
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@mail.com`,
-      password: generateString(),
-      domain: `${generateString()}.com`,
-      avatar_url: '',
-      avatar_alt: ''
-    }
-    await createUserUseCase.execute(userMock)
-    const authResponse = await request(app)
-      .post('/auth')
-      .send({
-        username: userMock.username,
-        password: userMock.password
-      })
-    const token: string = authResponse.body.accessToken
-
-    const response = await request(app)
-      .get('/localization')
-      .set('Authorization', `Bearer ${token}`)
-      .send()
-
-    expect(response.status).toBe(404)
-    expect(response.body).toHaveProperty('message', 'Localization not found')
-  })
-
   it('should get localizations for a user thrown access token', async () => {
     const userMock = {
       id: generateString(),
@@ -125,7 +98,7 @@ describe('Express - Localization', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }

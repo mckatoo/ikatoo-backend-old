@@ -23,12 +23,13 @@ const userMock = {
   username: generateString(),
   email: `${generateString()}@domain.com`,
   password: 'teste12345',
-  domain: `${generateString()}.com.br`,
+  is_admin: true,
   avatar_url: '',
   avatar_alt: ''
 }
 
 beforeAll(async () => {
+  await userRepository.clear()
   await createUserUseCase.execute(userMock)
   const authResponse = await request(app)
     .post('/auth')
@@ -76,7 +77,7 @@ describe('Express - Social Links', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     })
@@ -105,90 +106,20 @@ describe('Express - Social Links', () => {
     expect(response.body).toEqual(socialLinks)
   })
 
-  it('should get social links of the user thrown access token', async () => {
-    const userMock = {
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@mail.com`,
-      password: generateString(),
-      domain: `${generateString()}.com`,
-      avatar_url: '',
-      avatar_alt: ''
-    }
-    const user = await createUserUseCase.execute(userMock)
-    const authResponse = await request(app)
-      .post('/auth')
-      .send({
-        username: userMock.username,
-        password: userMock.password
-      })
-    const token: string = authResponse.body.accessToken
-
-    let socialLinks: SocialLinksProps[] = []
-    for (let i = 0; i < 5; i++) {
-      const newSocialLink: SocialLinksProps = {
-        id: generateString(),
-        name: generateString(),
-        url: generateString(),
-        icon_url: generateString(),
-        user_id: i % 2 === 0 ? user?.id ?? '' : generateString()
-      }
-      await createSocialLinksUseCase.execute(newSocialLink)
-      if (i % 2 === 0) {
-        socialLinks = [...socialLinks, newSocialLink]
-      }
-    }
-
-    const response = await request(app)
-      .get('/social-links')
-      .set('Authorization', `Bearer ${token}`)
-      .set('origin', `https://www.${userMock.domain}`)
-      .send()
-
-    expect(response.status).toBe(200)
-    expect(response.body).toEqual(socialLinks)
-  })
-
-  it('should get social links of the user thrown domain url', async () => {
-    const userMock = {
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@mail.com`,
-      password: generateString(),
-      domain: generateString(),
-      avatar_url: '',
-      avatar_alt: ''
-    }
-    const user = await createUserUseCase.execute(userMock)
-
-    let socialLinks: SocialLinksProps[] = []
-    for (let i = 0; i < 5; i++) {
-      const newSocialLink: SocialLinksProps = {
-        id: generateString(),
-        name: generateString(),
-        url: generateString(),
-        icon_url: generateString(),
-        user_id: i % 2 === 0 ? user?.id ?? '' : generateString()
-      }
-      await createSocialLinksUseCase.execute(newSocialLink)
-      if (i % 2 === 0) {
-        socialLinks = [...socialLinks, newSocialLink]
-      }
-    }
-
-    const response = await request(app)
-      .get('/social-links')
-      .set('origin', `https://www.${userMock.domain}`)
-      .send()
-
-    expect(response.status).toBe(200)
-    expect(response.body).toEqual(socialLinks)
-  })
-
   it('should not get social links', async () => {
+    const user = await createUserUseCase.execute({
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@mail.com`,
+      password: generateString(),
+      is_admin: false,
+      avatar_url: '',
+      avatar_alt: ''
+    })
+
     const response = await request(app)
-      .get('/social-links')
-      .set('origin', `https://www.${generateString()}`)
+      .get(`/social-links/user/${user?.id ?? ''}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
     expect(response.status).toBe(200)

@@ -99,5 +99,29 @@ describe('Create User use-case Test', () => {
     )
   })
 
-  it.todo('should have only one admin')
+  it('should have only one admin', async () => {
+    await createUseCase.execute({
+      id: generateString(),
+      name: generateString(),
+      email: `${generateString()}@mail.com`,
+      username: generateString(),
+      password: generateString(),
+      is_admin: true,
+      avatar_url: '',
+      avatar_alt: ''
+    })
+
+    await expect(createUseCase.execute({
+      id: generateString(),
+      name: generateString(),
+      email: `${generateString()}@mail.com`,
+      username: generateString(),
+      password: generateString(),
+      is_admin: true,
+      avatar_url: '',
+      avatar_alt: ''
+    })).rejects.toThrowError(
+      'Admin user already exists.'
+    )
+  })
 })

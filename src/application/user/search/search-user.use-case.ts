@@ -17,7 +17,7 @@ export class SearchUserUseCase {
         name,
         username,
         email,
-        domain,
+        is_admin: isAdmin,
         avatar_url: avatarUrl,
         avatar_alt: avatarAlt
       }) => ({
@@ -25,7 +25,7 @@ export class SearchUserUseCase {
         name,
         username,
         email,
-        domain,
+        is_admin: isAdmin,
         avatar_url: avatarUrl,
         avatar_alt: avatarAlt
       })

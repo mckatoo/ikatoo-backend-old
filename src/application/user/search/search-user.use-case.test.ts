@@ -23,7 +23,7 @@ describe('Search User use-case Test', () => {
         email: `${generateString()}@user.com`,
         username: generateString(),
         password: generateString(),
-        domain: `${generateString()}.com`,
+        is_admin: index === 0,
         avatar_url: '',
         avatar_alt: ''
       }
@@ -35,7 +35,7 @@ describe('Search User use-case Test', () => {
           name: user.name,
           email: user.email,
           username: user.username,
-          domain: user.domain,
+          is_admin: user.is_admin,
           avatar_url: user.avatar_url,
           avatar_alt: user.avatar_alt
         }

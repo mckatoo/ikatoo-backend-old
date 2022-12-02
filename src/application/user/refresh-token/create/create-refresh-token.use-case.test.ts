@@ -11,13 +11,17 @@ describe('Create Refresh-Token use-case Test', () => {
   )
   const userUseCase = new CreateUserUseCase(userRepository)
 
+  beforeEach(async () => {
+    await userRepository.clear()
+  })
+
   it('should create a refresh-token', async () => {
     const user = await userUseCase.execute({
       name: generateString(),
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     })
@@ -32,7 +36,7 @@ describe('Create Refresh-Token use-case Test', () => {
       username: generateString(),
       email: `${generateString()}@mail.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: true,
       avatar_url: '',
       avatar_alt: ''
     })

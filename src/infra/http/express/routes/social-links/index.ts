@@ -30,16 +30,4 @@ socialLinksRoute.get('/social-links/user/:userId', expressVerifyToken, async (re
   res.status(200).json(output)
 })
 
-socialLinksRoute.get('/social-links', async (req: Request, res: Response) => {
-  const origin = req.headers.origin
-
-  const domain = origin?.split('/')[2].replace('www.', '')
-  if (domain == null) return res.status(200).json([])
-
-  const getUseCase = new GetSocialLinksUseCase(socialLinksRepository)
-  const socialLinks = await getUseCase.byDomain(domain)
-
-  res.status(200).json(socialLinks)
-})
-
 export default socialLinksRoute

@@ -22,7 +22,8 @@ describe('Express - Auth', () => {
   const getUserUseCase = new GetUserUseCase(userRepository)
   const authUseCase = new AuthUserUseCase(userRepository)
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    await userRepository.clear()
     app.get('/test', expressVerifyToken, (_req: Request, res: Response) => {
       res.status(200).send()
     })
@@ -35,7 +36,7 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: true,
       avatar_url: 'should authenticate a valid username -url',
       avatar_alt: 'should authenticate a valid username -alt'
     })
@@ -70,7 +71,7 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: 'should authenticate a valid username -url',
       avatar_alt: 'should authenticate a valid username -alt'
     })
@@ -98,7 +99,7 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: 'should authenticate a valid username -url',
       avatar_alt: 'should authenticate a valid username -alt'
     })
@@ -125,7 +126,7 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: 'should authenticate a valid username -url',
       avatar_alt: 'should authenticate a valid username -alt'
     })
@@ -151,7 +152,7 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     })
@@ -182,7 +183,7 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: 'should authenticate a valid username -url',
       avatar_alt: 'should authenticate a valid username -alt'
     })
@@ -214,7 +215,7 @@ describe('Express - Auth', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: 'should authenticate a valid username -url',
       avatar_alt: 'should authenticate a valid username -alt'
     })
@@ -250,7 +251,7 @@ describe('Express - Auth', () => {
       name,
       login: generateString(),
       email: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar: {
         url: 'should get github access-token -url',
         alt: name
@@ -269,7 +270,6 @@ describe('Express - Auth', () => {
 
     const githubResponse = await request(app)
       .post('/auth/github')
-      .set('origin', `https://www.${mockedApiResponse.domain}`)
       .send({ code })
 
     const databaseUser = await userRepository.getByEmail(
@@ -294,7 +294,7 @@ describe('Express - Auth', () => {
       name: generateString(),
       username: generateString(),
       email: `${generateString()}@${generateString(5)}.com`,
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: generateString(),
       avatar_alt: generateString(),
       password: generateString()
@@ -322,7 +322,6 @@ describe('Express - Auth', () => {
 
     const authResponse = await request(app)
       .post('/auth/access-token')
-      .set('origin', `https://www.${mockedUser.domain}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 

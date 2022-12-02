@@ -67,19 +67,17 @@ authRoute.post('/github', async (req: Request, res: Response) => {
 
   const githubUser = await githubFetchUser(githubAccessToken)
   if (githubUser != null) {
-    const origin = req.headers.origin
-    const domain = origin?.split('/')[2].replace('www.', '') ?? ''
     const password = generateString()
     let user
     try {
       user = await getUserUseCase.byEmail(githubUser.email)
     } catch {
       await createUserUseCase.execute({
-        domain,
         email: githubUser.email,
         name: githubUser.name,
         username: githubUser.login,
         password,
+        is_admin: false,
         avatar_url: githubUser.avatar_url,
         avatar_alt: githubUser.name
       })

@@ -16,10 +16,10 @@ contactPageRoute.post('/contact-page', expressVerifyToken, async (req: Request, 
   res.status(201).send()
 })
 
-contactPageRoute.get('/contact-page', async (req: Request, res: Response) => {
-  const { domain } = req.body
+contactPageRoute.get('/contact-page/user/:userId', async (req: Request, res: Response) => {
+  const { userId } = req.params
   const getUseCase = new GetContactPageUseCase(contactPageRepository)
-  const contactPage = await getUseCase.getByDomain(domain)
+  const contactPage = await getUseCase.getByUserId(userId)
 
   res.status(200).json(contactPage)
 })

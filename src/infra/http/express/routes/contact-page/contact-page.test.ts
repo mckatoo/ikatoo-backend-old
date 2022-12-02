@@ -25,12 +25,13 @@ describe('Express - Contact Page', () => {
     username: generateString(),
     email: `${generateString()}@katoo.com`,
     password: 'teste12345',
-    domain: `${generateString()}.com.br`,
+    is_admin: true,
     avatar_url: '',
     avatar_alt: ''
   }
 
   beforeAll(async () => {
+    await userRepository.clear()
     const user = await createUserUseCase.execute(userMock)
     const authResponse = await request(app)
       .post('/auth')
@@ -88,7 +89,7 @@ describe('Express - Contact Page', () => {
       username: generateString(),
       email: `${generateString()}@katoo.com`,
       password: 'teste12345',
-      domain: `${generateString()}.com.br`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -103,9 +104,8 @@ describe('Express - Contact Page', () => {
 
     await createContactPageUseCase.execute(contactPageMock)
     const response = await request(app)
-      .get('/contact-page')
+      .get(`/contact-page/user/${contactPageMock.user_id}`)
       .send({
-        domain: userMock.domain,
         avatar_url: '',
         avatar_alt: ''
       })

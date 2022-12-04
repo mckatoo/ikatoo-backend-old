@@ -7,17 +7,13 @@ describe('Create User use-case Test', () => {
   const repository = new UserRepository()
   const createUseCase = new CreateUserUseCase(repository)
 
-  beforeEach(async () => {
-    await repository.clear()
-  })
-
   it('should create a new user without id', async () => {
     const mock = {
       name: generateString(),
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      is_admin: true,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -39,7 +35,7 @@ describe('Create User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      is_admin: true,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -60,7 +56,7 @@ describe('Create User use-case Test', () => {
       email: `${generateString()}@mail.com`,
       username: generateString(),
       password: generateString(),
-      is_admin: true,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     })
@@ -82,35 +78,7 @@ describe('Create User use-case Test', () => {
     )
   })
 
-  it('should first user to be created must be an admin', async () => {
-    const mock = {
-      id: generateString(),
-      name: generateString(),
-      email: `${generateString()}@mail.com`,
-      username: generateString(),
-      password: generateString(),
-      is_admin: false,
-      avatar_url: '',
-      avatar_alt: ''
-    }
-
-    await expect(createUseCase.execute(mock)).rejects.toThrowError(
-      'The first user should be an admin.'
-    )
-  })
-
   it('should have only one admin', async () => {
-    await createUseCase.execute({
-      id: generateString(),
-      name: generateString(),
-      email: `${generateString()}@mail.com`,
-      username: generateString(),
-      password: generateString(),
-      is_admin: true,
-      avatar_url: '',
-      avatar_alt: ''
-    })
-
     await expect(createUseCase.execute({
       id: generateString(),
       name: generateString(),

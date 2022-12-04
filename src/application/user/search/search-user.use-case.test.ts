@@ -9,10 +9,6 @@ describe('Search User use-case Test', () => {
   const createUseCase = new CreateUserUseCase(repository)
   const searchUseCase = new SearchUserUseCase(repository)
 
-  beforeEach(async () => {
-    await repository.clear()
-  })
-
   it('should search users with last name', async () => {
     const lastname = 'search-user-use-case-test'
     let users: Array<Omit<UserWithId, 'password'>> = []
@@ -23,7 +19,7 @@ describe('Search User use-case Test', () => {
         email: `${generateString()}@user.com`,
         username: generateString(),
         password: generateString(),
-        is_admin: index === 0,
+        is_admin: false,
         avatar_url: '',
         avatar_alt: ''
       }

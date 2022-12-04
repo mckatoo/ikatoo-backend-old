@@ -23,28 +23,17 @@ describe('Express - Auth', () => {
   const authUseCase = new AuthUserUseCase(userRepository)
 
   beforeAll(async () => {
-    await userRepository.clear()
     app.get('/test', expressVerifyToken, (_req: Request, res: Response) => {
       res.status(200).send()
     })
   })
 
   it('should authenticate a valid username', async () => {
-    const user = await createUserUseCase.execute({
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@katoo.com`,
-      password: 'teste12345',
-      is_admin: true,
-      avatar_url: 'should authenticate a valid username -url',
-      avatar_alt: 'should authenticate a valid username -alt'
-    })
     const response = await request(app)
       .post('/auth')
       .send({
-        username: user?.username,
-        password: 'teste12345'
+        username: 'test',
+        password: 'test'
       })
 
     expect(response.status).toBe(200)
@@ -65,76 +54,44 @@ describe('Express - Auth', () => {
   })
 
   it('should get user id an through token', async () => {
-    const user = await createUserUseCase.execute({
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@katoo.com`,
-      password: 'teste12345',
-      is_admin: false,
-      avatar_url: 'should authenticate a valid username -url',
-      avatar_alt: 'should authenticate a valid username -alt'
-    })
     const response = await request(app)
       .post('/auth')
       .send({
-        username: user?.username,
-        password: 'teste12345'
+        username: 'test',
+        password: 'test'
       })
 
     const accessToken: string = response.body.accessToken
     const decodedAccessToken = decodeToken(accessToken)
 
-    expect(decodedAccessToken.userId).toBe(user?.id)
+    expect(decodedAccessToken.userId).toBe('testId')
 
     const refreshToken = response.body.refreshToken
-
-    expect(decodeToken(refreshToken).userId).toBe(user?.id)
+    expect(decodeToken(refreshToken).userId).toBe('testId')
   })
 
   it('should get accessToken with expiration time in 1h', async () => {
-    const user = await createUserUseCase.execute({
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@katoo.com`,
-      password: 'teste12345',
-      is_admin: false,
-      avatar_url: 'should authenticate a valid username -url',
-      avatar_alt: 'should authenticate a valid username -alt'
-    })
     const response = await request(app)
       .post('/auth')
       .send({
-        username: user?.username,
-        password: 'teste12345'
+        username: 'test',
+        password: 'test'
       })
 
     const accessToken: string = response.body.accessToken
     const decodedAccessToken = decodeToken(accessToken)
 
-    expect(decodedAccessToken.userId).toBe(user?.id)
     expect(decodedAccessToken.expiresIn - decodedAccessToken.generatedAt).toBe(
       60 * 60
     )
   })
 
   it('should get refreshToken with expiration time in 2 days', async () => {
-    const user = await createUserUseCase.execute({
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@katoo.com`,
-      password: 'teste12345',
-      is_admin: false,
-      avatar_url: 'should authenticate a valid username -url',
-      avatar_alt: 'should authenticate a valid username -alt'
-    })
     const response = await request(app)
       .post('/auth')
       .send({
-        username: user?.username,
-        password: 'teste12345'
+        username: 'test',
+        password: 'test'
       })
 
     const refreshToken = response.body.refreshToken
@@ -146,21 +103,11 @@ describe('Express - Auth', () => {
   })
 
   it('should get new accessTokens and refreshToken using the refreshToken', async () => {
-    const user = await createUserUseCase.execute({
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@katoo.com`,
-      password: 'teste12345',
-      is_admin: false,
-      avatar_url: '',
-      avatar_alt: ''
-    })
     const response = await request(app)
       .post('/auth')
       .send({
-        username: user?.username,
-        password: 'teste12345'
+        username: 'test',
+        password: 'test'
       })
 
     const responseRefreshToken = await request(app)
@@ -172,26 +119,16 @@ describe('Express - Auth', () => {
     const decodedRefreshToken = decodeToken(refreshToken)
 
     expect(responseRefreshToken.status).toBe(200)
-    expect(decodedAccessToken.userId).toBe(user?.id)
-    expect(decodedRefreshToken.userId).toBe(user?.id)
+    expect(decodedAccessToken.userId).toBe('testId')
+    expect(decodedRefreshToken.userId).toBe('testId')
   })
 
   it('should access protected route with AccessToken obtained through RefreshToken', async () => {
-    const user = await createUserUseCase.execute({
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@katoo.com`,
-      password: 'teste12345',
-      is_admin: false,
-      avatar_url: 'should authenticate a valid username -url',
-      avatar_alt: 'should authenticate a valid username -alt'
-    })
     const responseAuth = await request(app)
       .post('/auth')
       .send({
-        username: user?.username,
-        password: 'teste12345'
+        username: 'test',
+        password: 'test'
       })
 
     const responseRefreshToken = await request(app)
@@ -209,22 +146,11 @@ describe('Express - Auth', () => {
   })
 
   it.skip('should expire token', async () => {
-    const user = await createUserUseCase.execute({
-      id: generateString(),
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@katoo.com`,
-      password: 'teste12345',
-      is_admin: false,
-      avatar_url: 'should authenticate a valid username -url',
-      avatar_alt: 'should authenticate a valid username -alt'
-    })
-
     const { body } = await request(app)
       .post('/auth')
       .send({
-        username: user?.username,
-        password: 'teste12345'
+        username: 'test',
+        password: 'test'
       })
     const accessToken: string = body.accessToken
     const responseBeforeExpiration = await request(app)

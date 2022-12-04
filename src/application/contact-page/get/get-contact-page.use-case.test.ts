@@ -19,7 +19,7 @@ describe('Get Skills Page use-case Test', () => {
       username: generateString(),
       email: `${generateString()}@email.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }
@@ -35,7 +35,7 @@ describe('Get Skills Page use-case Test', () => {
     const contactPageDataByUserId = await getUseCase.getByUserId(
       contactPageData.user_id
     )
-    const contactPageByDomain = await getUseCase.getByDomain(user?.domain ?? '')
+    const contactPage = await getUseCase.getByUserId(user?.id ?? '')
     expect(contactPageDataByUserId).toHaveProperty(
       'title',
       contactPageData.title
@@ -44,6 +44,6 @@ describe('Get Skills Page use-case Test', () => {
       'description',
       contactPageData.description
     )
-    expect(contactPageByDomain).toEqual(contactPageDataByUserId)
+    expect(contactPage).toEqual(contactPageDataByUserId)
   })
 })

@@ -17,23 +17,10 @@ describe('Express - Skills Page', () => {
 
   let accessToken: string
 
-  const userMock = {
-    id: generateString(),
-    name: generateString(),
-    username: generateString(),
-    email: `${generateString()}@katoo.com`,
-    password: 'teste12345',
-    is_admin: true,
-    avatar_url: '',
-    avatar_alt: ''
-  }
-
   beforeAll(async () => {
-    await userRepository.clear()
-    const user = await createUserUseCase.execute(userMock)
     const authResponse = await request(app).post('/auth').send({
-      username: user?.username,
-      password: 'teste12345'
+      username: 'test',
+      password: 'test'
     })
     accessToken = authResponse.body.accessToken
   })
@@ -42,7 +29,7 @@ describe('Express - Skills Page', () => {
     const skillsPageMock = {
       title: generateString(),
       description: generateString(),
-      user_id: userMock.id
+      user_id: 'testId'
     }
     const response = await request(app)
       .post('/skills-page')

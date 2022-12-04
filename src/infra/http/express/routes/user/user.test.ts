@@ -1,33 +1,16 @@
-import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
-import { UserRepository } from '@infra/db/user'
 import { generateString } from '@infra/generate'
 import app from '@infra/http/express/app'
 import request from 'supertest'
 
 describe('Express - User', () => {
-  const userRepository = new UserRepository()
-  const createUseCase = new CreateUserUseCase(userRepository)
   let accessToken: string
 
-  const userMock = {
-    id: generateString(),
-    name: generateString(),
-    username: generateString(),
-    email: `${generateString()}@domain.com`,
-    password: 'teste12345',
-    is_admin: true,
-    avatar_url: '',
-    avatar_alt: ''
-  }
-
   beforeAll(async () => {
-    await userRepository.clear()
-    await createUseCase.execute(userMock)
     const authResponse = await request(app)
       .post('/auth')
       .send({
-        username: userMock.username,
-        password: 'teste12345'
+        username: 'test',
+        password: 'test'
       })
     accessToken = authResponse.body.accessToken
   })

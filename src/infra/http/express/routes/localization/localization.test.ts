@@ -17,25 +17,12 @@ const userRepository = new UserRepository()
 const createUserUseCase = new CreateUserUseCase(userRepository)
 let accessToken: string
 
-const userMock = {
-  id: generateString(),
-  name: generateString(),
-  username: generateString(),
-  email: `${generateString()}@domain.com`,
-  password: 'teste12345',
-  is_admin: true,
-  avatar_url: '',
-  avatar_alt: ''
-}
-
 beforeAll(async () => {
-  await userRepository.clear()
-  await createUserUseCase.execute(userMock)
   const authResponse = await request(app)
     .post('/auth')
     .send({
-      username: userMock.username,
-      password: 'teste12345'
+      username: 'test',
+      password: 'test'
     })
   accessToken = authResponse.body.accessToken
 })

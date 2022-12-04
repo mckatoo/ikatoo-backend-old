@@ -17,7 +17,7 @@ describe('Get Skill use-case Test', () => {
       email: `${generateString()}@email.com`,
       username: generateString(),
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     }

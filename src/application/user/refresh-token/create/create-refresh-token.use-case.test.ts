@@ -1,6 +1,4 @@
-import { CreateUserUseCase } from '@application/user/create/create-user.use-case'
 import { UserRepository } from '@infra/db/user'
-import { generateString } from '@infra/generate'
 import { decodeToken } from '@infra/http/express/routes/auth/decodeToken'
 import { CreateRefreshTokenUseCase } from './create-refresh-token.use-case'
 
@@ -9,41 +7,18 @@ describe('Create Refresh-Token use-case Test', () => {
   const createRefreshTokenUseCase = new CreateRefreshTokenUseCase(
     userRepository
   )
-  const userUseCase = new CreateUserUseCase(userRepository)
-
-  beforeEach(async () => {
-    await userRepository.clear()
-  })
 
   it('should create a refresh-token', async () => {
-    const user = await userUseCase.execute({
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@mail.com`,
-      password: generateString(),
-      is_admin: true,
-      avatar_url: '',
-      avatar_alt: ''
-    })
-    const refreshToken = await createRefreshTokenUseCase.execute(user?.id ?? '')
+    const refreshToken = await createRefreshTokenUseCase.execute('testId')
 
-    expect(decodeToken(refreshToken).userId).toBe(user?.id ?? '')
+    expect(decodeToken(refreshToken).userId).toBe('testId')
   })
 
   it('should expire on 15 seconds', async () => {
-    const user = await userUseCase.execute({
-      name: generateString(),
-      username: generateString(),
-      email: `${generateString()}@mail.com`,
-      password: generateString(),
-      is_admin: true,
-      avatar_url: '',
-      avatar_alt: ''
-    })
     const expiresIn = parseInt(
       (new Date().getTime() / 1000 + 60 * 60 * 24 * 2).toFixed(0)
     )
-    const refreshToken = await createRefreshTokenUseCase.execute(user?.id ?? '')
+    const refreshToken = await createRefreshTokenUseCase.execute('testId')
 
     expect(decodeToken(refreshToken).expiresIn).toBeGreaterThanOrEqual(
       expiresIn - 1

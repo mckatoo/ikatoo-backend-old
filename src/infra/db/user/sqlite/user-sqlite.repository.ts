@@ -70,7 +70,7 @@ export class UserSqliteRepository implements UserRepositoryInterface {
   async getAdmin (): Promise<UserWithId | undefined> {
     const db = await database()
     const user = await db.get<UserWithId>(
-      'select * from users where is_admin = true'
+      'select * from users'
     )
     await db.close()
 

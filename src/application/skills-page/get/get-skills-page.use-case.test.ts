@@ -19,7 +19,7 @@ describe('Get Skills Page use-case Test', () => {
       username: generateString(),
       email: `${generateString()}@email.com`,
       password: generateString(),
-      domain: `${generateString()}.com`,
+      is_admin: false,
       avatar_url: '',
       avatar_alt: ''
     })
@@ -33,9 +33,7 @@ describe('Get Skills Page use-case Test', () => {
 
     await repository.create(skillsPageData)
     const skillsPageDataByUserId = await getUseCase.getByUserId(skillsPageData.user_id)
-    const skillsPageByDomain = await getUseCase.getByDomain(user?.domain ?? '')
     expect(skillsPageDataByUserId).toHaveProperty('title', skillsPageData.title)
     expect(skillsPageDataByUserId).toHaveProperty('description', skillsPageData.description)
-    expect(skillsPageByDomain).toEqual(skillsPageDataByUserId)
   })
 })

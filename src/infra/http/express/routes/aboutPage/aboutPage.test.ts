@@ -17,28 +17,26 @@ describe('Express - About Page', () => {
 
   let accessToken: string
 
-  const userMock = {
-    id: generateString(),
-    name: generateString(),
-    username: generateString(),
-    email: `${generateString()}@katoo.com`,
-    password: 'teste12345',
-    is_admin: true,
-    avatar_url: '',
-    avatar_alt: ''
-  }
-
   beforeAll(async () => {
-    await userRepository.clear()
-    const user = await createUserUseCase.execute(userMock)
     const authResponse = await request(app).post('/auth').send({
-      username: user?.username,
-      password: 'teste12345'
+      username: 'test',
+      password: 'test'
     })
     accessToken = authResponse.body.accessToken
   })
 
   it('should create about page without id', async () => {
+    const userMock = {
+      id: generateString(),
+      name: generateString(),
+      username: generateString(),
+      email: `${generateString()}@katoo.com`,
+      password: 'teste12345',
+      is_admin: false,
+      avatar_url: '',
+      avatar_alt: ''
+    }
+    await createUserUseCase.execute(userMock)
     const aboutPageMock = {
       title: generateString(),
       description: generateString(),

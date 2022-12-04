@@ -13,6 +13,7 @@ module.exports = {
     'src/services',
     'src/middlewares'
   ],
+  globalSetup: './jestSetup.js',
   modulePathIgnorePatterns: ['dist', 'node_modules', 'coverage'],
   testMatch: ['**/?(*.)+(spec|test).(ts|tsx)'],
   moduleNameMapper: {
